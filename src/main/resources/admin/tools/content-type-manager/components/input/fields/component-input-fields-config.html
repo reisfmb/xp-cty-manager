@@ -1,0 +1,131 @@
+<div th:fragment="component-input-fields-config" th:remove="tag">
+  <template>
+    <v-card>
+      <v-card-subtitle> {{ inputType }} Configuration</v-card-subtitle>
+
+      <v-card-text>
+        <component
+          v-if="options.length > 0 
+            || inputType === 'ComboBox' 
+            || inputType === 'RadioButton'"
+          :is="'component-input-fields-options'"
+          v-bind="{ path, inputType }"
+        ></component>
+
+        <component
+          v-if="params.length > 0
+            || inputType === 'CustomSelector'"
+          :is="'component-input-fields-params'"
+          v-bind="{ path, inputType }"
+        ></component>
+
+        <component
+          v-if="allowContentTypes.length > 0
+            || inputType === 'ContentSelector'
+            || inputType === 'MediaSelector'"
+          :is="'component-input-fields-allowContentTypes'"
+          v-bind="{ path, inputType }"
+        ></component>
+
+        <component
+          v-if="allowPaths.length > 0
+            || inputType === 'ContentSelector'
+            || inputType === 'MediaSelector'
+            || inputType === 'ImageSelector'"
+          :is="'component-input-fields-allowPaths'"
+          v-bind="{ path, inputType }"
+        ></component>
+
+        <template v-for="(element, index) in remainingElements">
+          <component
+            v-if="elementIsValid(element)"
+            :is="'component-input-fields-' + element.name"
+            v-bind="{ path: depthPath(index), inputType }"
+          ></component>
+        </template>
+      </v-card-text>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-config", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+        elementIsValid(element) {
+          return Object.keys(element).length > 0;
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+
+        options() {
+          return (
+            (this.json.elements &&
+              this.json.elements.filter(
+                (element) => element.name === "option"
+              )) ||
+            []
+          );
+        },
+        params() {
+          return (
+            (this.json.elements &&
+              this.json.elements.filter(
+                (element) => element.name === "param"
+              )) ||
+            []
+          );
+        },
+        allowContentTypes() {
+          return (
+            (this.json.elements &&
+              this.json.elements.filter(
+                (element) => element.name === "allowContentType"
+              )) ||
+            []
+          );
+        },
+        allowPaths() {
+          return (
+            (this.json.elements &&
+              this.json.elements.filter(
+                (element) => element.name === "allowPath"
+              )) ||
+            []
+          );
+        },
+
+        remainingElements() {
+          return (
+            (this.json.elements &&
+              this.json.elements.map((element) => {
+                // This is needed in order to maintain the order
+                // and pass the correct indexes to deptPath
+                if (
+                  element.name === "option" ||
+                  element.name === "param" ||
+                  element.name === "allowContentType" ||
+                  element.name === "allowPath"
+                ) {
+                  return {};
+                } else {
+                  return element;
+                }
+              })) ||
+            []
+          );
+        },
+      },
+    });
+  </script>
+</div>

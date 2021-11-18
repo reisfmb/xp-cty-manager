@@ -1,0 +1,19 @@
+<div th:fragment="module-rules" th:remove="tag">
+  <script th:inline="javascript" th-remove="tag">
+    const moduleRules = {
+      state: {
+        rules: {
+          requiredText: (v) => v !== "" || "This field is required.",
+          requiredArray: (v) =>
+            v.filter((x) => !!x).length > 0 || "This field is required.",
+          noSpaces: (v) =>
+            v.indexOf(" ") === -1 || "This field does not allow spaces.",
+          numbersOnly: (v) => !isNaN(v) || "This field has to be a number.",
+          numberNotNegative: (v) =>
+            (!isNaN(v) && v >= 0) ||
+            "This field has to be a non negative number.",
+        },
+      },
+    };
+  </script>
+</div>

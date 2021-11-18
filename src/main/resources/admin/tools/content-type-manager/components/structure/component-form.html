@@ -1,0 +1,62 @@
+<div th:fragment="component-form" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title>{{ inputType }}</v-card-title>
+        </v-col>
+        <v-col cols="2" class="d-flex align-center justify-center">
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <component
+            :is="'component-recursive-element-render'"
+            v-bind="{ path }"
+          ></component>
+
+          <component
+            :is="'component-input-form-definition-mixins'"
+            v-bind="{ path }"
+          ></component>
+
+          <component-schemas :path="''" :hide="['Option']"></component-schemas>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-form", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          valid: true,
+          showConfig: false,
+        };
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputType() {
+          return "Form";
+        },
+        id() {
+          return this.path + ":form";
+        },
+      },
+    });
+  </script>
+</div>

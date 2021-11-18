@@ -1,0 +1,91 @@
+<div th:fragment="component-input-fields-allowContentTypes" th:remove="tag">
+  <template>
+    <div>
+      <template v-for="(_, index) in allowedContentTypes">
+        <v-row>
+          <v-col cols="10">
+            <v-text-field
+              @blur="save(index)"
+              v-model="allowedContentTypes[index].elements[0].text"
+              :label="fields.label"
+              :hint="fields.hint"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="2">
+            <v-btn @click="remove(index)" icon>
+              <v-icon color="red">mdi-delete-circle-outline</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
+
+      <v-btn @click="add" class="my-5">Add allowed content type</v-btn>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-allowContentTypes", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      data() {
+        return {
+          allowedContentTypes: [],
+
+          fields: {
+            label: "Allowed Content Type",
+            hint: "Is used to limit the content types that may be selected using the Allow content type pattern.",
+          },
+        };
+      },
+      mounted() {
+        this.allowedContentTypes = this.elements;
+      },
+      watch: {
+        elements() {
+          this.allowedContentTypes = this.elements;
+        },
+      },
+      methods: {
+        save(index) {
+          const path = `${this.path}elements`;
+          const data = [...this.allowedContentTypes, ...this.remainingElements];
+
+          this.$store.commit("updateJson", { path, data });
+        },
+        add() {
+          this.allowedContentTypes.push({
+            type: "element",
+            name: "allowContentType",
+            elements: [{ type: "text", text: "" }],
+          });
+        },
+        remove(index) {
+          this.allowedContentTypes = this.allowedContentTypes.filter(
+            (_, idx) => idx !== index
+          );
+          this.save(index);
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        elements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name === "allowContentType"
+          );
+        },
+        remainingElements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name !== "allowContentType"
+          );
+        },
+      },
+    });
+  </script>
+</div>

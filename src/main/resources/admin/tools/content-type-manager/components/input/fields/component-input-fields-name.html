@@ -1,0 +1,61 @@
+<div th:fragment="component-input-fields-name" th:remove="tag">
+  <template>
+    <v-text-field
+      @blur="save"
+      v-model="states.text"
+      :label="field.label"
+      :hint="field.hint"
+      :rules="[rules.requiredText]"
+    >
+    </v-text-field>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-name", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      data() {
+        return {
+          field: {
+            label: "Name",
+            hint: "Is used when storing the data in a property, and must be unique on each level.",
+          },
+
+          states: {
+            text: "",
+          },
+        };
+      },
+      mounted() {
+        this.states.text = this.value;
+      },
+      watch: {
+        value() {
+          this.states.text = this.value;
+        },
+      },
+      methods: {
+        save() {
+          const path = `${this.path}.attributes.name`;
+          const data = this.states.text;
+          this.$store.commit("updateJson", { path, data });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        value() {
+          return _.get(this.json, "attributes.name") || "";
+        },
+        rules() {
+          return this.$store.state.moduleRules.rules;
+        },
+      },
+    });
+  </script>
+</div>

@@ -1,0 +1,88 @@
+<div th:fragment="component-option-set-options-option" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title>{{ inputName }}</v-card-title>
+        </v-col>
+        <v-col cols="2" class="d-flex align-center justify-center">
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+          <v-btn @click="removeSet" icon>
+            <v-icon color="red"> mdi-delete-circle-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <!-- Name field -->
+          <component
+            :is="'component-input-fields-name'"
+            v-bind="{ path, inputName}"
+          ></component>
+
+          <template v-for="(element, index) in elements">
+            <component
+              v-if="element.name !== 'items' && element.name !== 'input'"
+              :is="'component-input-fields-' + element.name"
+              v-bind="{ path: depthPath(index), inputName }"
+            ></component>
+            <component
+              v-else-if="element.name === 'items'"
+              :is="'component-set-items'"
+              v-bind="{ path: depthPath(index) }"
+            ></component>
+          </template>
+
+          <component
+            :is="'component-recursive-element-render'"
+            v-bind="{ path }"
+          ></component>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-option-set-options-option", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+        };
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        removeSet() {
+          this.$store.commit("removeSchemaInJson", { path: this.path });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputName() {
+          return this.json.attributes.name;
+        },
+        elements() {
+          return this.json.elements || [];
+        },
+        id() {
+          return this.path + ":option_set-options-option";
+        },
+      },
+    });
+  </script>
+</div>

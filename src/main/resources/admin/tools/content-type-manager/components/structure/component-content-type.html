@@ -1,0 +1,184 @@
+<div th:fragment="component-content-type" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title>{{ inputType }}</v-card-title>
+        </v-col>
+        <v-col cols="2" class="d-flex align-center justify-center">
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <!-- TODO: Change form definition to a component -->
+          <v-card>
+            <v-row>
+              <v-col cols="10">
+                <v-card-title>Form Definition</v-card-title>
+              </v-col>
+              <v-col cols="2" class="d-flex align-center justify-center">
+                <v-btn
+                  @click="showFormDefinitionConfig = !showFormDefinitionConfig"
+                  icon
+                >
+                  <v-icon> mdi-circle-edit-outline </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+
+            <transition name="fade">
+              <v-card-text v-show="showFormDefinitionConfig">
+                <template v-for="(element, index) in remainingElements">
+                  <component
+                    v-if="elementIsValid(element) && element.name !== 'form'"
+                    :is="'component-form-definition-' + element.name"
+                    v-bind="{ path: depthPath(index), inputType }"
+                  ></component>
+                </template>
+
+                <component
+                  :is="'component-input-form-definition-allow-child-content-types'"
+                  v-bind="{ path, inputType }"
+                ></component>
+
+                <component
+                  :is="'component-input-form-definition-x-datas'"
+                  v-bind="{ path, inputType }"
+                ></component>
+              </v-card-text>
+            </transition>
+          </v-card>
+
+          <component
+            :is="'component-recursive-element-render'"
+            v-bind="{ path }"
+          ></component>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-content-type", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+          showFormDefinitionConfig: false,
+
+          commonFieldNames: {
+            "allow-child-content": {
+              type: "element",
+              name: "allow-child-content",
+              elements: [{ type: "text", text: "true" }],
+            },
+            "is-built-in": {
+              type: "element",
+              name: "is-built-in",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "is-final": {
+              type: "element",
+              name: "is-final",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "is-abstract": {
+              type: "element",
+              name: "is-abstract",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "super-type": {
+              type: "element",
+              name: "super-type",
+              elements: [{ type: "text", text: "base:structured" }],
+            },
+            description: {
+              type: "element",
+              name: "description",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name-expression": {
+              type: "element",
+              name: "display-name-expression",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name-label": {
+              type: "element",
+              name: "display-name-label",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name": {
+              type: "element",
+              name: "display-name",
+              elements: [{ type: "text", text: "" }],
+            },
+          },
+        };
+      },
+      created() {
+        this.addCommonFieldsToElements();
+      },
+      watch: {
+        elements() {
+          this.addCommonFieldsToElements();
+        },
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        addCommonFieldsToElements() {
+          const elementNames = this.elements.map((element) => element.name);
+          Object.keys(this.commonFieldNames).forEach((fieldName) => {
+            if (elementNames.indexOf(fieldName) === -1) {
+              const fieldJson = this.commonFieldNames[fieldName];
+              this.elements.unshift(fieldJson);
+            }
+          }, this);
+        },
+
+        elementIsValid(element) {
+          return Object.keys(element).length > 0;
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputType() {
+          return "Content-Type";
+        },
+        elements() {
+          return this.json.elements;
+        },
+
+        remainingElements() {
+          return this.json.elements.map((element) => {
+            // This is needed in order to maintain the order
+            // and pass the correct indexes to deptPath
+            if (
+              element.name === "x-data" ||
+              element.name === "allow-child-content-type"
+            ) {
+              return {};
+            } else {
+              return element;
+            }
+          });
+        },
+      },
+    });
+  </script>
+</div>

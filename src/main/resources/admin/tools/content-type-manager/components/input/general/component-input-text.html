@@ -1,0 +1,69 @@
+<div th:fragment="component-input-text" th:remove="tag">
+  <template>
+    <div>
+      <v-text-field
+        @blur="save"
+        v-model="states.text"
+        :label="field.label"
+        :hint="field.hint"
+      >
+      </v-text-field>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-text", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+        elementName: String,
+        field: { label: String, hint: String },
+        rulesNames: Array,
+      },
+      data() {
+        return {
+          states: {
+            text: "",
+          },
+        };
+      },
+      mounted() {
+        this.field.label = this.elementName;
+        this.states.text = this.value;
+      },
+      watch: {
+        value() {
+          this.states.text = this.value;
+        },
+      },
+      methods: {
+        save() {
+          const path = `${this.path}.attributes.${this.elementName}`;
+          const data = this.states.text;
+          this.$store.commit("updateJson", { path, data });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        value() {
+          return _.get(this.json, `attributes.${this.elementName}`) || "";
+        },
+        rules() {
+          // TODO: CONTINUE RULES IMPLEMENTATION
+          const ruleKeys = Object.keys(this.$store.state.moduleRules.rules);
+          const usedRuleKeys = ruleKeys.filter(
+            (ruleName) => this.rulesNames.indexOf(ruleName) !== -1
+          );
+
+          return;
+        },
+      },
+    });
+  </script>
+</div>

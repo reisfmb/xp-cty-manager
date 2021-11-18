@@ -1,0 +1,96 @@
+<div th:fragment="component-item-set" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title>{{ inputName }}</v-card-title>
+          <v-card-subtitle>
+            <small>
+              <a :href="docsUrl" target="_blank">{{ inputType }}</a>
+            </small>
+          </v-card-subtitle>
+        </v-col>
+        <v-col cols="2" class="d-flex align-center justify-center">
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+          <v-btn @click="removeSet" icon>
+            <v-icon color="red"> mdi-delete-circle-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <!-- Name field -->
+          <component
+            :is="'component-input-fields-name'"
+            v-bind="{ path, inputType }"
+          ></component>
+
+          <template v-for="(element, index) in elements">
+            <component
+              v-if="element.name !== 'items'"
+              :is="'component-input-fields-' + element.name"
+              v-bind="{ path: depthPath(index), inputType }"
+            ></component>
+            <component
+              v-else-if="element.name === 'items'"
+              :is="'component-set-items'"
+              v-bind="{ path: depthPath(index) }"
+            ></component>
+          </template>
+
+          <component
+            :is="'component-recursive-element-render'"
+            v-bind="{ path }"
+          ></component>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-item-set", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+        };
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        removeSet() {
+          this.$store.commit("removeSchemaInJson", { path: this.path });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputName() {
+          return this.json.attributes.name;
+        },
+        inputType() {
+          return "Item_Set";
+        },
+        elements() {
+          return this.json.elements || [];
+        },
+        docsUrl() {
+          return `https://developer.enonic.com/docs/xp/stable/cms/schemas#${this.inputType.toLowerCase()}`;
+        },
+      },
+    });
+  </script>
+</div>

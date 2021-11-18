@@ -1,0 +1,94 @@
+<div th:fragment="component-option-set" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="10">
+          <v-card-title>{{ inputName }}</v-card-title>
+          <v-card-subtitle>
+            <small>
+              <a :href="docsUrl" target="_blank">{{ inputType }}</a>
+            </small>
+          </v-card-subtitle>
+        </v-col>
+        <v-col cols="2" class="d-flex align-center justify-center">
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+          <v-btn @click="removeSet" icon>
+            <v-icon color="red"> mdi-delete-circle-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <!-- Name field -->
+          <component
+            :is="'component-input-fields-name'"
+            v-bind="{ path, inputName}"
+          ></component>
+
+          <template v-for="(element, index) in elements">
+            <component
+              v-if="element.name === 'options'"
+              :is="'component-option-set-' + element.name"
+              v-bind="{ path: depthPath(index), inputName }"
+            ></component>
+            <component
+              v-else-if="element.name !== 'input'"
+              :is="'component-input-fields-' + element.name"
+              v-bind="{ path: depthPath(index), inputName }"
+            ></component>
+          </template>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-option-set", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+        };
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        removeSet() {
+          this.$store.commit("removeSchemaInJson", { path: this.path });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputName() {
+          return this.json.attributes.name;
+        },
+        inputType() {
+          return "Option_Set";
+        },
+        elements() {
+          return this.json.elements || [];
+        },
+        id() {
+          return this.path + ":option_set";
+        },
+        docsUrl() {
+          return `https://developer.enonic.com/docs/xp/stable/cms/schemas#${this.inputType.toLowerCase()}`;
+        },
+      },
+    });
+  </script>
+</div>

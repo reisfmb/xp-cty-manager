@@ -1,0 +1,152 @@
+<div th:fragment="component-input" th:remove="tag">
+  <template>
+    <v-card>
+      <v-row>
+        <v-col cols="9">
+          <v-card-title>{{ inputName }}</v-card-title>
+          <v-card-subtitle>
+            <small>
+              <a :href="docsUrl" target="_blank">{{ inputType }}</a>
+            </small>
+          </v-card-subtitle>
+        </v-col>
+        <v-col cols="3" class="d-flex align-center justify-center">
+          <v-btn @click="moveInputUp" icon>
+            <v-icon> mdi-arrow-up </v-icon>
+          </v-btn>
+          <v-btn @click="moveInputDown" icon>
+            <v-icon> mdi-arrow-down </v-icon>
+          </v-btn>
+          <v-btn @click="showConfig = !showConfig" icon>
+            <v-icon> mdi-circle-edit-outline </v-icon>
+          </v-btn>
+          <v-btn @click="removeInput" icon>
+            <v-icon color="red"> mdi-delete-circle-outline </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <!-- Name field -->
+          <component
+            :is="'component-input-fields-name'"
+            v-bind="{ path, inputType }"
+          ></component>
+
+          <!-- Remaining fields -->
+          <template v-for="(element, index) in elements">
+            <!-- <component
+              v-if="map[element.name] !== undefined"
+              :is="map[element.name].componentName"
+              v-bind="{ 
+                path: depthPath(index), 
+                field: map[element.name].field,
+                rulesNames: map[element.name].rules
+               }"
+            ></component> -->
+            <component
+              :is="'component-input-fields-' + element.name"
+              v-bind="{ path: depthPath(index), inputType }"
+            ></component>
+          </template>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+
+          map: {
+            label: {
+              componentName: "component-input-text",
+              field: { label: "Label", hint: "My Hint." },
+              rules: ["requiredText"],
+            },
+          },
+
+          commonFieldNames: {
+            occurrences: {
+              type: "element",
+              name: "occurrences",
+              attributes: { minimum: 0, maximum: 1 },
+            },
+            "help-text": {
+              type: "element",
+              name: "help-text",
+              elements: [{ type: "text", text: "" }],
+            },
+            label: {
+              type: "element",
+              name: "label",
+              elements: [{ type: "text", text: "" }],
+            },
+          },
+        };
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        moveInputUp() {
+          this.$store.commit("moveSchemaInJson", {
+            path: this.path,
+            direction: "up",
+          });
+        },
+
+        moveInputDown() {
+          this.$store.commit("moveSchemaInJson", {
+            path: this.path,
+            direction: "down",
+          });
+        },
+
+        removeInput() {
+          this.$store.commit("removeSchemaInJson", { path: this.path });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        inputName() {
+          return this.json.attributes.name;
+        },
+        inputType() {
+          return this.json.attributes.type;
+        },
+        elements() {
+          const elements = this.json.elements;
+
+          Object.keys(this.commonFieldNames).forEach((key) => {
+            const commonFieldObject = this.commonFieldNames[key];
+            if (elements.filter((el) => el.name === key).length === 0)
+              elements.push(commonFieldObject);
+          });
+
+          return elements || [];
+        },
+        id() {
+          return this.path + ":" + this.inputType;
+        },
+        docsUrl() {
+          return `https://developer.enonic.com/docs/xp/stable/cms/input-types#${this.inputType.toLowerCase()}`;
+        },
+      },
+    });
+  </script>
+</div>

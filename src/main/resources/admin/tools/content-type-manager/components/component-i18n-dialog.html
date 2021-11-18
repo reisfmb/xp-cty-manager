@@ -1,0 +1,74 @@
+<div th:fragment="component-i18n-dialog" th:remove="tag">
+  <template>
+    <v-dialog v-model="dialog.show" max-width="600">
+      <v-card>
+        <v-card-title class="text-h5"> {{ dialog.title }} </v-card-title>
+        <v-card-text>
+          <v-text-field
+            v-model="states.i18nkey"
+            :label="field.label"
+            :hint="field.hint"
+            :rules="[rules.noSpaces]"
+            class="mb-5"
+          >
+          </v-text-field>
+          <v-btn @click="save" color="green">Save</v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-i18n-dialog", {
+      template: DOM.innerHTML.toString(),
+      props: { path: String, showdialog: Boolean },
+      data() {
+        return {
+          dialog: {
+            show: false,
+            title: "I18n key",
+          },
+
+          field: {
+            label: "Key value",
+            hint: `This i18n attribute will contain a key string that refers to the
+            translated texts in the i18n/phrases.properties bundle files.`,
+          },
+
+          states: {
+            i18nkey: "",
+          },
+        };
+      },
+      watch: {
+        showdialog() {
+          this.dialog.show = this.showdialog;
+          if (this.dialog.show) {
+            this.states.i18nkey = _.get(this.json, "attributes.i18n") || "";
+          }
+        },
+      },
+      methods: {
+        save() {
+          const path = `${this.path}.attributes.i18n`;
+          const data = this.states.i18nkey;
+          this.$store.commit("updateJson", { path, data });
+
+          this.dialog.show = false;
+          this.states.i18nkey = "";
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        rules() {
+          return this.$store.state.moduleRules.rules;
+        },
+      },
+    });
+  </script>
+</div>

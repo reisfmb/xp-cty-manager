@@ -1,0 +1,109 @@
+<div th:fragment="component-input-fields-params" th:remove="tag">
+  <template>
+    <div>
+      <p>
+        <small class="mb-5"> {{ configHint }} </small>
+      </p>
+      <template v-for="(_, index) in params">
+        <v-row>
+          <v-col cols="5">
+            <v-text-field
+              @blur="save(index)"
+              v-model="params[index].elements[0].text"
+              :label="fields.label.label"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="5">
+            <v-text-field
+              @blur="save(index)"
+              v-model="params[index].attributes.value"
+              :label="fields.value.label"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="1">
+            <v-btn @click="remove(index)" icon>
+              <v-icon color="red">mdi-delete-circle-outline</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </template>
+
+      <v-btn @click="add" class="mb-5">Add parameter</v-btn>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-params", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      data() {
+        return {
+          configHint: `Lets you pass parameters to the service. This allows for the service to
+              be used in different contexts. There can be multiple parameters or none.
+              The parameters will be included in the HTTP request to the service as
+              name-value query parameters.`,
+
+          params: [],
+
+          fields: {
+            label: {
+              label: "Name",
+            },
+            value: {
+              label: "Value",
+            },
+          },
+        };
+      },
+      mounted() {
+        this.params = this.elements;
+      },
+      watch: {
+        elements() {
+          this.params = this.elements;
+        },
+      },
+      methods: {
+        save(index) {
+          const path = `${this.path}elements`;
+          const data = [...this.params, ...this.remainingElements];
+
+          this.$store.commit("updateJson", { path, data });
+        },
+        add() {
+          this.params.push({
+            type: "element",
+            name: "param",
+            attributes: { value: "" },
+            elements: [{ type: "text", text: "" }],
+          });
+        },
+        remove(index) {
+          this.params = this.params.filter((_, idx) => idx !== index);
+          this.save(index);
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        elements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name === "param"
+          );
+        },
+        remainingElements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name !== "param"
+          );
+        },
+      },
+    });
+  </script>
+</div>

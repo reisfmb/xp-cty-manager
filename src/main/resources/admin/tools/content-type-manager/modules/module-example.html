@@ -1,0 +1,177 @@
+<div th:fragment="module-example" th:remove="tag">
+  <script th:inline="javascript" th-remove="tag">
+    // TODO: After first call, there's no need to recall it.
+    const recursivelyFindPathOfFormElement = (json, path = "") => {
+      let nextPath = "";
+      const jsonAtPath = path ? _.get(json, path) : json;
+
+      if (!jsonAtPath) return false;
+
+      for (let i = 0; i < (jsonAtPath.elements || []).length; i++) {
+        const element = jsonAtPath.elements[i];
+        nextPath = `${path}elements[${i}]`;
+
+        if (element.name === "form") return nextPath;
+      }
+
+      return recursivelyFindPathOfFormElement(jsonAtPath, nextPath);
+    };
+
+    const moduleExample = {
+      state: {
+        json: {
+          declaration: {
+            attributes: {
+              version: "1.0",
+              encoding: "UTF-8",
+            },
+          },
+          elements: [
+            {
+              type: "element",
+              name: "content-type",
+              elements: [
+                {
+                  type: "element",
+                  name: "form",
+                  elements: [],
+                },
+              ],
+            },
+          ],
+        },
+      },
+
+      mutations: {
+        setJson: (state, { data }) => {
+          state.json = data;
+        },
+
+        updateJson: (state, { path, data }) => {
+          _.setWith(state.json, path, data, (value, key, obj) => {
+            return Vue.set(obj, key, value);
+          });
+        },
+
+        addSchemaInJsonForm: (state, { schemaJson }) => {
+          const formPath = recursivelyFindPathOfFormElement(state.json);
+          const formElementsPath = `${formPath}.elements`;
+          const formElements = _.get(state.json, formElementsPath) || [];
+          _.setWith(
+            state.json,
+            formElementsPath,
+            [...formElements, { ...schemaJson }],
+            (value, key, obj) => {
+              return Vue.set(obj, key, value);
+            }
+          );
+        },
+
+        addSchemaInSet: (state, { path, schemaJson }) => {
+          const setPath = path;
+          let elementItemsIndex = 0;
+
+          _.get(state.json, `${setPath}.elements`).forEach(
+            (el, idx) => el.name === "items" && (elementItemsIndex = idx)
+          );
+
+          const setElementItemsPath = `${setPath}.elements[${elementItemsIndex}]elements`;
+          const setElementItems = _.get(state.json, setElementItemsPath) || [];
+          _.setWith(
+            state.json,
+            setElementItemsPath,
+            [...setElementItems, { ...schemaJson }],
+            (value, key, obj) => {
+              return Vue.set(obj, key, value);
+            }
+          );
+        },
+
+        addSchemaInOptions: (state, { path, schemaJson }) => {
+          const setPath = path;
+          let elementItemsIndex = 0;
+
+          !_.get(state.json, `${setPath}.elements`) &&
+            _.set(state.json, `${setPath}.elements`, []);
+
+          const optionsElementPath = `${setPath}.elements`;
+          const optionsElements = _.get(state.json, optionsElementPath) || [];
+          _.setWith(
+            state.json,
+            optionsElementPath,
+            [...optionsElements, { ...schemaJson }],
+            (value, key, obj) => {
+              return Vue.set(obj, key, value);
+            }
+          );
+        },
+
+        moveSchemaInJson: (state, { path, direction }) => {
+          const indexesWithBracketsInPath = path.match(/[[0-9]+]/g);
+          const lastIndexWithBrackets = _.last(indexesWithBracketsInPath);
+          const previousPath = path.slice(0, -lastIndexWithBrackets.length);
+          const currentIndex = parseInt(
+            lastIndexWithBrackets.replace("[", "").replace("]", "")
+          );
+          const desiredIndex =
+            direction === "up" ? currentIndex - 1 : currentIndex + 1;
+          const maxIndex = Math.max(
+            (_.get(state.json, previousPath) || []).length - 1,
+            0
+          );
+
+          if (0 <= desiredIndex && desiredIndex <= maxIndex) {
+            const desiredPath = `${previousPath}[${desiredIndex}]`;
+            const currentPath = `${previousPath}[${currentIndex}]`;
+
+            const desiredData = _.get(state.json, desiredPath);
+            const currentData = _.get(state.json, currentPath);
+
+            if (
+              desiredData.name === "field-set" ||
+              desiredData.name === "item-set"
+            )
+              return;
+
+            _.setWith(
+              state.json,
+              desiredPath,
+              currentData,
+              (value, key, obj) => {
+                return Vue.set(obj, key, value);
+              }
+            );
+
+            _.setWith(
+              state.json,
+              currentPath,
+              desiredData,
+              (value, key, obj) => {
+                return Vue.set(obj, key, value);
+              }
+            );
+          }
+        },
+
+        removeSchemaInJson: (state, { path }) => {
+          const indexesWithBracketsInPath = path.match(/[[0-9]+]/g);
+          const lastIndexWithBrackets = _.last(indexesWithBracketsInPath);
+          const previousPath = path.slice(0, -lastIndexWithBrackets.length);
+          const lastIndex = parseInt(
+            lastIndexWithBrackets.replace("[", "").replace("]", "")
+          );
+          const data = _.get(state.json, previousPath).filter(
+            (_, idx) => idx !== lastIndex
+          );
+          _.setWith(state.json, previousPath, data, (value, key, obj) => {
+            return Vue.set(obj, key, value);
+          });
+        },
+      },
+
+      getters: {
+        jsonPath: (state) => (path) => _.get(state.json, path) || {},
+      },
+    };
+  </script>
+</div>

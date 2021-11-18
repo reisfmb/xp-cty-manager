@@ -1,0 +1,75 @@
+<div th:fragment="component-input-fields-alignment" th:remove="tag">
+  <template>
+    <div v-if="inputType === 'CheckBox'">
+      <v-select
+        @blur="save"
+        v-model="states.text"
+        :label="field.label"
+        :hint="field.hint"
+        :items="['top', 'right', 'bottom', 'left']"
+      >
+      </v-select>
+    </div>
+
+    <div v-else>
+      <v-text-field
+        @blur="save"
+        v-model="states.text"
+        :label="field.label"
+        :hint="field.hint"
+      >
+      </v-text-field>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-alignment", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      data() {
+        return {
+          field: {
+            label: "Alignment",
+            hint: 'Defines placement of checkbox relative to label text. Supported values are: "left", "right", "top", "bottom", default is "left".',
+          },
+
+          states: {
+            text: "",
+          },
+        };
+      },
+      mounted() {
+        this.states.text = this.value;
+      },
+      watch: {
+        value() {
+          this.states.text = this.value;
+        },
+      },
+      methods: {
+        save() {
+          const path = `${this.path}.elements`;
+          const data = [
+            {
+              type: "text",
+              text: this.states.text,
+            },
+          ];
+          this.$store.commit("updateJson", { path, data });
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        value() {
+          return _.get(this.json, "elements[0].text") || "left";
+        },
+      },
+    });
+  </script>
+</div>

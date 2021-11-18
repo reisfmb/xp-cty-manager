@@ -1,0 +1,115 @@
+<div th:fragment="component-schemas" th:remove="tag">
+  <template>
+    <div>
+      <div v-if="filteredSchemas.length > 1">
+        <v-autocomplete
+          v-model="selectedSchemaName"
+          :items="filteredSchemas"
+          label="Schema"
+          prepend-inner-icon="mdi-xml"
+        ></v-autocomplete>
+
+        <v-btn @click="addSchema" color="green">Add Schema</v-btn>
+      </div>
+      <div v-else>
+        <v-btn @click="addSchema">Add {{ selectedSchemaName }}</v-btn>
+      </div>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-schemas", {
+      template: DOM.innerHTML.toString(),
+      props: { path: String, show: Array, hide: Array },
+      data() {
+        return {
+          schemas: [
+            "AttachmentUploader",
+            "CheckBox",
+            "ComboBox",
+            "ContentSelector",
+            "ContentTypeFilter",
+            "CustomSelector",
+            "Date",
+            "DateTime",
+            "Double",
+            "FieldSet",
+            "GeoPoint",
+            "HtmlArea",
+            "ImageSelector",
+            "ItemSet",
+            "Long",
+            "MediaSelector",
+            "Option",
+            "OptionSet",
+            "RadioButton",
+            "Tag",
+            "TextArea",
+            "TextLine",
+            "Time",
+          ],
+
+          selectedSchemaName: "",
+
+          schemaJson: {},
+        };
+      },
+      methods: {
+        addSchema() {
+          fetch(
+            `http://localhost:8080/_/service/tool.content.type.manager/test2?schemaName=${this.selectedSchemaName}`
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(response.statusText);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              this.schemaJson = _.get(data, "json.elements[0]") || {};
+
+              if (!this.path)
+                // add in form
+                this.$store.commit("addSchemaInJsonForm", {
+                  schemaJson: this.schemaJson,
+                });
+              else if (this.show === ["Option"])
+                // add in options
+                this.$store.commit("addSchemaInOptions", {
+                  path: this.path,
+                  schemaJson: this.schemaJson,
+                });
+              // add in set
+              else
+                this.$store.commit("addSchemaInOptions", {
+                  path: this.path,
+                  schemaJson: this.schemaJson,
+                });
+
+              this.selectedSchemaName = "";
+            })
+            .catch((error) => console.log(error));
+        },
+      },
+      watch: {
+        filteredSchemas() {
+          if (this.filteredSchemas.length === 1)
+            this.selectedSchemaName = this.filteredSchemas[0];
+        },
+      },
+      computed: {
+        filteredSchemas() {
+          const show = this.show || this.schemas;
+          const hide = this.hide || [];
+          return this.schemas.filter(
+            (schemaName) =>
+              show.indexOf(schemaName) !== -1 && hide.indexOf(schemaName) === -1
+          );
+        },
+      },
+    });
+  </script>
+</div>

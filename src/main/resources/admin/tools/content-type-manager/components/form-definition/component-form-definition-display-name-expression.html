@@ -1,0 +1,56 @@
+<div th:fragment="component-form-definition-display-name-expression" th:remove="tag">
+
+    <template>
+        <v-text-field
+            @blur="save"
+            v-model="states.text"
+            :label="field.label"
+            :hint="field.hint">
+        </v-text-field>
+    </template>
+
+    <script th:inline="javascript">
+        DOM = document.getElementsByTagName('template')[0]
+        DOM.remove()
+
+        Vue.component("component-form-definition-display-name-expression", {
+            template: DOM.innerHTML.toString(),
+
+            props: { path: String, inputType: String },
+            data(){
+                return {
+                    field:{
+                        label: 'Display Name Expression',
+                        hint: 'This is a hint.'
+                    },
+
+                    states: {
+                        text: ''
+                    }   
+                }
+            },
+            mounted(){
+                this.states.text = this.value
+            },
+            watch:{
+                value() { this.states.text = this.value }
+            },
+            methods:{
+                save(){
+                    const path = `${this.path}.elements`
+                    const data = [{
+                        type: "text", 
+                        text: this.states.text 
+                    }]
+                    this.$store.commit('updateJson', { path, data })
+                }
+            },
+            computed: {
+                json() { return this.$store.getters.jsonPath(this.path) },
+                value() { return _.get(this.json, 'elements[0].text') || '' }
+            }
+        })
+
+    </script>
+
+</div>

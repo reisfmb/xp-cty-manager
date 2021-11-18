@@ -1,0 +1,177 @@
+<div th:fragment="component-file-picker-and-saver" th:remove="tag">
+  <template>
+    <div>
+      <v-btn @click="createNewContentType">New</v-btn>
+      <v-btn @click="getFileContent">Load</v-btn>
+      <v-btn
+        @click="saveContentType"
+        color="green"
+        :disabled="fileHandle == null"
+        >Save</v-btn
+      >
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-file-picker-and-saver", {
+      template: DOM.innerHTML.toString(),
+      data() {
+        return {
+          fileHandle: null,
+          errorVcardColor: "red",
+        };
+      },
+      methods: {
+        async createNewContentType() {
+          alert("Please select the content-types folder.");
+
+          dirHandle = await window.showDirectoryPicker();
+          const contentTypeName = window.prompt(
+            "What is the name of the content type?"
+          );
+          const newContentTypeDirectoryHandle =
+            await dirHandle.getDirectoryHandle(contentTypeName, {
+              create: true,
+            });
+          this.fileHandle = await newContentTypeDirectoryHandle.getFileHandle(
+            `${contentTypeName}.xml`,
+            { create: true }
+          );
+        },
+        async getFileContent() {
+          alert("Please select the xml file of a content-type.");
+
+          [fileHandle] = await window.showOpenFilePicker();
+
+          const file = await fileHandle.getFile();
+
+          if (file.type !== "text/xml") {
+            alert("This is not a XML file.");
+            return false;
+          }
+
+          this.setJson(await file.text());
+
+          this.fileHandle = fileHandle;
+
+          Swal.fire({
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        },
+        async saveContentType() {
+          const isFormValid = app.$refs.form.validate();
+
+          if (!isFormValid) {
+            this.setBorderOfVcardsWithErrors();
+
+            Swal.fire({
+              icon: "error",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            return;
+          }
+
+          this.resetBorderOfVcards();
+
+          const xml = await this.getXmlFromJson(this.json);
+          const writable = await this.fileHandle.createWritable();
+
+          if (writable && xml) {
+            await writable.write(xml);
+            await writable.close();
+
+            Swal.fire({
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        },
+
+        ///
+
+        setBorderOfVcardsWithErrors() {
+          setTimeout(() => {
+            Array.from(
+              document.getElementsByClassName("v-messages error--text")
+            ).forEach((div) => {
+              let i = 0,
+                el = div;
+              const m = 10;
+
+              while (el && i < m) {
+                if (
+                  Array.from(el.classList).indexOf("v-card") !== -1 &&
+                  Array.from(el.classList).indexOf("v-sheet") !== -1
+                ) {
+                  break;
+                } else {
+                  el = el.parentElement;
+                  i += 1;
+                }
+              }
+
+              el.style.border = `2px solid ${this.errorVcardColor}`;
+            });
+          }, 100);
+        },
+        resetBorderOfVcards() {
+          Array.from(document.getElementsByClassName("v-card")).forEach(
+            (div) => {
+              div.style.border = "";
+            }
+          );
+        },
+
+        ///
+
+        setJson(xml) {
+          const xmlWithoutComments = xml.replaceAll(/<!--[\s\S]*?-->/g, "");
+          const request = { mode: "xml2json", xml: xmlWithoutComments };
+          fetch(
+            "http://localhost:8080/_/service/tool.content.type.manager/test",
+            {
+              method: "POST",
+              body: JSON.stringify(request),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              this.$store.commit("setJson", { data: data.json });
+            });
+        },
+        async getXmlFromJson(json) {
+          const request = { mode: "json2xml", json };
+
+          return fetch(
+            "http://localhost:8080/_/service/tool.content.type.manager/test",
+            {
+              method: "POST",
+              body: JSON.stringify(request),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => data.xml);
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.state.moduleExample.json;
+        },
+      },
+    });
+  </script>
+</div>

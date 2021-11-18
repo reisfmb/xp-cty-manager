@@ -1,0 +1,125 @@
+<div th:fragment="component-input-fields-options" th:remove="tag">
+  <template>
+    <div>
+      <p>
+        <small class="mb-5"> {{ configHint }} </small>
+      </p>
+      <template v-for="(_, index) in options">
+        <v-row>
+          <v-col cols="5">
+            <v-text-field
+              @blur="save(index)"
+              v-model="options[index].elements[0].text"
+              :label="fields.label.label"
+              :hint="fields.label.hint"
+              append-icon="mdi-translate"
+              @click:append="showDialog(index)"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="5">
+            <v-text-field
+              @blur="save(index)"
+              v-model="options[index].attributes.value"
+              :label="fields.value.label"
+              :hint="fields.value.hint"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="1">
+            <v-btn @click="removeOption(index)" icon>
+              <v-icon color="red">mdi-delete-circle-outline</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <component-i18n-dialog
+          :path="`${path}.elements[${index}]`"
+          :showdialog="i18n.dialogToShow == index"
+        ></component-i18n-dialog>
+      </template>
+
+      <v-btn @click="addOption">Add option</v-btn>
+    </div>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-input-fields-options", {
+      template: DOM.innerHTML.toString(),
+
+      props: { path: String, inputType: String },
+      data() {
+        return {
+          configHint: `Option elements and the @value attribute defines the actual 
+            value to store when the option is selected. Multiple option elements are 
+            allowed and ordered.`,
+
+          i18n: { dialogToShow: -1 },
+
+          options: [],
+
+          fields: {
+            label: {
+              label: "Label",
+              hint: "This is a hint.",
+            },
+            value: {
+              label: "Value",
+              hint: "This is a hint.",
+            },
+          },
+        };
+      },
+      mounted() {
+        this.options = this.elements;
+      },
+      watch: {
+        elements() {
+          this.options = this.elements;
+        },
+      },
+      methods: {
+        save(index) {
+          const path = `${this.path}elements`;
+          const data = [...this.options, ...this.remainingElements];
+
+          this.$store.commit("updateJson", { path, data });
+        },
+        addOption() {
+          this.options.push({
+            type: "element",
+            name: "option",
+            attributes: { value: "" },
+            elements: [{ type: "text", text: "" }],
+          });
+        },
+        removeOption(index) {
+          this.options = this.options.filter((_, idx) => idx !== index);
+          this.save(index);
+        },
+        showDialog(index) {
+          this.i18n.dialogToShow = -1;
+          setTimeout(() => (this.i18n.dialogToShow = index), 100);
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        elements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name === "option"
+          );
+        },
+        remainingElements() {
+          return (this.json.elements || []).filter(
+            (element) => element.name !== "option"
+          );
+        },
+      },
+    });
+  </script>
+</div>
