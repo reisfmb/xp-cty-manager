@@ -32,9 +32,24 @@
 
             <transition name="fade">
               <v-card-text v-show="showFormDefinitionConfig">
-                <template v-for="(element, index) in remainingElements">
+                <template
+                  v-if="Object.keys(map).length > 0"
+                  v-for="(element, index) in remainingElements"
+                >
                   <component
-                    v-if="elementIsValid(element) && element.name !== 'form'"
+                    v-if="map[element.name] !== undefined"
+                    :is="map[element.name].componentName"
+                    v-bind="{ 
+                      path: depthPath(index),
+                      initialValue: element.initialValue || '',
+                      field: map[element.name].field,
+                      items: map[element.name].items,
+                      rules: map[element.name].rules,
+                      i18n: map[element.name].i18n
+                    }"
+                  ></component>
+                  <component
+                    v-else-if="element.name && element.name !== 'form'"
                     :is="'component-form-definition-' + element.name"
                     v-bind="{ path: depthPath(index), inputType }"
                   ></component>
@@ -74,8 +89,10 @@
       },
       data() {
         return {
-          showConfig: false,
+          showConfig: true,
           showFormDefinitionConfig: false,
+
+          map: {},
 
           commonFieldNames: {
             "allow-child-content": {
@@ -128,7 +145,9 @@
       },
       created() {
         this.addCommonFieldsToElements();
+        setTimeout(() => (this.map = app.$root._data.map), 500);
       },
+      mounted() {},
       watch: {
         elements() {
           this.addCommonFieldsToElements();
@@ -147,10 +166,6 @@
               this.elements.unshift(fieldJson);
             }
           }, this);
-        },
-
-        elementIsValid(element) {
-          return Object.keys(element).length > 0;
         },
       },
       computed: {

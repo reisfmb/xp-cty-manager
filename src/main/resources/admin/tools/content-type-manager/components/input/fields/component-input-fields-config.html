@@ -1,7 +1,7 @@
 <div th:fragment="component-input-fields-config" th:remove="tag">
   <template>
     <v-card>
-      <v-card-subtitle> {{ inputType }} Configuration</v-card-subtitle>
+      <v-card-subtitle> {{ inputType }} - config.</v-card-subtitle>
 
       <v-card-text>
         <component
@@ -36,9 +36,23 @@
           v-bind="{ path, inputType }"
         ></component>
 
-        <template v-for="(element, index) in remainingElements">
+        <template
+          v-if="Object.keys(map).length > 0"
+          v-for="(element, index) in remainingElements"
+        >
           <component
-            v-if="elementIsValid(element)"
+            v-if="map[element.name] !== undefined"
+            :is="map[element.name].componentName"
+            v-bind="{ 
+                path: depthPath(index),
+                field: map[element.name].field,
+                items: map[element.name].items,
+                rules: map[element.name].rules,
+                i18n: map[element.name].i18n
+               }"
+          ></component>
+          <component
+            v-else-if="element.name"
             :is="'component-input-fields-' + element.name"
             v-bind="{ path: depthPath(index), inputType }"
           ></component>
@@ -55,12 +69,17 @@
       template: DOM.innerHTML.toString(),
 
       props: { path: String, inputType: String },
+      data() {
+        return {
+          map: {},
+        };
+      },
+      created() {
+        this.map = app.$root._data.map;
+      },
       methods: {
         depthPath(index) {
           return `${this.path}elements[${index}]`;
-        },
-        elementIsValid(element) {
-          return Object.keys(element).length > 0;
         },
       },
       computed: {

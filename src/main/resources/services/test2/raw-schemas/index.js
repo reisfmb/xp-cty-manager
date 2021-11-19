@@ -12,7 +12,7 @@ const CheckBox = `
     <occurrences minimum="0" maximum="1"/>
     <default>checked</default>
     <config>
-        <alignment>right</alignment>
+        <alignment>left</alignment>
     </config>
 </input>`.trim()
 

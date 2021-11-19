@@ -28,24 +28,29 @@
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
-          <!-- Name field -->
+          <!-- Name -->
           <component
             :is="'component-input-fields-name'"
             v-bind="{ path, inputType }"
           ></component>
 
           <!-- Remaining fields -->
-          <template v-for="(element, index) in elements">
-            <!-- <component
+          <template
+            v-if="Object.keys(map).length > 0"
+            v-for="(element, index) in elements"
+          >
+            <component
               v-if="map[element.name] !== undefined"
               :is="map[element.name].componentName"
               v-bind="{ 
-                path: depthPath(index), 
+                path: depthPath(index),
                 field: map[element.name].field,
-                rulesNames: map[element.name].rules
+                rules: map[element.name].rules,
+                i18n: map[element.name].i18n
                }"
-            ></component> -->
+            ></component>
             <component
+              v-else
               :is="'component-input-fields-' + element.name"
               v-bind="{ path: depthPath(index), inputType }"
             ></component>
@@ -69,13 +74,7 @@
         return {
           showConfig: false,
 
-          map: {
-            label: {
-              componentName: "component-input-text",
-              field: { label: "Label", hint: "My Hint." },
-              rules: ["requiredText"],
-            },
-          },
+          map: {},
 
           commonFieldNames: {
             occurrences: {
@@ -95,6 +94,9 @@
             },
           },
         };
+      },
+      created() {
+        this.map = app.$root._data.map;
       },
       methods: {
         depthPath(index) {

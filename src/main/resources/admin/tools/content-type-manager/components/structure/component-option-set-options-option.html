@@ -17,7 +17,7 @@
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
-          <!-- Name field -->
+          <!-- Name -->
           <component
             :is="'component-input-fields-name'"
             v-bind="{ path, inputName}"
@@ -25,9 +25,14 @@
 
           <template v-for="(element, index) in elements">
             <component
-              v-if="element.name !== 'items' && element.name !== 'input'"
-              :is="'component-input-fields-' + element.name"
-              v-bind="{ path: depthPath(index), inputName }"
+              v-if="element.name !== 'input' && map[element.name] !== undefined"
+              :is="map[element.name].componentName"
+              v-bind="{ 
+                path: depthPath(index),
+                field: map[element.name].field,
+                rules: map[element.name].rules,
+                i18n: map[element.name].i18n
+               }"
             ></component>
             <component
               v-else-if="element.name === 'items'"
@@ -35,11 +40,6 @@
               v-bind="{ path: depthPath(index) }"
             ></component>
           </template>
-
-          <component
-            :is="'component-recursive-element-render'"
-            v-bind="{ path }"
-          ></component>
         </v-card-text>
       </transition>
     </v-card>
@@ -58,7 +58,11 @@
       data() {
         return {
           showConfig: false,
+          map: {},
         };
+      },
+      created() {
+        this.map = app.$root._data.map;
       },
       methods: {
         depthPath(index) {

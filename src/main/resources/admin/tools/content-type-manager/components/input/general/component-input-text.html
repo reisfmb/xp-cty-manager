@@ -2,12 +2,31 @@
   <template>
     <div>
       <v-text-field
+        v-if="!i18n"
         @blur="save"
         v-model="states.text"
         :label="field.label"
         :hint="field.hint"
+        :rules="usedRules"
       >
       </v-text-field>
+      <v-text-field
+        v-else
+        @blur="save"
+        v-model="states.text"
+        :label="field.label"
+        :hint="field.hint"
+        :rules="usedRules"
+        append-icon="mdi-translate"
+        @click:append="showDialog"
+      >
+      </v-text-field>
+
+      <component-i18n-dialog
+        v-if="i18n"
+        :path="path"
+        :showdialog="i18nDialog"
+      ></component-i18n-dialog>
     </div>
   </template>
 
@@ -20,19 +39,18 @@
 
       props: {
         path: String,
-        elementName: String,
+        initialValue: String,
         field: { label: String, hint: String },
-        rulesNames: Array,
+        rules: Array,
+        i18n: Boolean,
       },
       data() {
         return {
-          states: {
-            text: "",
-          },
+          states: { text: this.initialValue || "" },
+          i18nDialog: false,
         };
       },
       mounted() {
-        this.field.label = this.elementName;
         this.states.text = this.value;
       },
       watch: {
@@ -42,9 +60,18 @@
       },
       methods: {
         save() {
-          const path = `${this.path}.attributes.${this.elementName}`;
-          const data = this.states.text;
+          const path = `${this.path}.elements`;
+          const data = [
+            {
+              type: "text",
+              text: this.states.text,
+            },
+          ];
           this.$store.commit("updateJson", { path, data });
+        },
+        showDialog() {
+          this.i18nDialog = false;
+          setTimeout(() => (this.i18nDialog = true), 100);
         },
       },
       computed: {
@@ -52,16 +79,18 @@
           return this.$store.getters.jsonPath(this.path);
         },
         value() {
-          return _.get(this.json, `attributes.${this.elementName}`) || "";
+          return (
+            _.get(this.json, "elements[0].text") || this.initialValue || ""
+          );
         },
-        rules() {
-          // TODO: CONTINUE RULES IMPLEMENTATION
-          const ruleKeys = Object.keys(this.$store.state.moduleRules.rules);
+        usedRules() {
+          const rulesObject = this.$store.state.moduleRules.rules;
+          const ruleKeys = Object.keys(rulesObject);
           const usedRuleKeys = ruleKeys.filter(
-            (ruleName) => this.rulesNames.indexOf(ruleName) !== -1
+            (ruleName) => this.rules.indexOf(ruleName) !== -1
           );
 
-          return;
+          return usedRuleKeys.map((usedRuleKey) => rulesObject[usedRuleKey]);
         },
       },
     });

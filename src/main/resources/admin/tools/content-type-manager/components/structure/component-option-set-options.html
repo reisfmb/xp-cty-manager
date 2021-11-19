@@ -39,7 +39,7 @@
 
           <template v-for="(element, index) in elements">
             <component
-              :is="'component-option-set-options-' + element.name"
+              is="component-option-set-options-option"
               v-bind="{ path: depthPath(index), inputName }"
             ></component>
           </template>

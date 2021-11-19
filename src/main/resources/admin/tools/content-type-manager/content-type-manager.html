@@ -92,42 +92,6 @@
 
     <!-- Form Definition -->
     <component
-      th:replace="./components/form-definition/component-form-definition-display-name.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-display-name-expression.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-display-name-label.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-description.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-super-type.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-is-abstract.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-is-final.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-is-built-in.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-allow-child-content.html"
-      th:remove="tag"
-    ></component>
-    <component
       th:replace="./components/form-definition/component-form-definition-allow-child-content-types.html"
       th:remove="tag"
     ></component>
@@ -140,138 +104,100 @@
       th:remove="tag"
     ></component>
 
+    <!-- Input -->
     <component
       th:replace="./components/input/component-input.html"
       th:remove="tag"
     ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-config.html"
-      th:remove="tag"
-    ></component>
 
-    <!-- Text -->
+    <!-- General Ones -->
     <component
       th:replace="./components/input/general/component-input-text.html"
       th:remove="tag"
     ></component>
     <component
-      th:replace="./components/input/fields/component-input-fields-name.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-label.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-help-text.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-default.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-alignment.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-service.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-min.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-max.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-exclude.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-include.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-allowHeadings.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-max-length.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-regexp.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-relationship-type.html"
+      th:replace="./components/input/general/component-input-boolean.html"
       th:remove="tag"
     ></component>
 
-    <!-- Text *2 -->
+    <!-- Custom Ones -->
     <component
       th:replace="./components/input/fields/component-input-fields-occurrences.html"
       th:remove="tag"
     ></component>
-
-    <!-- List: Label/Value -->
+    <!-- Text *2 -->
     <component
       th:replace="./components/input/fields/component-input-fields-options.html"
       th:remove="tag"
     ></component>
+    <!-- List: Label/Value -->
     <component
       th:replace="./components/input/fields/component-input-fields-params.html"
       th:remove="tag"
     ></component>
-
-    <!-- List: Text -->
+    <!-- List: Label/Value -->
     <component
       th:replace="./components/input/fields/component-input-fields-allowContentTypes.html"
       th:remove="tag"
     ></component>
+    <!-- List: Text -->
     <component
       th:replace="./components/input/fields/component-input-fields-allowPaths.html"
       th:remove="tag"
     ></component>
+    <!-- List: Text -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-config.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-name.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-config.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-name.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-exclude.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-include.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-allowHeadings.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-exclude.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-include.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
+    <component
+      th:replace="./components/input/fields/component-input-fields-allowHeadings.html"
+      th:remove="tag"
+    ></component>
+    <!-- Specific -->
 
-    <!-- Boolean -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-treeMode.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-hideToggleIcon.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-context.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-timezone.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-show-counter.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-expanded.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-indexed.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/fields/component-input-fields-showStatus.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- Main Component -->
+    <!-- Root Component -->
     <script th:inline="javascript">
       var app = new Vue({
         el: "#app",
@@ -282,6 +208,17 @@
             moduleExample,
           },
         }),
+        data: {
+          map: {},
+        },
+        created() {
+          fetch(
+            "http://localhost:8080/_/service/tool.content.type.manager/test3",
+            { method: "GET" }
+          )
+            .then((response) => response.json())
+            .then((data) => (this.map = data.map));
+        },
       });
     </script>
   </body>

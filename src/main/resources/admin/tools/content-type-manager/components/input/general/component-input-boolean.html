@@ -1,31 +1,33 @@
-<div th:fragment="component-input-fields-regexp" th:remove="tag">
+<div th:fragment="component-input-boolean" th:remove="tag">
   <template>
-    <v-text-field
-      @blur="save"
-      v-model="states.text"
-      :label="field.label"
-      :hint="field.hint"
-    >
-    </v-text-field>
+    <div>
+      <v-checkbox
+        @click="save"
+        v-model="states.text"
+        :label="field.label"
+        :hint="field.hint"
+      >
+      </v-checkbox>
+    </div>
   </template>
 
   <script th:inline="javascript">
     DOM = document.getElementsByTagName("template")[0];
     DOM.remove();
 
-    Vue.component("component-input-fields-regexp", {
+    Vue.component("component-input-boolean", {
       template: DOM.innerHTML.toString(),
 
-      props: { path: String, inputType: String },
+      props: {
+        path: String,
+        field: { label: String, hint: String },
+        rules: Array,
+        i18n: Boolean,
+      },
       data() {
         return {
-          field: {
-            label: "Regular Expression",
-            hint: "Supports validation by defining regular expressions.",
-          },
-
           states: {
-            text: "",
+            text: false,
           },
         };
       },
@@ -43,7 +45,7 @@
           const data = [
             {
               type: "text",
-              text: this.states.text,
+              text: this.states.text.toString(),
             },
           ];
           this.$store.commit("updateJson", { path, data });
@@ -54,7 +56,7 @@
           return this.$store.getters.jsonPath(this.path);
         },
         value() {
-          return _.get(this.json, "elements[0].text") || "";
+          return _.get(this.json, "elements[0].text") === "true" || false;
         },
       },
     });
