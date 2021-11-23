@@ -69,8 +69,9 @@
           return `${this.path}elements[${index}]`;
         },
 
-        removeSet() {
-          this.$store.commit("removeSchemaInJson", { path: this.path });
+        async removeSet() {
+          if (await app.$root.confirmDialog("Are you sure ?"))
+            this.$store.commit("removeSchemaInJson", { path: this.path });
         },
       },
       computed: {

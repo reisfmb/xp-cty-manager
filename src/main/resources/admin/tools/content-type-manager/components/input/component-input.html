@@ -117,8 +117,9 @@
           });
         },
 
-        removeInput() {
-          this.$store.commit("removeSchemaInJson", { path: this.path });
+        async removeInput() {
+          if (await app.$root.confirmDialog("Are you sure ?"))
+            this.$store.commit("removeSchemaInJson", { path: this.path });
         },
       },
       computed: {

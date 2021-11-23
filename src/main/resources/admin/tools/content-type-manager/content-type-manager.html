@@ -219,6 +219,17 @@
             .then((response) => response.json())
             .then((data) => (this.map = data.map));
         },
+        methods: {
+          confirmDialog(title) {
+            return Swal.fire({
+              title: title,
+              showDenyButton: true,
+              showCancelButton: false,
+              confirmButtonText: "Yes",
+              denyButtonText: "No",
+            }).then((result) => result.isConfirmed);
+          },
+        },
       });
     </script>
   </body>
