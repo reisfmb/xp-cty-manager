@@ -32,6 +32,7 @@
           const contentTypeName = window.prompt(
             "What is the name of the content type?"
           );
+
           const newContentTypeDirectoryHandle =
             await dirHandle.getDirectoryHandle(contentTypeName, {
               create: true,
@@ -40,27 +41,31 @@
             `${contentTypeName}.xml`,
             { create: true }
           );
+
+          this.$store.commit("setFileName", { data: contentTypeName });
         },
         async getFileContent() {
           alert("Please select the xml file of a content-type.");
 
           [fileHandle] = await window.showOpenFilePicker();
-
+          this.fileHandle = fileHandle;
           const file = await fileHandle.getFile();
 
           if (file.type !== "text/xml") {
             alert("This is not a XML file.");
-            return false;
+            return;
           }
 
           this.setJson(await file.text());
-
-          this.fileHandle = fileHandle;
 
           Swal.fire({
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
+          }).then(() => {
+            this.$store.commit("setFileName", {
+              data: file.name.replace(".xml", ""),
+            });
           });
         },
         async saveContentType() {

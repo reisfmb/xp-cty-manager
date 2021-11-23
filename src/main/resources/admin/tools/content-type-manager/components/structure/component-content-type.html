@@ -3,7 +3,9 @@
     <v-card>
       <v-row>
         <v-col cols="10">
-          <v-card-title>{{ inputType }}</v-card-title>
+          <v-card-title>
+            <v-chip v-if="fileName" color="green">{{ fileName }}</v-chip>
+          </v-card-title>
         </v-col>
         <v-col cols="2" class="d-flex align-center justify-center">
           <v-btn @click="showConfig = !showConfig" icon>
@@ -51,18 +53,18 @@
                   <component
                     v-else-if="element.name && element.name !== 'form'"
                     :is="'component-form-definition-' + element.name"
-                    v-bind="{ path: depthPath(index), inputType }"
+                    v-bind="{ path: depthPath(index), inputType: fileName }"
                   ></component>
                 </template>
 
                 <component
                   :is="'component-input-form-definition-allow-child-content-types'"
-                  v-bind="{ path, inputType }"
+                  v-bind="{ path, inputType: fileName }"
                 ></component>
 
                 <component
                   :is="'component-input-form-definition-x-datas'"
-                  v-bind="{ path, inputType }"
+                  v-bind="{ path, inputType: fileName }"
                 ></component>
               </v-card-text>
             </transition>
@@ -172,8 +174,8 @@
         json() {
           return this.$store.getters.jsonPath(this.path);
         },
-        inputType() {
-          return "Content-Type";
+        fileName() {
+          return this.$store.getters.fileName;
         },
         elements() {
           return this.json.elements;
