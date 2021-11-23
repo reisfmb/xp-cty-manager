@@ -29,13 +29,24 @@
           alert("Please select the content-types folder.");
 
           dirHandle = await window.showDirectoryPicker();
+
+          if (dirHandle.name !== "content-types") {
+            Swal.fire({
+              icon: "warning",
+              text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+            });
+            return;
+          }
+
           const contentTypeName = window.prompt(
             "What is the name of the content type?"
           );
+
           const newContentTypeDirectoryHandle =
             await dirHandle.getDirectoryHandle(contentTypeName, {
               create: true,
             });
+
           this.fileHandle = await newContentTypeDirectoryHandle.getFileHandle(
             `${contentTypeName}.xml`,
             { create: true }
