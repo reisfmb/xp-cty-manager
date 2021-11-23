@@ -45,7 +45,7 @@
           alert("Please select the xml file of a content-type.");
 
           [fileHandle] = await window.showOpenFilePicker();
-
+          this.fileHandle = fileHandle;
           const file = await fileHandle.getFile();
 
           if (file.type !== "text/xml") {
@@ -55,10 +55,11 @@
 
           this.setJson(await file.text());
 
-          this.fileHandle = fileHandle;
-
           Swal.fire({
-            icon: "success",
+            iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+            customClass: {
+              icon: "no-border",
+            },
             showConfirmButton: false,
             timer: 1500,
           });
