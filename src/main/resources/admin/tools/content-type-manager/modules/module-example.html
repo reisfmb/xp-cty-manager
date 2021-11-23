@@ -127,11 +127,11 @@
             const desiredData = _.get(state.json, desiredPath);
             const currentData = _.get(state.json, currentPath);
 
-            if (
+            /* if (
               desiredData.name === "field-set" ||
               desiredData.name === "item-set"
             )
-              return;
+              return; */
 
             _.setWith(
               state.json,
