@@ -1,10 +1,10 @@
 <div th:fragment="component-content-type" th:remove="tag">
   <template>
-    <v-card>
+    <v-card v-if="fileName">
       <v-row>
         <v-col cols="10">
           <v-card-title>
-            <v-chip v-if="fileName" color="green">{{ fileName }}</v-chip>
+            <v-chip color="green">{{ fileName }}</v-chip>
           </v-card-title>
         </v-col>
         <v-col cols="2" class="d-flex align-center justify-center">
