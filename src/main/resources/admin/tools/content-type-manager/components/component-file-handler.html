@@ -34,6 +34,14 @@
 
             dirHandle = await window.showDirectoryPicker();
 
+            if (dirHandle.name !== "content-types") {
+              Swal.fire({
+                icon: "warning",
+                text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+              });
+              return;
+            }
+
             const { value: contentTypeName } = await Swal.fire({
               text: "What is the name of the content type?",
               input: "text",
@@ -83,7 +91,6 @@
               showConfirmButton: false,
               timer: 500,
             });
-            
           });
         },
         async saveContentType() {
