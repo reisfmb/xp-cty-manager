@@ -17,6 +17,18 @@
       return recursivelyFindPathOfFormElement(jsonAtPath, nextPath);
     };
 
+    const renameAttributeNameIfNeeded = (jsonAsString, schemaJson) => {
+      const schemaAttributeName = (schemaJson.attributes || {}).name || "";
+      if (
+        schemaAttributeName &&
+        jsonAsString.indexOf(schemaAttributeName) !== -1
+      ) {
+        const counter =
+          jsonAsString.split(`"name":"${schemaAttributeName}`).length - 1;
+        schemaJson.attributes.name = `${schemaAttributeName}-${counter + 1}`;
+      }
+    };
+
     const moduleExample = {
       state: {
         json: {
@@ -53,7 +65,9 @@
           });
         },
 
-        addSchemaInJsonForm: (state, { schemaJson }) => {
+        addSchemaInForm: (state, { schemaJson }) => {
+          renameAttributeNameIfNeeded(JSON.stringify(state.json), schemaJson);
+
           const formPath = recursivelyFindPathOfFormElement(state.json);
           const formElementsPath = `${formPath}.elements`;
           const formElements = _.get(state.json, formElementsPath) || [];
@@ -68,6 +82,8 @@
         },
 
         addSchemaInSet: (state, { path, schemaJson }) => {
+          renameAttributeNameIfNeeded(JSON.stringify(state.json), schemaJson);
+
           const setPath = path;
           let elementItemsIndex = 0;
 
@@ -88,6 +104,8 @@
         },
 
         addSchemaInOptions: (state, { path, schemaJson }) => {
+          renameAttributeNameIfNeeded(JSON.stringify(state.json), schemaJson);
+
           const setPath = path;
           let elementItemsIndex = 0;
 
