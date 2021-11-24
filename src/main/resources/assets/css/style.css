@@ -11,6 +11,10 @@
   }
 }
 
+.pointer:hover {
+  cursor: pointer;
+}
+
 /* --- */
 
 .swal2-container {

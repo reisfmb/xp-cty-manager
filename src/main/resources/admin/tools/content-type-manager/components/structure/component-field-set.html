@@ -1,33 +1,32 @@
 <div th:fragment="component-field-set" th:remove="tag">
   <template>
     <v-card>
-      <v-row>
+      <div class="row pointer" @click="showConfig = !showConfig">
         <v-col cols="9">
           <v-card-title>{{ inputLabel }}</v-card-title>
           <v-card-subtitle>
             <small>
-              <a :href="docsUrl" target="_blank">{{ inputType }}</a>
+              <a :href="docsUrl" target="_blank" @click.stop>{{ inputType }}</a>
             </small>
           </v-card-subtitle>
         </v-col>
         <v-col cols="3" class="d-flex align-center justify-center">
-          <v-btn @click="moveSetUp" icon>
+          <v-btn @click.stop="moveSetUp" icon>
             <v-icon> mdi-arrow-up </v-icon>
           </v-btn>
-          <v-btn @click="moveSetDown" icon>
+          <v-btn @click.stop="moveSetDown" icon>
             <v-icon> mdi-arrow-down </v-icon>
           </v-btn>
-          <v-btn @click="showConfig = !showConfig" icon>
-            <v-icon> mdi-circle-edit-outline </v-icon>
-          </v-btn>
-          <v-btn @click="removeSet" icon>
+          <v-btn @click.stop="removeSet" icon>
             <v-icon color="red"> mdi-delete-circle-outline </v-icon>
           </v-btn>
         </v-col>
-      </v-row>
+      </div>
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
+          <v-divider class="mb-5"></v-divider>
+
           <template
             v-if="Object.keys(map).length > 0"
             v-for="(element, index) in elements"
