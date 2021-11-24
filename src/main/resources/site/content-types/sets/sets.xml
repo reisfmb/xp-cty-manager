@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-type>
+	<display-name>sets</display-name>
+	<display-name-label/>
+	<display-name-expression/>
+	<description/>
+	<super-type>base:structured</super-type>
+	<is-abstract>false</is-abstract>
+	<is-final>false</is-final>
+	<is-built-in>false</is-built-in>
+	<allow-child-content>true</allow-child-content>
+	<form>
+		<option-set name="myoptionset">
+			<label>My Option Set</label>
+			<help-text/>
+			<occurrences minimum="0" maximum="1"/>
+			<expanded>false</expanded>
+			<options minimum="1" maximum="1">
+				<option name="my2ndoption">
+					<label>My Second Option</label>
+					<items>
+						<input name="mytextline" type="TextLine">
+							<label>Option Set &gt; 2st Option &gt; Text Line</label>
+							<help-text/>
+							<occurrences minimum="0" maximum="1"/>
+							<default>Default text goes here</default>
+							<config>
+								<max-length>100</max-length>
+								<show-counter>true</show-counter>
+								<regexp/>
+							</config>
+						</input>
+					</items>
+				</option>
+				<option name="my1stoption">
+					<label>My First Option</label>
+					<items>
+						<input name="mytextline" type="TextLine">
+							<label>Option Set &gt; 1st Option &gt; Text Line</label>
+							<help-text/>
+							<occurrences minimum="0" maximum="1"/>
+							<default>Default text goes here</default>
+							<config>
+								<max-length>100</max-length>
+								<show-counter>true</show-counter>
+								<regexp/>
+							</config>
+						</input>
+					</items>
+				</option>
+			</options>
+		</option-set>
+		<item-set name="myitemset">
+			<label>My Item Set</label>
+			<help-text/>
+			<occurrences minimum="0" maximum="1"/>
+			<items>
+				<input name="mytextline" type="TextLine">
+					<label>Item Set &gt; Text Line</label>
+					<help-text/>
+					<occurrences minimum="0" maximum="1"/>
+					<default>Default text goes here</default>
+					<config>
+						<max-length>100</max-length>
+						<show-counter>true</show-counter>
+						<regexp>/*/g</regexp>
+					</config>
+				</input>
+			</items>
+		</item-set>
+		<field-set>
+			<label>myfieldset</label>
+			<items>
+				<input name="mytextline" type="TextLine">
+					<label>Field Set &gt; Text Line</label>
+					<help-text/>
+					<occurrences minimum="0" maximum="1"/>
+					<default>Default text goes here</default>
+					<config>
+						<max-length>100</max-length>
+						<show-counter>true</show-counter>
+						<regexp/>
+					</config>
+				</input>
+			</items>
+		</field-set>
+	</form>
+</content-type>

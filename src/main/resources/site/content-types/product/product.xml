@@ -29,6 +29,7 @@
 			<label i18n="content-type.product.input.note">Text</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<config/>
 		</input>
 		<input type="TextLine" name="atc">
 			<label i18n="content-type.product.input.atc">ATC</label>
@@ -63,11 +64,6 @@
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
 		</input>
-		<input type="TextLine" name="kakazinha">
-			<label i18n="content-type.product.input.gasket">Kakazinha da minha vida</label>
-			<occurrences minimum="0" maximum="1"/>
-			<help-text>Type kakazinha</help-text>
-		</input>
 		<input type="ContentSelector" name="usage">
 			<label i18n="content-type.product.input.usage">Usage</label>
 			<occurrences minimum="1" maximum="0"/>
@@ -87,6 +83,17 @@
 			<label i18n="content-type.product.input.marketingStatus">Marketing Status</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+		</input>
+		<input name="myhtmlarea" type="HtmlArea">
+			<label>My HTML Area</label>
+			<help-text>This is my html area</help-text>
+			<occurrences minimum="0" maximum="1"/>
+			<default>My html area with a default value :)</default>
+			<config>
+				<exclude>*</exclude>
+				<include>Format | JustifyBlock JustifyLeft JustifyCenter JustifyRight | BulletedList NumberedList Outdent Indent | SpecialChar Anchor Image Macro Link Unlink | Table | PasteModeSwitcher</include>
+				<allowHeadings>h1 h3 h5</allowHeadings>
+			</config>
 		</input>
 		<item-set name="stockStatus">
 			<label i18n="content-type.product.item-set.stockStatus">Stock Status</label>

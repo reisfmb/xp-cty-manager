@@ -13,6 +13,12 @@
 
 /* Vuetify overwrite rules */
 
+.swal2-container {
+  font-family: "Roboto";
+}
+
+/* --- */
+
 .v-card {
   margin: 25px 0px;
 }
