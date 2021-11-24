@@ -34,6 +34,14 @@
 
             dirHandle = await window.showDirectoryPicker();
 
+            if (dirHandle.name !== "content-types") {
+              Swal.fire({
+                icon: "warning",
+                text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+              });
+              return;
+            }
+
             const { value: contentTypeName } = await Swal.fire({
               text: "What is the name of the content type?",
               input: "text",
@@ -75,12 +83,13 @@
 
             this.setJson(await file.text());
 
-            this.fileHandle = fileHandle;
-
             Swal.fire({
-              icon: "success",
+              iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+              customClass: {
+                icon: "no-border",
+              },
               showConfirmButton: false,
-              timer: 1500,
+              timer: 500,
             });
           });
         },

@@ -209,6 +209,7 @@
           },
         }),
         data: {
+          loadingIcon: /*[[${ loadingIcon }]]*/ "",
           map: {},
         },
         created() {
@@ -218,6 +219,29 @@
           )
             .then((response) => response.json())
             .then((data) => (this.map = data.map));
+        },
+        methods: {
+          // Those methods are ones that are shared through multiple components
+          ableToMoveSchema(path, direction) {
+            if (direction === "up" || direction === "down") {
+              const indexesWithBracketsInPath = path.match(/[[0-9]+]/g);
+              const lastIndexWithBrackets = _.last(indexesWithBracketsInPath);
+              const previousPath = path.slice(0, -lastIndexWithBrackets.length);
+              const currentIndex = parseInt(
+                lastIndexWithBrackets.replace("[", "").replace("]", "")
+              );
+              const desiredIndex =
+                direction === "up" ? currentIndex - 1 : currentIndex + 1;
+              const maxIndex = Math.max(
+                (this.$store.getters.jsonPath(previousPath) || []).length - 1,
+                0
+              );
+              return !(0 <= desiredIndex && desiredIndex <= maxIndex);
+            }
+          },
+          moveSchema(path, direction) {
+            this.$store.commit("moveSchemaInJson", { path, direction });
+          },
         },
       });
     </script>
