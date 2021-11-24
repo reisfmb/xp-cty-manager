@@ -238,6 +238,9 @@
               return !(0 <= desiredIndex && desiredIndex <= maxIndex);
             }
           },
+          moveSchema(path, direction) {
+            this.$store.commit("moveSchemaInJson", { path, direction });
+          },
         },
       });
     </script>

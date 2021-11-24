@@ -11,10 +11,18 @@
           </v-card-subtitle>
         </v-col>
         <v-col cols="3" class="d-flex align-center justify-center">
-          <v-btn @click="moveSetUp" icon :disabled="ableToMoveSchema('up')">
+          <v-btn
+            @click="moveSchema('up')"
+            icon
+            :disabled="ableToMoveSchema('up')"
+          >
             <v-icon> mdi-arrow-up </v-icon>
           </v-btn>
-          <v-btn @click="moveSetDown" icon :disabled="ableToMoveSchema('down')">
+          <v-btn
+            @click="moveSchema('down')"
+            icon
+            :disabled="ableToMoveSchema('down')"
+          >
             <v-icon> mdi-arrow-down </v-icon>
           </v-btn>
           <v-btn @click="showConfig = !showConfig" icon>
@@ -80,18 +88,8 @@
           return `${this.path}elements[${index}]`;
         },
 
-        moveSetUp() {
-          this.$store.commit("moveSchemaInJson", {
-            path: this.path,
-            direction: "up",
-          });
-        },
-
-        moveSetDown() {
-          this.$store.commit("moveSchemaInJson", {
-            path: this.path,
-            direction: "down",
-          });
+        moveSchema(direction) {
+          app.$root.moveSchema(this.path, direction);
         },
 
         ableToMoveSchema(direction) {
