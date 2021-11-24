@@ -26,52 +26,71 @@
       },
       methods: {
         async createNewContentType() {
-          alert("Please select the content-types folder.");
+          Swal.fire({
+            text: "Please select the content-types folder.",
+            showCancelButton: true,
+          }).then(async (result) => {
+            if (!result.isConfirmed) return;
 
-          dirHandle = await window.showDirectoryPicker();
+            dirHandle = await window.showDirectoryPicker();
 
-          if (dirHandle.name !== "content-types") {
-            Swal.fire({
-              icon: "warning",
-              text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+            if (dirHandle.name !== "content-types") {
+              Swal.fire({
+                icon: "warning",
+                text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+              });
+              return;
+            }
+
+            const { value: contentTypeName } = await Swal.fire({
+              text: "What is the name of the content type?",
+              input: "text",
             });
-            return;
-          }
 
-          const contentTypeName = window.prompt(
-            "What is the name of the content type?"
-          );
+            if (!contentTypeName) return;
 
-          const newContentTypeDirectoryHandle =
-            await dirHandle.getDirectoryHandle(contentTypeName, {
-              create: true,
-            });
+            const newContentTypeDirectoryHandle =
+              await dirHandle.getDirectoryHandle(contentTypeName, {
+                create: true,
+              });
 
-          this.fileHandle = await newContentTypeDirectoryHandle.getFileHandle(
-            `${contentTypeName}.xml`,
-            { create: true }
-          );
+            this.fileHandle = await newContentTypeDirectoryHandle.getFileHandle(
+              `${contentTypeName}.xml`,
+              { create: true }
+            );
+          });
         },
         async getFileContent() {
-          alert("Please select the xml file of a content-type.");
-
-          [fileHandle] = await window.showOpenFilePicker();
-
-          const file = await fileHandle.getFile();
-
-          if (file.type !== "text/xml") {
-            alert("This is not a XML file.");
-            return false;
-          }
-
-          this.setJson(await file.text());
-
-          this.fileHandle = fileHandle;
-
           Swal.fire({
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
+            text: "Please select the xml file of a content-type.",
+            showCancelButton: true,
+          }).then(async (result) => {
+            if (!result.isConfirmed) return;
+
+            [fileHandle] = await window.showOpenFilePicker();
+
+            const file = await fileHandle.getFile();
+
+            if (file.type !== "text/xml") {
+              Swal.fire({
+                text: "This is not a XML file.",
+                icon: "error",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              return false;
+            }
+
+            this.setJson(await file.text());
+
+            Swal.fire({
+              iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+              customClass: {
+                icon: "no-border",
+              },
+              showConfirmButton: false,
+              timer: 500,
+            });
           });
         },
         async saveContentType() {
