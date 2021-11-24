@@ -11,10 +11,20 @@
   }
 }
 
-/* --- */
+/* Vuetify overwrite rules */
+
+.v-card {
+  margin: 25px 0px;
+}
+
+.v-dialog .v-card {
+  margin: 0px;
+}
+
+/* Icon */
 
 .loading-icon {
-  width: 100px !important;
+  width: 100px;
   display: block;
   margin: 0 auto;
 }
@@ -23,22 +33,13 @@
   border: 0 !important;
 }
 
-/* --- */
-
-.v-card {
-  margin: 25px 0px !important;
-}
-
-.v-dialog .v-card {
-  margin: 0px !important;
-}
-
-/* --- */
+/* Transitions */
 
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
