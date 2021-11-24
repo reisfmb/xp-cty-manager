@@ -220,14 +220,18 @@
             .then((data) => (this.map = data.map));
         },
         methods: {
-          confirmDialog(title) {
-            return Swal.fire({
-              title: title,
+          removeSchema(path) {
+            Swal.fire({
+              title: "Are you sure ?",
               showDenyButton: true,
               showCancelButton: false,
               confirmButtonText: "Yes",
               denyButtonText: "No",
-            }).then((result) => result.isConfirmed);
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$store.commit("removeSchemaInJson", { path });
+              }
+            });
           },
         },
       });

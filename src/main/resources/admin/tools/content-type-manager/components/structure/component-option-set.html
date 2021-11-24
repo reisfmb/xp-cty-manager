@@ -14,7 +14,7 @@
           <v-btn @click="showConfig = !showConfig" icon>
             <v-icon> mdi-circle-edit-outline </v-icon>
           </v-btn>
-          <v-btn @click="removeSet" icon>
+          <v-btn @click="removeSchema" icon>
             <v-icon color="red"> mdi-delete-circle-outline </v-icon>
           </v-btn>
         </v-col>
@@ -74,9 +74,8 @@
           return `${this.path}elements[${index}]`;
         },
 
-        async removeSet() {
-          if (await app.$root.confirmDialog("Are you sure ?"))
-            this.$store.commit("removeSchemaInJson", { path: this.path });
+        removeSchema() {
+          app.$root.removeSchema(this.path);
         },
       },
       computed: {
