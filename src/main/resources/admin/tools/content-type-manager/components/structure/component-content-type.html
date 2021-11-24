@@ -1,37 +1,31 @@
 <div th:fragment="component-content-type" th:remove="tag">
   <template>
     <v-card>
-      <v-row>
-        <v-col cols="10">
+      <div class="row pointer" @click="showConfig = !showConfig">
+        <v-col cols="12">
           <v-card-title>{{ inputType }}</v-card-title>
         </v-col>
-        <v-col cols="2" class="d-flex align-center justify-center">
-          <v-btn @click="showConfig = !showConfig" icon>
-            <v-icon> mdi-circle-edit-outline </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+      </div>
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
+          <v-divider class="mb-5"></v-divider>
+
           <!-- TODO: Change form definition to a component -->
           <v-card>
-            <v-row>
-              <v-col cols="10">
+            <div
+              class="row pointer"
+              @click="showFormDefinitionConfig = !showFormDefinitionConfig"
+            >
+              <v-col cols="12">
                 <v-card-title>Form Definition</v-card-title>
               </v-col>
-              <v-col cols="2" class="d-flex align-center justify-center">
-                <v-btn
-                  @click="showFormDefinitionConfig = !showFormDefinitionConfig"
-                  icon
-                >
-                  <v-icon> mdi-circle-edit-outline </v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
+            </div>
 
             <transition name="fade">
               <v-card-text v-show="showFormDefinitionConfig">
+                <v-divider class="mb-5"></v-divider>
+
                 <template
                   v-if="Object.keys(map).length > 0"
                   v-for="(element, index) in remainingElements"

@@ -1,41 +1,42 @@
 <div th:fragment="component-input" th:remove="tag">
   <template>
     <v-card>
-      <v-row>
+      <div class="row pointer" @click="showConfig = !showConfig">
         <v-col cols="9">
           <v-card-title>{{ inputName }}</v-card-title>
           <v-card-subtitle>
             <small>
-              <a :href="docsUrl" target="_blank">{{ inputType }}</a>
+              <a :href="docsUrl" target="_blank" @click.stop>
+                {{ inputType }}
+              </a>
             </small>
           </v-card-subtitle>
         </v-col>
         <v-col cols="3" class="d-flex align-center justify-center">
           <v-btn
-            @click="moveSchema('up')"
+            @click.stop="moveSchema('up')"
             icon
             :disabled="ableToMoveSchema('up')"
           >
             <v-icon> mdi-arrow-up </v-icon>
           </v-btn>
           <v-btn
-            @click="moveSchema('down')"
+            @click.stop="moveSchema('down')"
             icon
             :disabled="ableToMoveSchema('down')"
           >
             <v-icon> mdi-arrow-down </v-icon>
           </v-btn>
-          <v-btn @click="showConfig = !showConfig" icon>
-            <v-icon> mdi-circle-edit-outline </v-icon>
-          </v-btn>
-          <v-btn @click="removeInput" icon>
+          <v-btn @click.stop="removeInput" icon>
             <v-icon color="red"> mdi-delete-circle-outline </v-icon>
           </v-btn>
         </v-col>
-      </v-row>
+      </div>
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
+          <v-divider class="mb-5"></v-divider>
+
           <!-- Name -->
           <component
             :is="'component-input-fields-name'"

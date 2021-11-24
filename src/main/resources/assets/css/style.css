@@ -11,13 +11,13 @@
   }
 }
 
-/* Vuetify overwrite rules */
+/* Seet alert rules */
 
 .swal2-container {
   font-family: "Roboto";
 }
 
-/* --- */
+/* Vuetify overwrite rules */
 
 .v-card {
   margin: 25px 0px;
@@ -25,6 +25,10 @@
 
 .v-dialog .v-card {
   margin: 0px;
+}
+
+.pointer:hover {
+  cursor: pointer;
 }
 
 /* Icon */
