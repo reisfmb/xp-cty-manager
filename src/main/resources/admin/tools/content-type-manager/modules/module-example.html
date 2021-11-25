@@ -31,6 +31,7 @@
 
     const moduleExample = {
       state: {
+        fileName: "",
         json: {
           declaration: {
             attributes: {
@@ -55,6 +56,10 @@
       },
 
       mutations: {
+        setFileName: (state, { data }) => {
+          state.fileName = data;
+        },
+
         setJson: (state, { data }) => {
           state.json = data;
         },
@@ -188,6 +193,7 @@
       },
 
       getters: {
+        fileName: (state) => state.fileName || "",
         jsonPath: (state) => (path) => _.get(state.json, path) || {},
       },
     };

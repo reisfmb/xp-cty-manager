@@ -58,6 +58,8 @@
               `${contentTypeName}.xml`,
               { create: true }
             );
+
+            this.$store.commit("setFileName", { data: contentTypeName });
           });
         },
         async getFileContent() {
@@ -68,7 +70,7 @@
             if (!result.isConfirmed) return;
 
             [fileHandle] = await window.showOpenFilePicker();
-
+            this.fileHandle = fileHandle;
             const file = await fileHandle.getFile();
 
             if (file.type !== "text/xml") {
@@ -90,6 +92,10 @@
               },
               showConfirmButton: false,
               timer: 500,
+            }).then(() => {
+              this.$store.commit("setFileName", {
+                data: file.name.replace(".xml", ""),
+              });
             });
           });
         },

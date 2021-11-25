@@ -1,9 +1,9 @@
 <div th:fragment="component-content-type" th:remove="tag">
   <template>
-    <v-card>
+    <v-card v-if="fileName">
       <div class="row pointer" @click="showConfig = !showConfig">
         <v-col cols="12">
-          <v-card-title>{{ inputType }}</v-card-title>
+          <v-card-title>{{ fileName }}</v-card-title>
         </v-col>
       </div>
 
@@ -45,18 +45,18 @@
                   <component
                     v-else-if="element.name && element.name !== 'form'"
                     :is="'component-form-definition-' + element.name"
-                    v-bind="{ path: depthPath(index), inputType }"
+                    v-bind="{ path: depthPath(index), inputType: fileName }"
                   ></component>
                 </template>
 
                 <component
                   :is="'component-input-form-definition-allow-child-content-types'"
-                  v-bind="{ path, inputType }"
+                  v-bind="{ path, inputType: fileName }"
                 ></component>
 
                 <component
                   :is="'component-input-form-definition-x-datas'"
-                  v-bind="{ path, inputType }"
+                  v-bind="{ path, inputType: fileName }"
                 ></component>
               </v-card-text>
             </transition>
@@ -166,8 +166,8 @@
         json() {
           return this.$store.getters.jsonPath(this.path);
         },
-        inputType() {
-          return "Content-Type";
+        fileName() {
+          return this.$store.getters.fileName;
         },
         elements() {
           return this.json.elements;
