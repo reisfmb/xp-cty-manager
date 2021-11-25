@@ -21,7 +21,10 @@
       data() {
         return {
           fileHandle: null,
-          errorVcardColor: "red",
+          error: {
+            borderColor: "red",
+            backgroundColor: "#ff000005",
+          },
         };
       },
       methods: {
@@ -114,7 +117,7 @@
             return;
           }
 
-          this.resetBorderOfVcards();
+          this.resetColorOfVcards();
 
           const xml = await this.getXmlFromJson(this.json);
           const writable = await this.fileHandle.createWritable();
@@ -140,19 +143,21 @@
         ///
 
         setBorderOfVcardsWithErrors() {
-          setTimeout(() => {
+          // Get all error DOM elements
+          const getAllDOMelementsWithErrors = () =>
             Array.from(
               document.getElementsByClassName("v-messages error--text")
-            ).forEach((div) => {
-              let i = 0,
-                el = div;
+            );
+
+          // For each error elements, find it's Vcard father and colorize it
+          const colorizeElementsWithErrors = (elements) => {
+            elements.forEach((div) => {
+              let i = 0;
+              let el = div;
               const m = 10;
 
               while (el && i < m) {
-                if (
-                  Array.from(el.classList).indexOf("v-card") !== -1 &&
-                  Array.from(el.classList).indexOf("v-sheet") !== -1
-                ) {
+                if (isElementVCard(el)) {
                   break;
                 } else {
                   el = el.parentElement;
@@ -160,14 +165,60 @@
                 }
               }
 
-              el.style.border = `2px solid ${this.errorVcardColor}`;
+              el.style.border = `2px solid ${this.error.borderColor}`;
+              el.style.backgroundColor = this.error.backgroundColor;
             });
+
+            return elements;
+          };
+
+          // Expand all parent elements of el
+          const expandAllParentElements = (elements) => {
+            elements.forEach((el) => {
+              getAllElementParents(el)
+                .filter((el) => isElementVCard(el))
+                .forEach((el) => {
+                  el.__vue__.$parent.showConfig = true;
+                });
+            });
+          };
+
+          ///
+
+          // Check if an element is a vuetify card
+          const isElementVCard = (el) => {
+            return (
+              (((el.__vue__ || {}).$options || {})._componentTag || "") ===
+              "v-card"
+            );
+          };
+
+          // Get all father parents of el
+          const getAllElementParents = (el) => {
+            return [
+              ...(function* (e) {
+                do {
+                  yield e;
+                } while ((e = e.parentNode));
+              })(el),
+            ];
+          };
+
+          ///
+
+          setTimeout(() => {
+            R.pipe(
+              getAllDOMelementsWithErrors,
+              colorizeElementsWithErrors,
+              expandAllParentElements
+            )();
           }, 100);
         },
-        resetBorderOfVcards() {
+        resetColorOfVcards() {
           Array.from(document.getElementsByClassName("v-card")).forEach(
             (div) => {
               div.style.border = "";
+              div.style.backgroundColor = "";
             }
           );
         },
