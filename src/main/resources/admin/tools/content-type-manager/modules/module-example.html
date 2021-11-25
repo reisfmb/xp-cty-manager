@@ -29,30 +29,34 @@
       }
     };
 
-    const moduleExample = {
-      state: {
-        fileName: "",
-        json: {
-          declaration: {
-            attributes: {
-              version: "1.0",
-              encoding: "UTF-8",
-            },
-          },
+    const emptyJson = {
+      declaration: {
+        attributes: {
+          version: "1.0",
+          encoding: "UTF-8",
+        },
+      },
+      elements: [
+        {
+          type: "element",
+          name: "content-type",
           elements: [
             {
               type: "element",
-              name: "content-type",
-              elements: [
-                {
-                  type: "element",
-                  name: "form",
-                  elements: [],
-                },
-              ],
+              name: "form",
+              elements: [],
             },
           ],
         },
+      ],
+    };
+
+    ///
+
+    const moduleExample = {
+      state: {
+        fileName: "",
+        json: emptyJson,
       },
 
       mutations: {
@@ -62,6 +66,10 @@
 
         setJson: (state, { data }) => {
           state.json = data;
+        },
+
+        resetJson: (state) => {
+          state.json = emptyJson;
         },
 
         updateJson: (state, { path, data }) => {
@@ -149,12 +157,6 @@
 
             const desiredData = _.get(state.json, desiredPath);
             const currentData = _.get(state.json, currentPath);
-
-            /* if (
-              desiredData.name === "field-set" ||
-              desiredData.name === "item-set"
-            )
-              return; */
 
             _.setWith(
               state.json,
