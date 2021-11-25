@@ -165,7 +165,7 @@ const MediaSelector = `
 </input>`.trim()
 
 const Option = `
-<option name="myoption">
+<option name="myoptionsetoption">
     <label></label>
     <items />
 </option>`.trim()

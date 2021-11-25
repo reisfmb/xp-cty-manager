@@ -1,19 +1,16 @@
 <div th:fragment="component-option-set-options" th:remove="tag">
   <template>
     <v-card>
-      <v-row>
-        <v-col cols="10">
+      <div class="row pointer" @click="showConfig = !showConfig">
+        <v-col cols="12">
           <v-card-title>{{ inputName }}</v-card-title>
         </v-col>
-        <v-col cols="2" class="d-flex align-center justify-center">
-          <v-btn @click="showConfig = !showConfig" icon>
-            <v-icon> mdi-circle-edit-outline </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+      </div>
 
       <transition name="fade">
         <v-card-text v-show="showConfig">
+          <v-divider class="mb-5"></v-divider>
+
           <v-row>
             <v-col>
               <v-text-field
@@ -65,7 +62,7 @@
       },
       data() {
         return {
-          showConfig: false,
+          showConfig: true,
 
           fields: {
             minimum: {
