@@ -27,7 +27,7 @@
           >
             <v-icon> mdi-arrow-down </v-icon>
           </v-btn>
-          <v-btn @click.stop="removeInput" icon>
+          <v-btn @click.stop="removeSchema" icon>
             <v-icon color="red"> mdi-delete-circle-outline </v-icon>
           </v-btn>
         </v-col>
@@ -120,8 +120,8 @@
           return app.$root.ableToMoveSchema(this.path, direction);
         },
 
-        removeInput() {
-          this.$store.commit("removeSchemaInJson", { path: this.path });
+        removeSchema() {
+          app.$root.removeSchema(this.path);
         },
       },
       computed: {

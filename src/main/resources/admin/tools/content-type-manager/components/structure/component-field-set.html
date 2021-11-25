@@ -25,7 +25,7 @@
           >
             <v-icon> mdi-arrow-down </v-icon>
           </v-btn>
-          <v-btn @click.stop="removeSet" icon>
+          <v-btn @click.stop="removeSchema" icon>
             <v-icon color="red"> mdi-delete-circle-outline </v-icon>
           </v-btn>
         </v-col>
@@ -83,17 +83,14 @@
         depthPath(index) {
           return `${this.path}elements[${index}]`;
         },
-
         moveSchema(direction) {
           app.$root.moveSchema(this.path, direction);
         },
-
         ableToMoveSchema(direction) {
           return app.$root.ableToMoveSchema(this.path, direction);
         },
-
-        removeSet() {
-          this.$store.commit("removeSchemaInJson", { path: this.path });
+        removeSchema() {
+          app.$root.removeSchema(this.path);
         },
       },
       computed: {

@@ -242,6 +242,19 @@
           moveSchema(path, direction) {
             this.$store.commit("moveSchemaInJson", { path, direction });
           },
+          removeSchema(path) {
+            Swal.fire({
+              title: "Are you sure ?",
+              showDenyButton: true,
+              showCancelButton: false,
+              confirmButtonText: "Yes",
+              denyButtonText: "No",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$store.commit("removeSchemaInJson", { path });
+              }
+            });
+          },
         },
       });
     </script>
