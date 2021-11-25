@@ -3,9 +3,7 @@
     <v-card v-if="fileName">
       <v-row>
         <v-col cols="10">
-          <v-card-title>
-            <v-chip color="green">{{ fileName }}</v-chip>
-          </v-card-title>
+          <v-card-title>{{ fileName }}</v-card-title>
         </v-col>
         <v-col cols="2" class="d-flex align-center justify-center">
           <v-btn @click="showConfig = !showConfig" icon>
