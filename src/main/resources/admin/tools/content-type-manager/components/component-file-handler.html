@@ -104,6 +104,7 @@
             );
 
             this.$store.commit("setFileName", { data: ctyName });
+            this.$store.commit("resetJson");
 
             return true;
           };
