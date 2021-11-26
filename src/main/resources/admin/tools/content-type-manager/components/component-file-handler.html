@@ -26,11 +26,20 @@
       },
       methods: {
         async createNewContentType() {
-          Swal.fire({
-            text: "Please select the content-types folder.",
-            showCancelButton: true,
-          }).then(async (result) => {
-            if (!result.isConfirmed) return;
+          // 1 - Select folder
+          const showFirstDialog = async () => {
+            return Swal.fire({
+              text: "Please select the content-types folder.",
+              showCancelButton: true,
+            }).then(async (result) => result.isConfirmed);
+          };
+
+          // 2 - Validate if selected folder is called 'content-types'
+          // and return the dirHandle
+          const selectFolderAndReturnDirectoryHandle = async (
+            userAcceptedToContinue
+          ) => {
+            if (!userAcceptedToContinue) return {};
 
             dirHandle = await window.showDirectoryPicker();
 
@@ -39,29 +48,75 @@
                 icon: "warning",
                 text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
               });
-              return;
+              return {};
             }
 
-            const { value: contentTypeName } = await Swal.fire({
-              text: "What is the name of the content type?",
-              input: "text",
-            });
+            return dirHandle;
+          };
 
-            if (!contentTypeName) return;
+          // 3 - Check if the name of the new content type is valid
+          const checkIfContentTypeNameIsValid = async (dirHandle) => {
+            if (!("name" in dirHandle)) {
+              return { nameIsValid: false, ctyName: "" };
+            }
+
+            let ctyName = "";
+            const existingCtyNames = [];
+
+            // Get all existing content type names
+            for await (const entry of dirHandle.values()) {
+              entry.kind === "directory" && existingCtyNames.push(entry.name);
+            }
+
+            const isCtyNameValid = (ctyName, existingCtyNames) =>
+              ctyName.length > 0 &&
+              !ctyName.includes(" ") &&
+              existingCtyNames.indexOf(ctyName) === -1;
+
+            const dialogText = (ctyName) => {
+              return ctyName
+                ? `${ctyName} is invalid or is the name of an existing content type.
+                  Please define another one.`
+                : "What is the name of the content type?";
+            };
+
+            do {
+              const text = dialogText(ctyName);
+              const r = await Swal.fire({ text, input: "text" });
+              ctyName = r.value;
+            } while (!isCtyNameValid(ctyName, existingCtyNames));
+
+            return { nameIsValid: true, ctyName };
+          };
+
+          // 4 - Create the directory and the xml files for the content type
+          const createDirAndXmlFile = async (nameIsValid, ctyName) => {
+            if (!nameIsValid) return false;
 
             const newContentTypeDirectoryHandle =
-              await dirHandle.getDirectoryHandle(contentTypeName, {
+              await dirHandle.getDirectoryHandle(ctyName, {
                 create: true,
               });
 
             this.fileHandle = await newContentTypeDirectoryHandle.getFileHandle(
-              `${contentTypeName}.xml`,
+              `${ctyName}.xml`,
               { create: true }
             );
 
-            this.$store.commit("setFileName", { data: contentTypeName });
+            this.$store.commit("setFileName", { data: ctyName });
             this.$store.commit("resetJson");
-          });
+
+            return true;
+          };
+
+          showFirstDialog()
+            .then((userAcceptedToContinue) =>
+              selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
+            )
+            .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
+            .then(({ nameIsValid, ctyName }) =>
+              createDirAndXmlFile(nameIsValid, ctyName)
+            );
         },
         async getFileContent() {
           Swal.fire({
