@@ -23,6 +23,11 @@
   margin: 25px 0px;
 }
 
+.v-card .v-card-error {
+  border: 2px solid red;
+  background-color: #ff000005;
+}
+
 .v-dialog .v-card {
   margin: 0px;
 }
