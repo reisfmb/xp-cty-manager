@@ -21,10 +21,6 @@
       data() {
         return {
           fileHandle: null,
-          error: {
-            borderColor: "red",
-            backgroundColor: "#ff000005",
-          },
         };
       },
       methods: {
@@ -165,8 +161,7 @@
                 }
               }
 
-              el.style.border = `2px solid ${this.error.borderColor}`;
-              el.style.backgroundColor = this.error.backgroundColor;
+              el.classList.add("v-card-error");
             });
 
             return elements;
@@ -195,31 +190,24 @@
 
           // Get all father parents of el
           const getAllElementParents = (el) => {
-            return [
-              ...(function* (e) {
-                do {
-                  yield e;
-                } while ((e = e.parentNode));
-              })(el),
-            ];
+            const parents = [];
+            do {
+              parents.push(el);
+            } while ((el = el.parentNode));
+            return parents;
           };
 
           ///
 
           setTimeout(() => {
-            R.pipe(
-              getAllDOMelementsWithErrors,
-              colorizeElementsWithErrors,
-              expandAllParentElements
-            )();
+            const elementsWithErrors = getAllDOMelementsWithErrors();
+            colorizeElementsWithErrors(elementsWithErrors);
+            expandAllParentElements(elementsWithErrors);
           }, 100);
         },
         resetColorOfVcards() {
-          Array.from(document.getElementsByClassName("v-card")).forEach(
-            (div) => {
-              div.style.border = "";
-              div.style.backgroundColor = "";
-            }
+          Array.from(document.getElementsByClassName("v-card")).forEach((el) =>
+            el.classList.remove("v-card-error")
           );
         },
 
