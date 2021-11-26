@@ -75,7 +75,7 @@
 
             const dialogText = (ctyName) => {
               return ctyName
-                ? `${ctyName} is invalid or is the name of an existing content type. 
+                ? `${ctyName} is invalid or is the name of an existing content type.
                   Please define another one.`
                 : "What is the name of the content type?";
             };
@@ -90,7 +90,7 @@
           };
 
           // 4 - Create the directory and the xml files for the content type
-          const createDirAndXmlFile = async ({ nameIsValid, ctyName }) => {
+          const createDirAndXmlFile = async (nameIsValid, ctyName) => {
             if (!nameIsValid) return false;
 
             const newContentTypeDirectoryHandle =
@@ -108,12 +108,14 @@
             return true;
           };
 
-          R.pipeWith(R.andThen)([
-            await showFirstDialog,
-            await selectFolderAndReturnDirectoryHandle,
-            await checkIfContentTypeNameIsValid,
-            await createDirAndXmlFile,
-          ])();
+          showFirstDialog()
+            .then((userAcceptedToContinue) =>
+              selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
+            )
+            .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
+            .then(({ nameIsValid, ctyName }) =>
+              createDirAndXmlFile(nameIsValid, ctyName)
+            );
         },
         async getFileContent() {
           Swal.fire({
