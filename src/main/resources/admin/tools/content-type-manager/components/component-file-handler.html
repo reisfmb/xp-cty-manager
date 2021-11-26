@@ -60,6 +60,7 @@
             );
 
             this.$store.commit("setFileName", { data: contentTypeName });
+            this.$store.commit("resetJson");
           });
         },
         async getFileContent() {
