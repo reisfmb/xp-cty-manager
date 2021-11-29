@@ -1,0 +1,172 @@
+<div th:fragment="component-form-definition" th:remove="tag">
+  <template>
+    <v-card>
+      <div
+        class="row pointer"
+        @click="showConfig = !showConfig"
+      >
+        <v-col cols="12">
+          <v-card-title>Content Type</v-card-title>
+        </v-col>
+      </div>
+
+      <transition name="fade">
+        <v-card-text v-show="showConfig">
+          <v-divider class="mb-5"></v-divider>
+
+          <template
+            v-if="Object.keys(map).length > 0"
+            v-for="(element, index) in remainingElements"
+          >
+            <component
+              v-if="map[element.name] !== undefined"
+              :is="map[element.name].componentName"
+              v-bind="{ 
+                path: depthPath(index),
+                initialValue: element.initialValue || '',
+                field: map[element.name].field,
+                items: map[element.name].items,
+                rules: map[element.name].rules,
+                i18n: map[element.name].i18n
+              }"
+            ></component>
+            <component
+              v-else-if="element.name && element.name !== 'form'"
+              :is="'component-form-definition-' + element.name"
+              v-bind="{ path: depthPath(index), inputType: fileName }"
+            ></component>
+          </template>
+
+          <component
+            :is="'component-input-form-definition-allow-child-content-types'"
+            v-bind="{ path, inputType: fileName }"
+          ></component>
+
+          <component
+            :is="'component-input-form-definition-x-datas'"
+            v-bind="{ path, inputType: fileName }"
+          ></component>
+        </v-card-text>
+      </transition>
+    </v-card>
+  </template>
+
+  <script th:inline="javascript">
+    DOM = document.getElementsByTagName("template")[0];
+    DOM.remove();
+
+    Vue.component("component-form-definition", {
+      template: DOM.innerHTML.toString(),
+
+      props: {
+        path: String,
+      },
+      data() {
+        return {
+          showConfig: false,
+
+          map: {},
+
+          commonFieldNames: {
+            "allow-child-content": {
+              type: "element",
+              name: "allow-child-content",
+              elements: [{ type: "text", text: "true" }],
+            },
+            "is-built-in": {
+              type: "element",
+              name: "is-built-in",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "is-final": {
+              type: "element",
+              name: "is-final",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "is-abstract": {
+              type: "element",
+              name: "is-abstract",
+              elements: [{ type: "text", text: "false" }],
+            },
+            "super-type": {
+              type: "element",
+              name: "super-type",
+              elements: [{ type: "text", text: "base:structured" }],
+            },
+            description: {
+              type: "element",
+              name: "description",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name-expression": {
+              type: "element",
+              name: "display-name-expression",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name-label": {
+              type: "element",
+              name: "display-name-label",
+              elements: [{ type: "text", text: "" }],
+            },
+            "display-name": {
+              type: "element",
+              name: "display-name",
+              elements: [{ type: "text", text: "" }],
+            },
+          },
+        };
+      },
+      created() {
+        this.addCommonFieldsToElements();
+        setTimeout(() => (this.map = app.$root._data.map), 500);
+      },
+      mounted() {},
+      watch: {
+        elements() {
+          this.addCommonFieldsToElements();
+        },
+      },
+      methods: {
+        depthPath(index) {
+          return `${this.path}elements[${index}]`;
+        },
+
+        addCommonFieldsToElements() {
+          const elementNames = this.elements.map((element) => element.name);
+          Object.keys(this.commonFieldNames).forEach((fieldName) => {
+            if (elementNames.indexOf(fieldName) === -1) {
+              const fieldJson = this.commonFieldNames[fieldName];
+              this.elements.unshift(fieldJson);
+            }
+          }, this);
+        },
+      },
+      computed: {
+        json() {
+          return this.$store.getters.jsonPath(this.path);
+        },
+        fileName() {
+          return this.$store.getters.fileName;
+        },
+        elements() {
+          return this.json.elements;
+        },
+
+        remainingElements() {
+          return this.json.elements.map((element) => {
+            // This is needed in order to maintain the order
+            // and pass the correct indexes to deptPath
+            if (
+              element.name === "x-data" ||
+              element.name === "allow-child-content-type"
+            ) {
+              return {};
+            } else {
+              return element;
+            }
+          });
+        },
+      },
+    });
+  </script>
+</div>
