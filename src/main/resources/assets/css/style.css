@@ -36,6 +36,10 @@
   cursor: pointer;
 }
 
+.spacer-2-icons-left {
+  margin-left: 72px;
+}
+
 /* Icon */
 
 .loading-icon {
