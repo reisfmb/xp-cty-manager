@@ -67,23 +67,37 @@
               entry.kind === "directory" && existingCtyNames.push(entry.name);
             }
 
-            const isCtyNameValid = (ctyName, existingCtyNames) =>
+            const isCtyNameValid = (ctyName) =>
               ctyName.length > 0 &&
-              !ctyName.includes(" ") &&
+              !ctyName.includes(" ");
+
+            const ctyNameExists = (ctyName, existingCtyNames) =>
               existingCtyNames.indexOf(ctyName) === -1;
 
-            const dialogText = (ctyName) => {
-              return ctyName
-                ? `${ctyName} is invalid or is the name of an existing content type.
-                  Please define another one.`
-                : "What is the name of the content type?";
+            const dialogText = (ctyName, existingCtyNames) => {
+              if(!ctyName) return "What is the name of the new content type?"
+
+              let errorMessages = [];
+              if(!isCtyNameValid(ctyName)){
+                errorMessages.push('is invalid');
+              }
+              if(!ctyNameExists(ctyName, existingCtyNames)){
+                errorMessages.push('is used by another content type');
+              }
+
+              if(errorMessages.length > 0){
+                return `<b>"${ctyName}"</b> ${errorMessages.join(' and ')}. Please provide a different name.`
+              }
             };
 
             do {
-              const text = dialogText(ctyName);
-              const r = await Swal.fire({ text, input: "text" });
+              const text = dialogText(ctyName, existingCtyNames);
+              const r = await Swal.fire({ html: text, input: "text" });
               ctyName = r.value;
-            } while (!isCtyNameValid(ctyName, existingCtyNames));
+            } while (
+              !isCtyNameValid(ctyName, existingCtyNames) ||
+              !ctyNameExists(ctyName, existingCtyNames)
+            );
 
             return { nameIsValid: true, ctyName };
           };
