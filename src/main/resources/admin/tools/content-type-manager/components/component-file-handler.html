@@ -171,6 +171,8 @@
         async saveContentType() {
           const isFormValid = app.$refs.form.validate();
 
+          this.resetColorOfVcards();
+
           if (!isFormValid) {
             this.setBorderOfVcardsWithErrors();
 
@@ -182,8 +184,6 @@
 
             return;
           }
-
-          this.resetColorOfVcards();
 
           const xml = await this.getXmlFromJson(this.json);
           const writable = await this.fileHandle.createWritable();
