@@ -8,11 +8,12 @@
             v-model="states.i18nkey"
             :label="field.label"
             :hint="field.hint"
+            persistent-hint
             :rules="[rules.noSpaces]"
             class="mb-5"
           >
           </v-text-field>
-          <v-btn @click="save" color="green">Save</v-btn>
+          <v-btn @click="save">Apply</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
