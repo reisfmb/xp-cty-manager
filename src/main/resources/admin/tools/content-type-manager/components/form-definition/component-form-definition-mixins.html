@@ -2,22 +2,26 @@
   <template>
     <div class="my-5">
       <template v-for="(_, index) in mixins">
-        <v-row>
-          <v-col cols="10">
-            <v-text-field
-              @blur="save(index)"
-              v-model="mixins[index].attributes.name"
-              :label="fields.label"
-              :hint="fields.hint"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col cols="2">
-            <v-btn @click="remove(index)" icon>
-              <v-icon color="red">mdi-delete-circle-outline</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-card>
+          <v-row>
+            <v-col cols="9">
+              <v-card-subtitle>
+                <v-text-field
+                  @blur="save(index)"
+                  v-model="mixins[index].attributes.name"
+                  :label="fields.label"
+                  :hint="fields.hint"
+                >
+                </v-text-field>
+              </v-card-subtitle>
+            </v-col>
+            <v-col cols="3" class="d-flex align-center justify-center">
+              <v-btn @click="remove(index)" icon class="spacer-2-icons-left">
+                <v-icon color="red">mdi-delete-circle-outline</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
       </template>
 
       <v-btn @click="add" class="my-5">Add Mixin</v-btn>
