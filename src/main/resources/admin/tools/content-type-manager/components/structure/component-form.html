@@ -2,8 +2,13 @@
   <template>
     <v-card>
       <div class="row pointer" @click="showConfig = !showConfig">
-        <v-col cols="12">
+        <v-col cols="11">
           <v-card-title>{{ inputType }}</v-card-title>
+        </v-col>
+        <v-col cols="1" class="d-flex align-center justify-end">
+          <v-btn class="mr-2" icon>
+              <v-icon>{{ showConfig ? 'mdi-menu-up' : 'mdi-menu-down' }}</v-icon>
+          </v-btn>
         </v-col>
       </div>
 
