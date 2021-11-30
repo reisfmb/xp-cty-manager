@@ -100,28 +100,6 @@
           const setPath = path;
           let elementItemsIndex = 0;
 
-          _.get(state.json, `${setPath}.elements`).forEach(
-            (el, idx) => el.name === "items" && (elementItemsIndex = idx)
-          );
-
-          const setElementItemsPath = `${setPath}.elements[${elementItemsIndex}]elements`;
-          const setElementItems = _.get(state.json, setElementItemsPath) || [];
-          _.setWith(
-            state.json,
-            setElementItemsPath,
-            [...setElementItems, { ...schemaJson }],
-            (value, key, obj) => {
-              return Vue.set(obj, key, value);
-            }
-          );
-        },
-
-        addSchemaInOptions: (state, { path, schemaJson }) => {
-          renameAttributeNameIfNeeded(JSON.stringify(state.json), schemaJson);
-
-          const setPath = path;
-          let elementItemsIndex = 0;
-
           !_.get(state.json, `${setPath}.elements`) &&
             _.set(state.json, `${setPath}.elements`, []);
 
