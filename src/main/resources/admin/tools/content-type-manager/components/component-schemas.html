@@ -12,7 +12,7 @@
         <v-btn @click="addSchema">Add Element</v-btn>
       </div>
       <div v-else>
-        <v-btn @click="addSchema">Add {{ selectedSchemaName }}</v-btn>
+        <v-btn @click="addSchema">Add {{ filteredSchemas[0] }}</v-btn>
       </div>
     </div>
   </template>
@@ -59,8 +59,14 @@
       },
       methods: {
         addSchema() {
+          const schemaName = this.filteredSchemas.length > 1 
+            ? this.selectedSchemaName 
+            : this.filteredSchemas[0] || '';
+
+          if(!schemaName) return;
+          
           fetch(
-            `http://localhost:8080/_/service/tool.content.type.manager/test2?schemaName=${this.selectedSchemaName}`
+            `http://localhost:8080/_/service/tool.content.type.manager/test2?schemaName=${schemaName}`
           )
             .then((response) => {
               if (!response.ok) {
@@ -76,15 +82,9 @@
                 this.$store.commit("addSchemaInForm", {
                   schemaJson: this.schemaJson,
                 });
-              else if (this.show === ["Option"])
-                // add in options
-                this.$store.commit("addSchemaInOptions", {
-                  path: this.path,
-                  schemaJson: this.schemaJson,
-                });
-              // add in set
               else
-                this.$store.commit("addSchemaInOptions", {
+                // add in set
+                this.$store.commit("addSchemaInSet", {
                   path: this.path,
                   schemaJson: this.schemaJson,
                 });
@@ -92,12 +92,6 @@
               this.selectedSchemaName = "";
             })
             .catch((error) => console.log(error));
-        },
-      },
-      watch: {
-        filteredSchemas() {
-          if (this.filteredSchemas.length === 1)
-            this.selectedSchemaName = this.filteredSchemas[0];
         },
       },
       computed: {
