@@ -249,6 +249,17 @@ exports.get = _ => {
             i18n: false
         },
 
+        // Others
+        occurrences: {
+            componentName: "component-input-fields-occurrences",
+            field: { 
+                label: "Occurrences", 
+                hint: "This is a hint." 
+            },
+            rules: [],
+            i18n: false
+        },
+
     }
 
     return {
