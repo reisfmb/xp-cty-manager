@@ -21,6 +21,13 @@
       data() {
         return {
           fileHandle: null,
+          warnings: {
+            'select-cty-folder': "Please select the content-types folder.",
+            'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
+            'select-xml': "Please select the xml file of a content-type.",
+            'file-not-xml': "This is not a XML file.",
+            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
+          }
         };
       },
       methods: {
@@ -28,7 +35,7 @@
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
-              text: "Please select the content-types folder.",
+              text: this.warnings['select-cty-folder'],
               showCancelButton: true,
             }).then(async (result) => result.isConfirmed);
           };
@@ -45,7 +52,7 @@
             if (dirHandle.name !== "content-types") {
               Swal.fire({
                 icon: "warning",
-                text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+                text: this.warnings['incorrect-cty-folder'](dirHandle.name),
               });
               return {};
             }
@@ -122,51 +129,56 @@
             return true;
           };
 
-          showFirstDialog()
-            .then((userAcceptedToContinue) =>
-              selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
-            )
-            .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
-            .then(({ nameIsValid, ctyName }) =>
-              createDirAndXmlFile(nameIsValid, ctyName)
-            );
+          if(this.checkBrowserCompatibility()){
+            showFirstDialog()
+              .then((userAcceptedToContinue) =>
+                selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
+              )
+              .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
+              .then(({ nameIsValid, ctyName }) =>
+                createDirAndXmlFile(nameIsValid, ctyName)
+              );
+          }
         },
         async getFileContent() {
-          Swal.fire({
-            text: "Please select the xml file of a content-type.",
-            showCancelButton: true,
-          }).then(async (result) => {
-            if (!result.isConfirmed) return;
+          if(this.checkBrowserCompatibility()){
+            Swal.fire({
+              text: this.warnings['select-xml'],
+              showCancelButton: true,
+            }).then(async (result) => {
+              if (!result.isConfirmed) return;
 
-            [fileHandle] = await window.showOpenFilePicker();
-            this.fileHandle = fileHandle;
-            const file = await fileHandle.getFile();
+              [fileHandle] = await window.showOpenFilePicker();
+              this.fileHandle = fileHandle;
+              const file = await fileHandle.getFile();
 
-            if (file.type !== "text/xml") {
+              if (file.type !== "text/xml") {
+                Swal.fire({
+                  text: this.warnings['file-not-xml'],
+                  icon: "error",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                this.fileHandle = null;
+                return false;
+              }
+
+              this.setJson(await file.text());
+
               Swal.fire({
-                text: "This is not a XML file.",
-                icon: "error",
+                iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+                customClass: {
+                  icon: "no-border",
+                },
                 showConfirmButton: false,
                 timer: 1500,
-              });
-              return false;
-            }
-
-            this.setJson(await file.text());
-
-            Swal.fire({
-              iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
-              customClass: {
-                icon: "no-border",
-              },
-              showConfirmButton: false,
-              timer: 1500,
-            }).then(() => {
-              this.$store.commit("setFileName", {
-                data: file.name.replace(".xml", ""),
+              }).then(() => {
+                this.$store.commit("setFileName", {
+                  data: file.name.replace(".xml", ""),
+                });
               });
             });
-          });
+          }
         },
         async saveContentType() {
           const isFormValid = app.$refs.form.validate();
@@ -207,6 +219,16 @@
         },
 
         ///
+        checkBrowserCompatibility(){
+          if(!window.showDirectoryPicker || !window.showOpenFilePicker){
+            Swal.fire({
+              text: this.warnings['incompatible-browser'],
+              icon: "warning",
+            });
+            return false;
+          }
+          return true;
+        },
 
         setBorderOfVcardsWithErrors() {
           // Get all error DOM elements
