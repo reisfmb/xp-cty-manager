@@ -1,32 +1,16 @@
 <div th:fragment="component-set-items" th:remove="tag">
   <template>
-    <v-card>
-      <div class="row pointer" @click="showConfig = !showConfig">
-        <v-col cols="11">
-          <v-card-title>{{ inputName }}</v-card-title>
-        </v-col>
-        <v-col cols="1" class="d-flex align-center justify-end">
-          <v-btn class="mr-2" icon>
-              <v-icon>{{ showConfig ? 'mdi-menu-up' : 'mdi-menu-down' }}</v-icon>
-          </v-btn>
-        </v-col>
-      </div>
+    <div>
+      <component
+        :is="'component-recursive-element-render'"
+        v-bind="{ path }"
+      ></component>
 
-      <transition name="fade">
-        <v-card-text v-show="showConfig">
-
-          <component
-            :is="'component-recursive-element-render'"
-            v-bind="{ path }"
-          ></component>
-
-          <component-schemas
-            :path="path"
-            :hide="['Option']"
-          ></component-schemas>
-        </v-card-text>
-      </transition>
-    </v-card>
+      <component-schemas
+        :path="path"
+        :hide="['Option']"
+      ></component-schemas>
+    </div>
   </template>
 
   <script th:inline="javascript">
@@ -35,27 +19,8 @@
 
     Vue.component("component-set-items", {
       template: DOM.innerHTML.toString(),
-
       props: {
         path: String,
-      },
-      data() {
-        return {
-          showConfig: true,
-        };
-      },
-      methods: {
-        depthPath(index) {
-          return `${this.path}elements[${index}]`;
-        },
-      },
-      computed: {
-        json() {
-          return this.$store.getters.jsonPath(this.path);
-        },
-        inputName() {
-          return "Items";
-        },
       },
     });
   </script>
