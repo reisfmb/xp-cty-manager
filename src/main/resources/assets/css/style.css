@@ -28,6 +28,19 @@
   background-color: #ff000005;
 }
 
+.v-card__title,
+.v-card__subtitle {
+  padding: 5px 16px;
+}
+
+.v-card__title + .v-card__subtitle {
+  padding-top: 5px;
+}
+
+.v-card > .v-card__subtitle {
+  padding-top: 16px;
+}
+
 .v-dialog .v-card {
   margin: 0px;
 }
