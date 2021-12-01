@@ -21,6 +21,13 @@
       data() {
         return {
           fileHandle: null,
+          warnings: {
+            'select-cty-folder': "Please select the content-types folder.",
+            'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
+            'select-xml': "Please select the xml file of a content-type.",
+            'file-not-xml': "This is not a XML file.",
+            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
+          }
         };
       },
       methods: {
@@ -28,7 +35,7 @@
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
-              text: "Please select the content-types folder.",
+              text: this.warnings['select-cty-folder'],
               showCancelButton: true,
             }).then(async (result) => result.isConfirmed);
           };
@@ -45,7 +52,7 @@
             if (dirHandle.name !== "content-types") {
               Swal.fire({
                 icon: "warning",
-                text: `Please select the content-types folder, you've selected a folder called ${dirHandle.name}.`,
+                text: this.warnings['incorrect-cty-folder'](dirHandle.name),
               });
               return {};
             }
@@ -136,7 +143,7 @@
         async getFileContent() {
           if(this.checkBrowserCompatibility()){
             Swal.fire({
-              text: "Please select the xml file of a content-type.",
+              text: this.warnings['select-xml'],
               showCancelButton: true,
             }).then(async (result) => {
               if (!result.isConfirmed) return;
@@ -147,11 +154,12 @@
 
               if (file.type !== "text/xml") {
                 Swal.fire({
-                  text: "This is not a XML file.",
+                  text: this.warnings['file-not-xml'],
                   icon: "error",
                   showConfirmButton: false,
                   timer: 1500,
                 });
+                this.fileHandle = null;
                 return false;
               }
 
@@ -214,7 +222,7 @@
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
-              text: "This application is using features that are currently not supported by your browser. Please use Google Chrome.",
+              text: this.warnings['incompatible-browser'],
               icon: "warning",
             });
             return false;
