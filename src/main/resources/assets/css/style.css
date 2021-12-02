@@ -25,7 +25,6 @@
 
 .v-card .v-card-error {
   border: 2px solid red;
-  background-color: #ff000005;
 }
 
 .v-card__title,
