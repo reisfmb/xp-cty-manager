@@ -5,11 +5,13 @@
         <v-autocomplete
           v-model="selectedSchemaName"
           :items="filteredSchemas"
-          label="Schema"
+          label="Select Element"
           prepend-inner-icon="mdi-xml"
         ></v-autocomplete>
-
-        <v-btn @click="addSchema">Add Element</v-btn>
+        <v-btn 
+          @click="addSchema"
+          :disabled="!selectedSchemaName"
+          >Add</v-btn>
       </div>
       <div v-else>
         <v-btn @click="addSchema">Add {{ filteredSchemas[0] }}</v-btn>
