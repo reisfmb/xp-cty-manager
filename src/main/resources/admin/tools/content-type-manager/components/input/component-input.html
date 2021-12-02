@@ -88,9 +88,8 @@
         this.map = app.$root._data.map;
 
         // TODO: Add cache to avoid unecessary requests
-        fetch(
-            `http://localhost:8080/_/service/tool.content.type.manager/test2?schemaName=${this.inputType}`
-          ).then((response) => {
+        fetch(`${app.$root._data.services.test2}?schemaName=${this.inputType}`)
+          .then((response) => {
             if (!response.ok) {
               throw new Error(response.statusText);
             }
