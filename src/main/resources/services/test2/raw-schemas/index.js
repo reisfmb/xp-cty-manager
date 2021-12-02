@@ -164,6 +164,9 @@ const MediaSelector = `
     </config>
 </input>`.trim()
 
+const Mixin = `
+<mixin name="mymixin"></mixin>`.trim()
+
 const Option = `
 <option name="myoptionsetoption">
     <label></label>
@@ -251,6 +254,7 @@ module.exports = {
     ItemSet,
     Long,
     MediaSelector,
+    Mixin,
     Option,
     OptionSet,
     RadioButton,
