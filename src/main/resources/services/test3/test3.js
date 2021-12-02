@@ -87,7 +87,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Relationship Type", 
-                hint: "This is a hint." 
+                hint: "" 
             },
             rules: [],
             i18n: false
@@ -96,7 +96,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Display Name", 
-                hint: "This is a hint." 
+                hint: "The human readable name of the content type. Optionally specify the i18n attribute to define a mapping to localize the value. The localisation key must then be declared and localised in the resource bundle." 
             },
             rules: ['requiredText'],
             i18n: true
@@ -105,7 +105,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Display Name Label", 
-                hint: "This is a hint." 
+                hint: "Enables you to override the default <Display Name> placeholder used in the content form." 
             },
             rules: [],
             i18n: false
@@ -114,7 +114,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Display Name Expression", 
-                hint: "This is a hint." 
+                hint: "" 
             },
             rules: [],
             i18n: false
@@ -123,7 +123,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Description", 
-                hint: "This is a hint." 
+                hint: "Set a description that is shown when creating the content type." 
             },
             rules: [],
             i18n: true
@@ -132,7 +132,7 @@ exports.get = _ => {
             componentName: "component-input-text",
             field: { 
                 label: "Super Type", 
-                hint: "This is a hint." 
+                hint: "Refers to the root controller of the form. For custom content types this should typically be set to base:structured." 
             },
             initialValue: 'base:structured',
             rules: ['requiredText'],
@@ -198,7 +198,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Expanded", 
-                hint: "This is a hint." 
+                hint: "" 
             },
             rules: [],
             i18n: false
@@ -207,7 +207,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Show Status", 
-                hint: "This is a hint." 
+                hint: "" 
             },
             rules: [],
             i18n: false
@@ -216,7 +216,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Is Abstract", 
-                hint: "This is a hint." 
+                hint: "If true, you cannot create content with this content type." 
             },
             rules: [],
             i18n: false
@@ -225,7 +225,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Is Final", 
-                hint: "This is a hint." 
+                hint: "If true, it is not possible to create new content types that “extend” this." 
             },
             rules: [],
             i18n: false
@@ -234,7 +234,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Is Built In", 
-                hint: "This is a hint." 
+                hint: "Only specified by built-in content types." 
             },
             rules: [],
             i18n: false
@@ -243,7 +243,7 @@ exports.get = _ => {
             componentName: "component-input-boolean",
             field: { 
                 label: "Allow Child Content", 
-                hint: "This is a hint." 
+                hint: "If false, no content will be allowed to be created or moved under content of this content type (e.g. prevents child content under media)" 
             },
             rules: [],
             i18n: false
@@ -254,7 +254,7 @@ exports.get = _ => {
             componentName: "component-input-fields-occurrences",
             field: { 
                 label: "Occurrences", 
-                hint: "This is a hint." 
+                hint: "" 
             },
             rules: [],
             i18n: false

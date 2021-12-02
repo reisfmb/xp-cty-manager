@@ -4,6 +4,7 @@
       <v-card-subtitle> {{ inputType }} - config.</v-card-subtitle>
 
       <v-card-text>
+
         <component
           v-if="options.length > 0 
             || inputType === 'ComboBox' 
@@ -76,6 +77,24 @@
       },
       created() {
         this.map = app.$root._data.map;
+
+        // TODO: Add cache to avoid unecessary requests
+        fetch(
+            `http://localhost:8080/_/service/tool.content.type.manager/test2?schemaName=${this.inputType}`
+          ).then((response) => {
+            if (!response.ok) {
+              throw new Error(response.statusText);
+            }
+            return response.json();
+          }).then((data) => {
+            const elements = _.get(data, 'json.elements[0]elements') || []
+            const rawJsonConfigElements = _.get(elements.find(el => el.name === 'config'), 'elements') || [];
+            rawJsonConfigElements.forEach((rawEl) => {
+              if(this.elements.every(el => el.name !== rawEl.name)){
+                this.elements.push(rawEl);
+              }
+            });
+          });
       },
       methods: {
         depthPath(index) {
@@ -86,11 +105,14 @@
         json() {
           return this.$store.getters.jsonPath(this.path);
         },
+        elements() {
+          return this.json.elements || [];
+        },
 
         options() {
           return (
-            (this.json.elements &&
-              this.json.elements.filter(
+            (this.elements &&
+              this.elements.filter(
                 (element) => element.name === "option"
               )) ||
             []
@@ -98,8 +120,8 @@
         },
         params() {
           return (
-            (this.json.elements &&
-              this.json.elements.filter(
+            (this.elements &&
+              this.elements.filter(
                 (element) => element.name === "param"
               )) ||
             []
@@ -107,8 +129,8 @@
         },
         allowContentTypes() {
           return (
-            (this.json.elements &&
-              this.json.elements.filter(
+            (this.elements &&
+              this.elements.filter(
                 (element) => element.name === "allowContentType"
               )) ||
             []
@@ -116,8 +138,8 @@
         },
         allowPaths() {
           return (
-            (this.json.elements &&
-              this.json.elements.filter(
+            (this.elements &&
+              this.elements.filter(
                 (element) => element.name === "allowPath"
               )) ||
             []
@@ -126,8 +148,8 @@
 
         remainingElements() {
           return (
-            (this.json.elements &&
-              this.json.elements.map((element) => {
+            (this.elements &&
+              this.elements.map((element) => {
                 // This is needed in order to maintain the order
                 // and pass the correct indexes to deptPath
                 if (
