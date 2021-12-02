@@ -68,6 +68,7 @@
 				</input>
 			</items>
 		</item-set>
+		<mixin name="mymixin"/>
 		<field-set>
 			<label>myfieldset</label>
 			<items>

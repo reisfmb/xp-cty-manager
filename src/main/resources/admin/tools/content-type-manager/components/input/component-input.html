@@ -119,6 +119,11 @@
         removeSchema() {
           app.$root.removeSchema(this.path);
         },
+
+        ///
+
+        capitalize(s) { return s && s[0].toUpperCase() + s.slice(1); }
+
       },
       computed: {
         json() {
@@ -128,13 +133,21 @@
           return this.json.attributes.name;
         },
         inputType() {
-          return this.json.attributes.type;
+          return this.capitalize(this.json.attributes.type || this.json.name) || '';
         },
         elements() {
-          return this.json.elements;
+          return this.json.elements || [];
         },
         docsUrl() {
-          return `https://developer.enonic.com/docs/xp/stable/cms/input-types#${this.inputType.toLowerCase()}`;
+          const baseUrl = this.inputType !== 'Mixin'
+            ? 'https://developer.enonic.com/docs/xp/stable/cms/input-types#'
+            : 'https://developer.enonic.com/docs/xp/stable/cms/mixins';
+
+          const anchor = this.inputType !== 'Mixin'
+            ? this.inputType.toLowerCase()
+            : '';
+
+          return baseUrl + anchor;
         },
       },
     });

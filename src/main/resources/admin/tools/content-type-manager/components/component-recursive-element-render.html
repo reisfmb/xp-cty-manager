@@ -15,7 +15,7 @@
         ></component>
 
         <component
-          v-if="element.name === 'input'"
+          v-if="element.name === 'input' || element.name === 'mixin'"
           :is="'component-input'"
           v-bind="{ path: depthPath(index) }"
         ></component>
