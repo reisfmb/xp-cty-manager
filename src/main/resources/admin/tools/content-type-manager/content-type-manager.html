@@ -14,14 +14,15 @@
     ></fragment>
   </head>
   <body>
-    <v-app id="app">
+    <v-app id="app" class="gp-full-height">
+      <component-file-picker-and-saver></component-file-picker-and-saver>
+      
       <v-form ref="form" lazy-validation>
-        <component-file-picker-and-saver></component-file-picker-and-saver>
-
         <component-recursive-element-render
           :path="''"
         ></component-recursive-element-render>
       </v-form>
+
     </v-app>
 
     <!-- JS Dependencies -->
