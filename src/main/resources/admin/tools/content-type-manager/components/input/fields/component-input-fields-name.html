@@ -5,7 +5,7 @@
       v-model="states.text"
       :label="field.label"
       :hint="field.hint"
-      :rules="[rules.requiredText]"
+      :rules="[rules.requiredText, rules.noSpaces]"
     >
     </v-text-field>
   </template>
