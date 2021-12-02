@@ -22,9 +22,12 @@
         return {
           fileHandle: null,
           warnings: {
+            'save': "Your changes have been saved.",
+            'load': "Loading content type schema...",
+            'error': "Failed to save the content type schema.",
             'select-cty-folder': "Please select the content-types folder.",
             'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
-            'select-xml': "Please select the xml file of a content-type.",
+            'select-xml': "Please select a content type XML schema.",
             'file-not-xml': "This is not a XML file.",
             'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
           }
@@ -170,6 +173,7 @@
                 customClass: {
                   icon: "no-border",
                 },
+                text: this.warnings.load,
                 showConfirmButton: false,
                 timer: 1500,
               }).then(() => {
@@ -190,6 +194,7 @@
 
             Swal.fire({
               icon: "error",
+              text: this.warnings.error,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -206,12 +211,7 @@
 
             Swal.fire({
               icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
+              text: this.warnings.save,
               showConfirmButton: false,
               timer: 1500,
             });
