@@ -81,30 +81,27 @@
       data() {
         return {
           showConfig: false,
-
           map: {},
-
-          commonFieldNames: {
-            occurrences: {
-              type: "element",
-              name: "occurrences",
-              attributes: { minimum: 0, maximum: 1 },
-            },
-            "help-text": {
-              type: "element",
-              name: "help-text",
-              elements: [{ type: "text", text: "" }],
-            },
-            label: {
-              type: "element",
-              name: "label",
-              elements: [{ type: "text", text: "" }],
-            },
-          },
         };
       },
       created() {
         this.map = app.$root._data.map;
+
+        // TODO: Add cache to avoid unecessary requests
+        fetch(`${app.$root._data.services.test2}?schemaName=${this.inputType}`)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.statusText);
+            }
+            return response.json();
+          }).then((data) => {
+            const rawJsonElements = _.get(data, 'json.elements[0]elements') || [];
+            rawJsonElements.forEach((rawEl) => {
+              if(this.elements.every(el => el.name !== rawEl.name)){
+                this.elements.push(rawEl);
+              }
+            });
+          });
       },
       methods: {
         depthPath(index) {
@@ -134,18 +131,7 @@
           return this.json.attributes.type;
         },
         elements() {
-          const elements = this.json.elements;
-
-          Object.keys(this.commonFieldNames).forEach((key) => {
-            const commonFieldObject = this.commonFieldNames[key];
-            if (elements.filter((el) => el.name === key).length === 0)
-              elements.push(commonFieldObject);
-          });
-
-          return elements || [];
-        },
-        id() {
-          return this.path + ":" + this.inputType;
+          return this.json.elements;
         },
         docsUrl() {
           return `https://developer.enonic.com/docs/xp/stable/cms/input-types#${this.inputType.toLowerCase()}`;
