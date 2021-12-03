@@ -5,6 +5,7 @@
         <v-btn @click="createNewContentType">New</v-btn>
         <v-btn @click="getFileContent">Load</v-btn>
         <v-btn
+          class="float-end"
           @click="saveContentType"
           color="green"
           :disabled="fileHandle === null"
@@ -17,7 +18,6 @@
         <p> {{ placeholderText }} </p>
       </div>
     </div>
-    
   </template>
 
   <script th:inline="javascript">
