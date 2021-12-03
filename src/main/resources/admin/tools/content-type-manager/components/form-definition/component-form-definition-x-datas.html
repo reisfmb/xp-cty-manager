@@ -11,6 +11,7 @@
                   v-model="xDatas[index].attributes.name"
                   :label="fields.label"
                   :hint="fields.hint"
+                  :rules="[rules.requiredText, rules.noSpaces]"
                 >
                 </v-text-field>
             </v-card-subtitle>
@@ -86,6 +87,9 @@
           return this.json.elements.filter(
             (element) => element.name !== "x-data"
           );
+        },
+        rules() {
+          return this.$store.state.moduleRules.rules;
         },
       },
     });
