@@ -15,6 +15,10 @@
   height: 100vh;
 }
 
+.required label::after {
+  content: " *";
+}
+
 /* Seet alert rules */
 
 .swal2-container {
