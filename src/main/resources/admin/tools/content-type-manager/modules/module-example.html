@@ -29,34 +29,32 @@
       }
     };
 
-    const emptyJson = {
-      declaration: {
-        attributes: {
-          version: "1.0",
-          encoding: "UTF-8",
-        },
-      },
-      elements: [
-        {
-          type: "element",
-          name: "content-type",
-          elements: [
-            {
-              type: "element",
-              name: "form",
-              elements: [],
-            },
-          ],
-        },
-      ],
-    };
-
     ///
 
     const moduleExample = {
       state: {
         fileName: "",
-        json: emptyJson,
+        json: {
+          declaration: {
+            attributes: {
+              version: "1.0",
+              encoding: "UTF-8",
+            },
+          },
+          elements: [
+            {
+              type: "element",
+              name: "content-type",
+              elements: [
+                {
+                  type: "element",
+                  name: "form",
+                  elements: [],
+                },
+              ],
+            },
+          ],
+        },
       },
 
       mutations: {
@@ -69,7 +67,23 @@
         },
 
         resetJson: (state) => {
-          state.json = emptyJson;
+          const initialJsonElements = [
+            { 
+              type: "element", 
+              name: "content-type", 
+              elements: [
+                { 
+                  type: "element", 
+                  name: "form", 
+                  elements: [] 
+                }
+              ] 
+            } 
+          ];
+          // Used empty array + setTimeout as a quick way to 
+          // remount components and their inner empty states.
+          state.json.elements = [];
+          setTimeout(() => { state.json.elements = initialJsonElements }, 100);
         },
 
         updateJson: (state, { path, data }) => {

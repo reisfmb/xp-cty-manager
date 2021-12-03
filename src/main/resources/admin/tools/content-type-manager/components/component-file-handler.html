@@ -1,12 +1,12 @@
 <div th:fragment="component-file-picker-and-saver" th:remove="tag">
   <template>
     <div>
-      <v-btn @click="createNewContentType">New</v-btn>
-      <v-btn @click="getFileContent">Load</v-btn>
+      <v-btn @click="newCty">New</v-btn>
+      <v-btn @click="loadCty">Load</v-btn>
       <v-btn
-        @click="saveContentType"
+        @click="saveCty"
         color="green"
-        :disabled="fileHandle == null"
+        :disabled="!fileName"
         >Save</v-btn
       >
     </div>
@@ -31,6 +31,62 @@
         };
       },
       methods: {
+        newCty(){
+          if(this.checkBrowserCompatibility()){
+            this.fileHandle = null;
+            this.$store.commit("resetJson");
+            this.$store.commit("setFileName", { data: ' ' });
+          }
+        },
+        async loadCty() {
+          if(this.checkBrowserCompatibility()){
+            Swal.fire({
+              text: this.warnings['select-xml'],
+              showCancelButton: true,
+            }).then(async (result) => {
+              if (!result.isConfirmed) return;
+
+              [fileHandle] = await window.showOpenFilePicker();
+              this.fileHandle = fileHandle;
+              const file = await fileHandle.getFile();
+
+              if (file.type !== "text/xml") {
+                Swal.fire({
+                  text: this.warnings['file-not-xml'],
+                  icon: "error",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                this.fileHandle = null;
+                return false;
+              }
+
+              this.setJson(await file.text());
+
+              Swal.fire({
+                iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+                customClass: {
+                  icon: "no-border",
+                },
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {
+                this.$store.commit("setFileName", {
+                  data: file.name.replace(".xml", ""),
+                });
+              });
+            });
+          }
+        },
+        async saveCty(){
+          if(this.fileHandle){
+            await this.saveContentType();
+          }else{
+            this.createNewContentType()
+              .then((lastStepResult) => { lastStepResult && this.saveContentType() });
+          }
+        },
+
         async createNewContentType() {
           // 1 - Select folder
           const showFirstDialog = async () => {
@@ -124,13 +180,12 @@
             );
 
             this.$store.commit("setFileName", { data: ctyName });
-            this.$store.commit("resetJson");
 
             return true;
           };
 
           if(this.checkBrowserCompatibility()){
-            showFirstDialog()
+            return showFirstDialog()
               .then((userAcceptedToContinue) =>
                 selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
               )
@@ -138,46 +193,6 @@
               .then(({ nameIsValid, ctyName }) =>
                 createDirAndXmlFile(nameIsValid, ctyName)
               );
-          }
-        },
-        async getFileContent() {
-          if(this.checkBrowserCompatibility()){
-            Swal.fire({
-              text: this.warnings['select-xml'],
-              showCancelButton: true,
-            }).then(async (result) => {
-              if (!result.isConfirmed) return;
-
-              [fileHandle] = await window.showOpenFilePicker();
-              this.fileHandle = fileHandle;
-              const file = await fileHandle.getFile();
-
-              if (file.type !== "text/xml") {
-                Swal.fire({
-                  text: this.warnings['file-not-xml'],
-                  icon: "error",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                this.fileHandle = null;
-                return false;
-              }
-
-              this.setJson(await file.text());
-
-              Swal.fire({
-                iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
-                customClass: {
-                  icon: "no-border",
-                },
-                showConfirmButton: false,
-                timer: 1500,
-              }).then(() => {
-                this.$store.commit("setFileName", {
-                  data: file.name.replace(".xml", ""),
-                });
-              });
-            });
           }
         },
         async saveContentType() {
@@ -217,8 +232,9 @@
             });
           }
         },
-
+        
         ///
+
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
@@ -229,7 +245,6 @@
           }
           return true;
         },
-
         setBorderOfVcardsWithErrors() {
           // Get all error DOM elements
           const getAllDOMelementsWithErrors = () =>
@@ -337,6 +352,9 @@
       computed: {
         json() {
           return this.$store.state.moduleExample.json;
+        },
+        fileName() {
+          return this.$store.getters.fileName;
         },
       },
     });
