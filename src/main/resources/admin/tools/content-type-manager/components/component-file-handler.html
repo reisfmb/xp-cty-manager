@@ -1,15 +1,22 @@
 <div th:fragment="component-file-picker-and-saver" th:remove="tag">
   <template>
     <div>
-      <v-btn @click="createNewContentType">New</v-btn>
-      <v-btn @click="getFileContent">Load</v-btn>
-      <v-btn
-        class="float-end"
-        @click="saveContentType"
-        color="green"
-        :disabled="fileHandle == null"
-        >Save</v-btn
-      >
+      <div>
+        <v-btn @click="createNewContentType">New</v-btn>
+        <v-btn @click="getFileContent">Load</v-btn>
+        <v-btn
+          class="float-end"
+          @click="saveContentType"
+          color="green"
+          :disabled="fileHandle === null"
+          >Save</v-btn
+        >
+      </div>
+      <div
+        v-if="fileHandle === null"
+        class="d-flex align-center justify-center h-100">
+        <p> {{ placeholderText }} </p>
+      </div>
     </div>
   </template>
 
@@ -22,6 +29,7 @@
       data() {
         return {
           fileHandle: null,
+          placeholderText: "Use NEW/LOAD buttons to create or open a content type schema.",
           warnings: {
             'select-cty-folder': "Please select the content-types folder.",
             'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
