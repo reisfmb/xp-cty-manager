@@ -264,7 +264,7 @@
         },
         
         checkBrowserCompatibility() {
-          return window.showDirectoryPicker || window.showOpenFilePicker;
+          return window.showDirectoryPicker && window.showOpenFilePicker;
         },
         setBorderOfVcardsWithErrors() {
           // Get all error DOM elements
