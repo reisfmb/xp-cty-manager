@@ -39,44 +39,60 @@
           }
         },
         async loadCty() {
-          if(this.checkBrowserCompatibility()){
-            Swal.fire({
+
+          const showSelectXmlDialog = async () => {
+            return Swal.fire({
               text: this.warnings['select-xml'],
               showCancelButton: true,
             }).then(async (result) => {
-              if (!result.isConfirmed) return;
+              if(!result.isConfirmed) { return Promise.reject(); }
+            })
+          }
 
-              [fileHandle] = await window.showOpenFilePicker();
-              this.fileHandle = fileHandle;
-              const file = await fileHandle.getFile();
+          const setFileHandler = async () => {
+            [fileHandle] = await window.showOpenFilePicker();
+            this.fileHandle = fileHandle;
+            const file = await fileHandle.getFile();
+            
+            if(!file){ return Promise.reject(); }
 
-              if (file.type !== "text/xml") {
-                Swal.fire({
-                  text: this.warnings['file-not-xml'],
-                  icon: "error",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                this.fileHandle = null;
-                return false;
-              }
+            return file;
+          }
 
-              this.setJson(await file.text());
+          const checkIfFileIsXml = (file) => {
+            if (file.type !== "text/xml") {
+              throw this.warnings['file-not-xml'];
+            }
+          }
 
-              Swal.fire({
-                iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
-                customClass: {
-                  icon: "no-border",
-                },
-                showConfirmButton: false,
-                timer: 1500,
-              }).then(() => {
-                this.$store.commit("setFileName", {
-                  data: file.name.replace(".xml", ""),
-                });
+          const showLoadingDialog = (file) => {
+            Swal.fire({
+              iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+              customClass: { icon: "no-border" },
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              this.$store.commit("setFileName", {
+                data: file.name.replace(".xml", ""),
               });
             });
           }
+
+          showSelectXmlDialog()
+            .then(() => setFileHandler())
+            .then(async (file) => {
+              checkIfFileIsXml(file);
+              showLoadingDialog(file);
+              this.setJson(await file.text());
+            })
+            .catch((error) => {
+              error && Swal.fire({
+                icon: "error",
+                text: error,
+                showConfirmButton: false,
+                timer: 2000,
+              })
+            });
         },
         async saveCty(){
           if(this.fileHandle){
@@ -233,8 +249,6 @@
           }
         },
         
-        ///
-
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
@@ -317,8 +331,6 @@
             el.classList.remove("v-card-error")
           );
         },
-
-        ///
 
         setJson(xml) {
           const xmlWithoutComments = xml.replaceAll(/<!--[\s\S]*?-->/g, "");
