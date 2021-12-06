@@ -28,6 +28,7 @@
       template: DOM.innerHTML.toString(),
       data() {
         return {
+          previousJson: {},
           fileHandle: null,
           placeholderText: "Use NEW/LOAD buttons to create or open a content type schema.",
           dialogMessages: {
@@ -38,12 +39,15 @@
             'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
             'select-xml': "Please select a content type XML schema.",
             'file-not-xml': "This is not a XML file.",
-            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
+            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome.",
+            'changes': "You have made changes to the schema which will be lost if you continue. Do you want to save your changes ?",
           }
         };
       },
       methods: {
         async createNewContentType() {
+          if(!await this.suggestSaveIfChangesExists()) return;
+
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
@@ -153,6 +157,8 @@
           }
         },
         async getFileContent() {
+          if(!await this.suggestSaveIfChangesExists()) return;
+
           if(this.checkBrowserCompatibility()){
             Swal.fire({
               text: this.dialogMessages['select-xml'],
@@ -174,7 +180,7 @@
                 this.fileHandle = null;
                 return false;
               }
-
+              
               this.setJson(await file.text());
 
               Swal.fire({
@@ -223,11 +229,37 @@
               text: this.dialogMessages.save,
               showConfirmButton: false,
               timer: 1500,
+            }).then(() => {
+              this.previousJson = this.copyObject(this.json);
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              text: this.dialogMessages.error,
+              showConfirmButton: false,
+              timer: 1500,
             });
           }
         },
 
         ///
+        async suggestSaveIfChangesExists(){
+          const changesExists = 
+            JSON.stringify(this.previousJson) !== JSON.stringify(this.json)
+            && this.fileHandle
+
+          if(!changesExists) return true;
+          
+          // If there are changes, then asks for saving the cty
+          return await Swal.fire({
+            icon: "warning",
+            text: this.warnings.changes,
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+          }).then((result) => result.isConfirmed && this.saveContentType())
+        },
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
@@ -311,6 +343,9 @@
             el.classList.remove("v-card-error")
           );
         },
+        copyObject(obj) {
+          return JSON.parse(JSON.stringify(obj));
+        },
 
         ///
 
@@ -326,6 +361,7 @@
           )
             .then((response) => response.json())
             .then((data) => {
+              this.previousJson = this.copyObject(this.json);
               this.$store.commit("setJson", { data: data.json });
             });
         },
