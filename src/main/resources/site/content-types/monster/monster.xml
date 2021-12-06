@@ -27,6 +27,8 @@
 									<occurrences minimum="1" maximum="1"/>
 									<config>
 										<allowPath>${site}/*</allowPath>
+										<treeMode/>
+										<hideToggleIcon/>
 									</config>
 									<help-text/>
 								</input>
@@ -42,6 +44,8 @@
 										<allowContentType>video</allowContentType>
 										<allowContentType>video-qbrick</allowContentType>
 										<allowPath>${site}/*</allowPath>
+										<treeMode/>
+										<hideToggleIcon/>
 									</config>
 									<help-text/>
 								</input>
@@ -72,6 +76,10 @@
 					<label i18n="background.twotone">2-tone bakgrunn</label>
 					<occurrences minimum="0" maximum="1"/>
 					<help-text/>
+					<default/>
+					<config>
+						<alignment/>
+					</config>
 				</input>
 			</items>
 		</item-set>
@@ -121,8 +129,10 @@
 							<config>
 								<exclude>Code | Blockquote | Table</exclude>
 								<allowHeadings>h2</allowHeadings>
+								<include/>
 							</config>
 							<help-text/>
+							<default/>
 						</input>
 					</items>
 				</option>
@@ -138,6 +148,8 @@
 									<occurrences minimum="1" maximum="1"/>
 									<config>
 										<allowPath>${site}/*</allowPath>
+										<treeMode/>
+										<hideToggleIcon/>
 									</config>
 									<help-text/>
 								</input>
@@ -145,6 +157,11 @@
 									<label i18n="text">Tekst</label>
 									<occurrences minimum="0" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<max-length/>
+										<show-counter/>
+									</config>
 								</input>
 							</items>
 						</item-set>
@@ -162,6 +179,8 @@
 									<occurrences minimum="1" maximum="1"/>
 									<config>
 										<allowPath>${site}/*</allowPath>
+										<treeMode/>
+										<hideToggleIcon/>
 									</config>
 									<help-text/>
 								</input>
@@ -170,11 +189,18 @@
 									<default>checked</default>
 									<occurrences minimum="0" maximum="1"/>
 									<help-text/>
+									<config>
+										<alignment/>
+									</config>
 								</input>
 								<input name="overlay" type="CheckBox">
 									<label i18n="promoted-banner.overlay">Gjør bildet mørkere</label>
 									<occurrences minimum="0" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<alignment/>
+									</config>
 								</input>
 							</items>
 						</item-set>
@@ -192,19 +218,33 @@
 							<indexed>true</indexed>
 							<config>
 								<max-length>80</max-length>
+								<show-counter/>
 							</config>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
 						</input>
 						<input type="TextLine" name="cite">
 							<label i18n="promoted-banner.cite">Sitering</label>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+								<regexp/>
+							</config>
 						</input>
 						<input name="label" type="TextLine">
 							<label i18n="label">Label</label>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+								<regexp/>
+							</config>
 						</input>
 						<item-set name="link">
 							<label i18n="link">Link</label>
@@ -214,11 +254,21 @@
 									<label i18n="link-text">Lenketekst</label>
 									<occurrences minimum="1" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<max-length/>
+										<show-counter/>
+										<regexp/>
+									</config>
 								</input>
 								<input name="button" type="CheckBox">
 									<label i18n="promoted-banner.button">Vis som knapp</label>
 									<occurrences minimum="0" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<alignment/>
+									</config>
 								</input>
 								<option-set name="linkType">
 									<label i18n="link.type">Type of link</label>
@@ -253,6 +303,8 @@
 														<allowContentType>media:spreadsheet</allowContentType>
 														<allowContentType>media:presentation</allowContentType>
 														<allowPath>${site}/*</allowPath>
+														<treeMode/>
+														<hideToggleIcon/>
 													</config>
 													<help-text/>
 												</input>
@@ -261,8 +313,11 @@
 													<occurrences minimum="0" maximum="1"/>
 													<config>
 														<regexp>^[^ \:\-\\\/]*$</regexp>
+														<max-length/>
+														<show-counter/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 											</items>
 										</option>
@@ -273,6 +328,12 @@
 													<label i18n="link.url">Type URL (with http/https attached)</label>
 													<occurrences minimum="1" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<input name="newTab" type="CheckBox">
 													<label i18n="link.tab">Open in new tab</label>
@@ -301,6 +362,8 @@
 								<allowContentType>video</allowContentType>
 								<allowContentType>video-qbrick</allowContentType>
 								<allowPath>${site}/*</allowPath>
+								<treeMode/>
+								<hideToggleIcon/>
 							</config>
 							<help-text/>
 						</input>
@@ -309,18 +372,27 @@
 							<occurrences minimum="0" maximum="1"/>
 							<default>checked</default>
 							<help-text/>
+							<config>
+								<alignment/>
+							</config>
 						</input>
 						<input name="repeat" type="CheckBox">
 							<label i18n="video.repeat.qbrick">Gjenta video (kun Qbrick)</label>
 							<occurrences minimum="0" maximum="1"/>
 							<default>checked</default>
 							<help-text/>
+							<config>
+								<alignment/>
+							</config>
 						</input>
 						<input name="fullwidth" type="CheckBox">
 							<label i18n="promoted-banner.fullwidth">Vis i fullbredde</label>
 							<default>checked</default>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<config>
+								<alignment/>
+							</config>
 						</input>
 						<input type="CustomSelector" name="color">
 							<label i18n="background">Bakgrunn</label>
@@ -335,17 +407,22 @@
 							<label i18n="title">Tittel</label>
 							<config>
 								<max-length>80</max-length>
+								<show-counter/>
+								<regexp/>
 							</config>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
 						</input>
 						<input name="text" type="TextArea">
 							<label i18n="promoted-banner.image-text">Bildetekst</label>
 							<config>
 								<max-length>120</max-length>
+								<show-counter/>
 							</config>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
 						</input>
 					</items>
 				</option>
@@ -356,11 +433,21 @@
 							<label i18n="text">Tekst</label>
 							<occurrences minimum="1" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+							</config>
 						</input>
 						<input name="footer" type="TextArea">
 							<label i18n="quote.cite">Sitering</label>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+							</config>
 						</input>
 					</items>
 				</option>
@@ -372,6 +459,12 @@
 							<indexed>true</indexed>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+								<regexp/>
+							</config>
 						</input>
 						<input type="CustomSelector" name="color">
 							<label i18n="background.color">Bakgrunn</label>
@@ -400,8 +493,10 @@
 													<config>
 														<exclude>*</exclude>
 														<include>Bold Italic | BulletedList NumberedList</include>
+														<allowHeadings/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 											</items>
 										</option>
@@ -413,6 +508,12 @@
 													<indexed>true</indexed>
 													<occurrences minimum="0" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<item-set name="facts">
 													<label i18n="fact">Fakta</label>
@@ -422,11 +523,23 @@
 															<label i18n="label">Label</label>
 															<occurrences minimum="0" maximum="1"/>
 															<help-text/>
+															<default/>
+															<config>
+																<max-length/>
+																<show-counter/>
+																<regexp/>
+															</config>
 														</input>
 														<input name="text" type="TextLine">
 															<label i18n="text">Text</label>
 															<occurrences minimum="1" maximum="1"/>
 															<help-text/>
+															<default/>
+															<config>
+																<max-length/>
+																<show-counter/>
+																<regexp/>
+															</config>
 														</input>
 													</items>
 												</item-set>
@@ -446,6 +559,12 @@
 							<indexed>true</indexed>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+								<regexp/>
+							</config>
 						</input>
 						<item-set name="link-list">
 							<label i18n="site.footer.links">Links</label>
@@ -455,6 +574,12 @@
 									<label i18n="link-text">Lenketekst</label>
 									<occurrences minimum="1" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<max-length/>
+										<show-counter/>
+										<regexp/>
+									</config>
 								</input>
 								<option-set name="linkType">
 									<label i18n="link.type">Type of link</label>
@@ -489,6 +614,8 @@
 														<allowContentType>media:spreadsheet</allowContentType>
 														<allowContentType>media:presentation</allowContentType>
 														<allowPath>${site}/*</allowPath>
+														<treeMode/>
+														<hideToggleIcon/>
 													</config>
 													<help-text/>
 												</input>
@@ -497,8 +624,11 @@
 													<occurrences minimum="0" maximum="1"/>
 													<config>
 														<regexp>^[^ \:\-\\\/]*$</regexp>
+														<max-length/>
+														<show-counter/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 											</items>
 										</option>
@@ -509,6 +639,12 @@
 													<label i18n="link.url">Type URL (with http/https attached)</label>
 													<occurrences minimum="1" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<input name="newTab" type="CheckBox">
 													<label i18n="link.tab">Open in new tab</label>
@@ -534,6 +670,12 @@
 							<label i18n="title">Title</label>
 							<occurrences minimum="0" maximum="1"/>
 							<help-text/>
+							<default/>
+							<config>
+								<max-length/>
+								<show-counter/>
+								<regexp/>
+							</config>
 						</input>
 						<item-set name="panels">
 							<label i18n="accordion.panel">Panel</label>
@@ -543,6 +685,12 @@
 									<label i18n="title">Title</label>
 									<occurrences minimum="1" maximum="1"/>
 									<help-text/>
+									<default/>
+									<config>
+										<max-length/>
+										<show-counter/>
+										<regexp/>
+									</config>
 								</input>
 								<option-set name="blocks">
 									<label i18n="accordion.panel.block">block</label>
@@ -559,8 +707,10 @@
 													<config>
 														<exclude>Code | Image | Table</exclude>
 														<allowHeadings>h4</allowHeadings>
+														<include/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 											</items>
 										</option>
@@ -579,6 +729,8 @@
 																	<occurrences minimum="1" maximum="1"/>
 																	<config>
 																		<allowPath>${site}/*</allowPath>
+																		<treeMode/>
+																		<hideToggleIcon/>
 																	</config>
 																	<help-text/>
 																</input>
@@ -594,6 +746,8 @@
 																		<allowContentType>video</allowContentType>
 																		<allowContentType>video-qbrick</allowContentType>
 																		<allowPath>${site}/*</allowPath>
+																		<treeMode/>
+																		<hideToggleIcon/>
 																	</config>
 																	<help-text/>
 																</input>
@@ -607,8 +761,10 @@
 													<config>
 														<exclude>*</exclude>
 														<include>Bold Italic</include>
+														<allowHeadings/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 											</items>
 										</option>
@@ -633,11 +789,22 @@
 													<label i18n="title">Title</label>
 													<occurrences minimum="0" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<input type="TextArea" name="subtitle">
 													<label i18n="accordion.subtitle">Subtitle</label>
 													<occurrences minimum="0" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+													</config>
 												</input>
 												<input type="CustomSelector" name="color">
 													<label i18n="background">Bakgrunn</label>
@@ -655,6 +822,12 @@
 															<label i18n="link-text">Lenketekst</label>
 															<occurrences minimum="1" maximum="1"/>
 															<help-text/>
+															<default/>
+															<config>
+																<max-length/>
+																<show-counter/>
+																<regexp/>
+															</config>
 														</input>
 														<option-set name="linkType">
 															<label i18n="link.type">Type of link</label>
@@ -689,6 +862,8 @@
 																				<allowContentType>media:spreadsheet</allowContentType>
 																				<allowContentType>media:presentation</allowContentType>
 																				<allowPath>${site}/*</allowPath>
+																				<treeMode/>
+																				<hideToggleIcon/>
 																			</config>
 																			<help-text/>
 																		</input>
@@ -697,8 +872,11 @@
 																			<occurrences minimum="0" maximum="1"/>
 																			<config>
 																				<regexp>^[^ \:\-\\\/]*$</regexp>
+																				<max-length/>
+																				<show-counter/>
 																			</config>
 																			<help-text/>
+																			<default/>
 																		</input>
 																	</items>
 																</option>
@@ -709,6 +887,12 @@
 																			<label i18n="link.url">Type URL (with http/https attached)</label>
 																			<occurrences minimum="1" maximum="1"/>
 																			<help-text/>
+																			<default/>
+																			<config>
+																				<max-length/>
+																				<show-counter/>
+																				<regexp/>
+																			</config>
 																		</input>
 																		<input name="newTab" type="CheckBox">
 																			<label i18n="link.tab">Open in new tab</label>
@@ -734,11 +918,23 @@
 													<label i18n="title">Tittel</label>
 													<occurrences minimum="1" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<input type="TextLine" name="subtitle">
 													<label i18n="subtitle">Undertittel</label>
 													<occurrences minimum="0" maximum="1"/>
 													<help-text/>
+													<default/>
+													<config>
+														<max-length/>
+														<show-counter/>
+														<regexp/>
+													</config>
 												</input>
 												<option-set name="media">
 													<label i18n="media">Media</label>
@@ -752,6 +948,8 @@
 																	<occurrences minimum="1" maximum="1"/>
 																	<config>
 																		<allowPath>${site}/*</allowPath>
+																		<treeMode/>
+																		<hideToggleIcon/>
 																	</config>
 																	<help-text/>
 																</input>
@@ -767,6 +965,8 @@
 																		<allowContentType>video</allowContentType>
 																		<allowContentType>video-qbrick</allowContentType>
 																		<allowPath>${site}/*</allowPath>
+																		<treeMode/>
+																		<hideToggleIcon/>
 																	</config>
 																	<help-text/>
 																</input>
@@ -789,8 +989,10 @@
 													<config>
 														<exclude>Code | Image | Table</exclude>
 														<allowHeadings>h5</allowHeadings>
+														<include/>
 													</config>
 													<help-text/>
+													<default/>
 												</input>
 												<item-set name="links">
 													<label i18n="link">Link</label>
@@ -801,6 +1003,12 @@
 															<indexed>true</indexed>
 															<occurrences minimum="0" maximum="1"/>
 															<help-text/>
+															<default/>
+															<config>
+																<max-length/>
+																<show-counter/>
+																<regexp/>
+															</config>
 														</input>
 														<item-set name="link-list">
 															<label i18n="site.footer.links">Links</label>
@@ -810,6 +1018,12 @@
 																	<label i18n="link-text">Lenketekst</label>
 																	<occurrences minimum="1" maximum="1"/>
 																	<help-text/>
+																	<default/>
+																	<config>
+																		<max-length/>
+																		<show-counter/>
+																		<regexp/>
+																	</config>
 																</input>
 																<option-set name="linkType">
 																	<label i18n="link.type">Type of link</label>
@@ -844,6 +1058,8 @@
 																						<allowContentType>media:spreadsheet</allowContentType>
 																						<allowContentType>media:presentation</allowContentType>
 																						<allowPath>${site}/*</allowPath>
+																						<treeMode/>
+																						<hideToggleIcon/>
 																					</config>
 																					<help-text/>
 																				</input>
@@ -852,8 +1068,11 @@
 																					<occurrences minimum="0" maximum="1"/>
 																					<config>
 																						<regexp>^[^ \:\-\\\/]*$</regexp>
+																						<max-length/>
+																						<show-counter/>
 																					</config>
 																					<help-text/>
+																					<default/>
 																				</input>
 																			</items>
 																		</option>
@@ -864,6 +1083,12 @@
 																					<label i18n="link.url">Type URL (with http/https attached)</label>
 																					<occurrences minimum="1" maximum="1"/>
 																					<help-text/>
+																					<default/>
+																					<config>
+																						<max-length/>
+																						<show-counter/>
+																						<regexp/>
+																					</config>
 																				</input>
 																				<input name="newTab" type="CheckBox">
 																					<label i18n="link.tab">Open in new tab</label>

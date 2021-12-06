@@ -8,6 +8,7 @@
         :label="field.label"
         :hint="field.hint"
         :rules="usedRules"
+        :class="{ 'required' : usesRequiredRule }"
       >
       </v-text-field>
       <v-text-field
@@ -19,6 +20,7 @@
         :rules="usedRules"
         append-icon="mdi-translate"
         @click:append="showDialog"
+        :class="{ 'required' : usesRequiredRule }"
       >
       </v-text-field>
 
@@ -83,15 +85,22 @@
             _.get(this.json, "elements[0].text") || this.initialValue || ""
           );
         },
-        usedRules() {
+        usedRulesKeys(){
           const rulesObject = this.$store.state.moduleRules.rules;
           const ruleKeys = Object.keys(rulesObject);
-          const usedRuleKeys = ruleKeys.filter(
+          const usedRulesKeys = ruleKeys.filter(
             (ruleName) => this.rules.indexOf(ruleName) !== -1
           );
 
-          return usedRuleKeys.map((usedRuleKey) => rulesObject[usedRuleKey]);
+          return usedRulesKeys;
         },
+        usedRules() {
+          const rulesObject = this.$store.state.moduleRules.rules;
+          return this.usedRulesKeys.map((usedRuleKey) => rulesObject[usedRuleKey]);
+        },
+        usesRequiredRule() {
+          return this.usedRulesKeys.indexOf('requiredText') >= 0;
+        }
       },
     });
   </script>

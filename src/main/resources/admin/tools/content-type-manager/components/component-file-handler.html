@@ -1,14 +1,21 @@
 <div th:fragment="component-file-picker-and-saver" th:remove="tag">
   <template>
     <div>
-      <v-btn @click="newCty">New</v-btn>
-      <v-btn @click="loadCty">Load</v-btn>
-      <v-btn
-        @click="saveCty"
-        color="green"
-        :disabled="!fileName"
-        >Save</v-btn
-      >
+      <div>
+        <v-btn @click="newCty">New</v-btn>
+        <v-btn @click="loadCty">Load</v-btn>
+        <v-btn
+          class="float-end"
+          @click="saveCty"
+          color="green"
+          :disabled="!fileName"
+          >Save</v-btn>
+      </div>
+      <div
+        v-if="!fileName"
+        class="d-flex align-center justify-center h-100">
+        <p> {{ placeholderText }} </p>
+      </div>
     </div>
   </template>
 
@@ -20,27 +27,39 @@
       template: DOM.innerHTML.toString(),
       data() {
         return {
+          previousJson: {},
           fileHandle: null,
-          warnings: {
+          placeholderText: "Use NEW/LOAD buttons to create or open a content type schema.",
+          dialogMessages: {
+            'save': "Your changes have been saved.",
+            'load': "Loading content type schema...",
+            'error': "Failed to save the content type schema.",
             'select-cty-folder': "Please select the content-types folder.",
             'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
-            'select-xml': "Please select the xml file of a content-type.",
+            'select-xml': "Please select a content type XML schema.",
             'file-not-xml': "This is not a XML file.",
-            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
+            'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome.",
+            'changes': "You have made changes to the schema which will be lost if you continue. Do you want to save your changes ?",
           }
         };
       },
+      mounted(){
+        this.previousJson = this.copyObject(this.json);
+      },
       methods: {
-        newCty(){
+        async newCty(){
 
           if(!this.checkBrowserCompatibility()){
             this.showIncompatibleBrowserDialog();
             return;
           }
 
+          await this.suggestSaveIfChangesExists();
+
           this.fileHandle = null;
-            this.$store.commit("resetJson");
-            this.$store.commit("setFileName", { data: ' ' });
+          this.$store.commit("resetJson");
+          this.$store.commit("setFileName", { data: ' ' });
+          this.previousJson = this.copyObject(this.json);
         },
         async loadCty() {
 
@@ -49,9 +68,11 @@
             return;
           }
 
+          await this.suggestSaveIfChangesExists();
+
           const showSelectXmlDialog = async () => {
             return Swal.fire({
-              text: this.warnings['select-xml'],
+              text: this.dialogMessages['select-xml'],
               showCancelButton: true,
             }).then(async (result) => {
               if(!result.isConfirmed) { return Promise.reject(); }
@@ -70,13 +91,14 @@
 
           const checkIfFileIsXml = (file) => {
             if (file.type !== "text/xml") {
-              throw this.warnings['file-not-xml'];
+              throw this.dialogMessages['file-not-xml'];
             }
           }
 
           const showLoadingDialog = (file) => {
             Swal.fire({
               iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+              text: this.dialogMessages.load,
               customClass: { icon: "no-border" },
               showConfirmButton: false,
               timer: 1500,
@@ -122,7 +144,7 @@
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
-              text: this.warnings['select-cty-folder'],
+              text: this.dialogMessages['select-cty-folder'],
               showCancelButton: true,
             }).then(async (result) => result.isConfirmed);
           };
@@ -139,7 +161,7 @@
             if (dirHandle.name !== "content-types") {
               Swal.fire({
                 icon: "warning",
-                text: this.warnings['incorrect-cty-folder'](dirHandle.name),
+                text: this.dialogMessages['incorrect-cty-folder'](dirHandle.name),
               });
               return {};
             }
@@ -235,6 +257,7 @@
 
             Swal.fire({
               icon: "error",
+              text: this.dialogMessages.error,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -251,16 +274,35 @@
 
             Swal.fire({
               icon: "success",
+              text: this.dialogMessages.save,
               showConfirmButton: false,
               timer: 1500,
+            }).then(() => {
+              this.previousJson = this.copyObject(this.json);
             });
           } else {
             Swal.fire({
               icon: "error",
+              text: this.dialogMessages.error,
               showConfirmButton: false,
               timer: 1500,
             });
           }
+        },
+        async suggestSaveIfChangesExists(){
+          const changesExists = JSON.stringify(this.previousJson) !== JSON.stringify(this.json);
+
+          if(!changesExists) return true;
+          
+          // If there are changes, then asks for saving the cty
+          return await Swal.fire({
+            icon: "warning",
+            text: this.dialogMessages.changes,
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+          }).then((result) => result.isConfirmed && this.saveCty())
         },
         
         checkBrowserCompatibility() {
@@ -340,11 +382,13 @@
         },
         showIncompatibleBrowserDialog() {
           Swal.fire({
-            text: this.warnings['incompatible-browser'],
+            text: this.dialogMessages['incompatible-browser'],
             icon: "warning",
           });
         },
-
+        copyObject(obj) {
+          return JSON.parse(JSON.stringify(obj));
+        },
         setJson(xml) {
           const xmlWithoutComments = xml.replaceAll(/<!--[\s\S]*?-->/g, "");
           const request = { mode: "xml2json", xml: xmlWithoutComments };
@@ -357,6 +401,7 @@
           )
             .then((response) => response.json())
             .then((data) => {
+              this.previousJson = this.copyObject(this.json);
               this.$store.commit("setJson", { data: data.json });
             });
         },
