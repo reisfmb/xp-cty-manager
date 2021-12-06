@@ -21,7 +21,7 @@
       data() {
         return {
           fileHandle: null,
-          warnings: {
+          dialogMessages: {
             'save': "Your changes have been saved.",
             'load': "Loading content type schema...",
             'error': "Failed to save the content type schema.",
@@ -38,7 +38,7 @@
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
-              text: this.warnings['select-cty-folder'],
+              text: this.dialogMessages['select-cty-folder'],
               showCancelButton: true,
             }).then(async (result) => result.isConfirmed);
           };
@@ -55,7 +55,7 @@
             if (dirHandle.name !== "content-types") {
               Swal.fire({
                 icon: "warning",
-                text: this.warnings['incorrect-cty-folder'](dirHandle.name),
+                text: this.dialogMessages['incorrect-cty-folder'](dirHandle.name),
               });
               return {};
             }
@@ -146,7 +146,7 @@
         async getFileContent() {
           if(this.checkBrowserCompatibility()){
             Swal.fire({
-              text: this.warnings['select-xml'],
+              text: this.dialogMessages['select-xml'],
               showCancelButton: true,
             }).then(async (result) => {
               if (!result.isConfirmed) return;
@@ -157,7 +157,7 @@
 
               if (file.type !== "text/xml") {
                 Swal.fire({
-                  text: this.warnings['file-not-xml'],
+                  text: this.dialogMessages['file-not-xml'],
                   icon: "error",
                   showConfirmButton: false,
                   timer: 1500,
@@ -173,7 +173,7 @@
                 customClass: {
                   icon: "no-border",
                 },
-                text: this.warnings.load,
+                text: this.dialogMessages.load,
                 showConfirmButton: false,
                 timer: 1500,
               }).then(() => {
@@ -194,7 +194,7 @@
 
             Swal.fire({
               icon: "error",
-              text: this.warnings.error,
+              text: this.dialogMessages.error,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -211,7 +211,7 @@
 
             Swal.fire({
               icon: "success",
-              text: this.warnings.save,
+              text: this.dialogMessages.save,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -222,7 +222,7 @@
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
-              text: this.warnings['incompatible-browser'],
+              text: this.dialogMessages['incompatible-browser'],
               icon: "warning",
             });
             return false;
