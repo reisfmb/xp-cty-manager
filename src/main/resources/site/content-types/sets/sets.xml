@@ -10,7 +10,7 @@
 	<is-built-in>false</is-built-in>
 	<allow-child-content>true</allow-child-content>
 	<form>
-		<option-set name="myoptionset">
+		<option-set name="myoptionset-2">
 			<label>My Option Set</label>
 			<help-text/>
 			<occurrences minimum="0" maximum="1"/>

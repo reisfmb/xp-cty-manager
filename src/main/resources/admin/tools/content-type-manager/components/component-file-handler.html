@@ -2,18 +2,17 @@
   <template>
     <div>
       <div>
-        <v-btn @click="createNewContentType">New</v-btn>
-        <v-btn @click="getFileContent">Load</v-btn>
+        <v-btn @click="newCty">New</v-btn>
+        <v-btn @click="loadCty">Load</v-btn>
         <v-btn
           class="float-end"
-          @click="saveContentType"
+          @click="saveCty"
           color="green"
-          :disabled="fileHandle === null"
-          >Save</v-btn
-        >
+          :disabled="!fileName"
+          >Save</v-btn>
       </div>
       <div
-        v-if="fileHandle === null"
+        v-if="!fileName"
         class="d-flex align-center justify-center h-100">
         <p> {{ placeholderText }} </p>
       </div>
@@ -44,10 +43,104 @@
           }
         };
       },
+      mounted(){
+        this.previousJson = this.copyObject(this.json);
+      },
       methods: {
-        async createNewContentType() {
-          if(!await this.suggestSaveIfChangesExists()) return;
+        async newCty(){
 
+          if(!this.checkBrowserCompatibility()){
+            this.showIncompatibleBrowserDialog();
+            return;
+          }
+
+          await this.suggestSaveIfChangesExists();
+
+          this.fileHandle = null;
+          this.$store.commit("resetJson");
+          this.$store.commit("setFileName", { data: ' ' });
+          this.previousJson = this.copyObject(this.json);
+        },
+        async loadCty() {
+
+          if(!this.checkBrowserCompatibility()){
+            this.showIncompatibleBrowserDialog();
+            return;
+          }
+
+          await this.suggestSaveIfChangesExists();
+
+          const showSelectXmlDialog = async () => {
+            return Swal.fire({
+              text: this.dialogMessages['select-xml'],
+              showCancelButton: true,
+            }).then(async (result) => {
+              if(!result.isConfirmed) { return Promise.reject(); }
+            })
+          }
+
+          const setFileHandler = async () => {
+            [fileHandle] = await window.showOpenFilePicker();
+            this.fileHandle = fileHandle;
+            const file = await fileHandle.getFile();
+            
+            if(!file){ return Promise.reject(); }
+
+            return file;
+          }
+
+          const checkIfFileIsXml = (file) => {
+            if (file.type !== "text/xml") {
+              throw this.dialogMessages['file-not-xml'];
+            }
+          }
+
+          const showLoadingDialog = (file) => {
+            Swal.fire({
+              iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
+              text: this.dialogMessages.load,
+              customClass: { icon: "no-border" },
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              this.$store.commit("setFileName", {
+                data: file.name.replace(".xml", ""),
+              });
+            });
+          }
+
+          showSelectXmlDialog()
+            .then(() => setFileHandler())
+            .then(async (file) => {
+              checkIfFileIsXml(file);
+              showLoadingDialog(file);
+              this.setJson(await file.text());
+            })
+            .catch((error) => {
+              error && Swal.fire({
+                icon: "error",
+                text: error,
+                showConfirmButton: false,
+                timer: 2000,
+              })
+            });
+        },
+        async saveCty(){
+
+          if(!this.checkBrowserCompatibility()){
+            this.showIncompatibleBrowserDialog();
+            return;
+          }
+
+          if(this.fileHandle){
+            await this.saveContentType();
+          }else{
+            this.createNewContentType()
+              .then((lastStepResult) => { lastStepResult && this.saveContentType() });
+          }
+        },
+
+        async createNewContentType() {
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
@@ -140,64 +233,19 @@
             );
 
             this.$store.commit("setFileName", { data: ctyName });
-            this.$store.commit("resetJson");
 
             return true;
           };
 
-          if(this.checkBrowserCompatibility()){
-            showFirstDialog()
-              .then((userAcceptedToContinue) =>
-                selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
-              )
-              .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
-              .then(({ nameIsValid, ctyName }) =>
-                createDirAndXmlFile(nameIsValid, ctyName)
-              );
-          }
-        },
-        async getFileContent() {
-          if(!await this.suggestSaveIfChangesExists()) return;
-
-          if(this.checkBrowserCompatibility()){
-            Swal.fire({
-              text: this.dialogMessages['select-xml'],
-              showCancelButton: true,
-            }).then(async (result) => {
-              if (!result.isConfirmed) return;
-
-              [fileHandle] = await window.showOpenFilePicker();
-              this.fileHandle = fileHandle;
-              const file = await fileHandle.getFile();
-
-              if (file.type !== "text/xml") {
-                Swal.fire({
-                  text: this.dialogMessages['file-not-xml'],
-                  icon: "error",
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                this.fileHandle = null;
-                return false;
-              }
-              
-              this.setJson(await file.text());
-
-              Swal.fire({
-                iconHtml: `<img class="loading-icon" src="${app.$root._data.loadingIcon}">`,
-                customClass: {
-                  icon: "no-border",
-                },
-                text: this.dialogMessages.load,
-                showConfirmButton: false,
-                timer: 1500,
-              }).then(() => {
-                this.$store.commit("setFileName", {
-                  data: file.name.replace(".xml", ""),
-                });
-              });
-            });
-          }
+          
+          return showFirstDialog()
+            .then((userAcceptedToContinue) =>
+              selectFolderAndReturnDirectoryHandle(userAcceptedToContinue)
+            )
+            .then((dirHandle) => checkIfContentTypeNameIsValid(dirHandle))
+            .then(({ nameIsValid, ctyName }) =>
+              createDirAndXmlFile(nameIsValid, ctyName)
+            );
         },
         async saveContentType() {
           const isFormValid = app.$refs.form.validate();
@@ -241,36 +289,25 @@
             });
           }
         },
-
-        ///
         async suggestSaveIfChangesExists(){
-          const changesExists = 
-            JSON.stringify(this.previousJson) !== JSON.stringify(this.json)
-            && this.fileHandle
+          const changesExists = JSON.stringify(this.previousJson) !== JSON.stringify(this.json);
 
           if(!changesExists) return true;
           
           // If there are changes, then asks for saving the cty
           return await Swal.fire({
             icon: "warning",
-            text: this.warnings.changes,
+            text: this.dialogMessages.changes,
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: 'Yes',
             denyButtonText: 'No',
-          }).then((result) => result.isConfirmed && this.saveContentType())
+          }).then((result) => result.isConfirmed && this.saveCty())
         },
-        checkBrowserCompatibility(){
-          if(!window.showDirectoryPicker || !window.showOpenFilePicker){
-            Swal.fire({
-              text: this.dialogMessages['incompatible-browser'],
-              icon: "warning",
-            });
-            return false;
-          }
-          return true;
+        
+        checkBrowserCompatibility() {
+          return window.showDirectoryPicker && window.showOpenFilePicker;
         },
-
         setBorderOfVcardsWithErrors() {
           // Get all error DOM elements
           const getAllDOMelementsWithErrors = () =>
@@ -343,12 +380,15 @@
             el.classList.remove("v-card-error")
           );
         },
+        showIncompatibleBrowserDialog() {
+          Swal.fire({
+            text: this.dialogMessages['incompatible-browser'],
+            icon: "warning",
+          });
+        },
         copyObject(obj) {
           return JSON.parse(JSON.stringify(obj));
         },
-
-        ///
-
         setJson(xml) {
           const xmlWithoutComments = xml.replaceAll(/<!--[\s\S]*?-->/g, "");
           const request = { mode: "xml2json", xml: xmlWithoutComments };
@@ -382,6 +422,9 @@
       computed: {
         json() {
           return this.$store.state.moduleExample.json;
+        },
+        fileName() {
+          return this.$store.getters.fileName;
         },
       },
     });

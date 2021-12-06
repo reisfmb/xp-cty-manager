@@ -1,6 +1,6 @@
 <div th:fragment="component-content-type" th:remove="tag">
   <template>
-    <v-card v-if="fileName">
+    <v-card v-if="showContentType">
       <div class="row pointer" @click="showConfig = !showConfig">
         <v-col cols="11">
           <v-card-title>{{ fileName }}</v-card-title>
@@ -48,6 +48,9 @@
         fileName() {
           return this.$store.getters.fileName;
         },
+        showContentType() {
+          return this.fileName.length > 0;
+        }
       },
     });
   </script>

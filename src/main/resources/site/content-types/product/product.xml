@@ -14,27 +14,52 @@
 			<label i18n="content-type.product.input.productName">Title</label>
 			<occurrences minimum="1" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="TextLine" name="shortTitle">
 			<label i18n="content-type.product.input.shortTitle">Short Title</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text>This is my help text for short title</help-text>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="HtmlArea" name="intro">
 			<label i18n="content-type.product.input.intro">Intro</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<exclude/>
+				<include/>
+				<allowHeadings/>
+			</config>
 		</input>
 		<input type="HtmlArea" name="note">
 			<label i18n="content-type.product.input.note">Text</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
 			<config/>
+			<default/>
 		</input>
 		<input type="TextLine" name="atc">
 			<label i18n="content-type.product.input.atc">ATC</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="ContentSelector" name="activeIngredient">
 			<label i18n="content-type.product.input.activeIngredient">Active Ingredient</label>
@@ -43,6 +68,7 @@
 				<allowPath>${site}/*</allowPath>
 				<treeMode>false</treeMode>
 				<allowContentType>active_ingredients</allowContentType>
+				<hideToggleIcon/>
 			</config>
 			<help-text/>
 		</input>
@@ -58,11 +84,23 @@
 			<label i18n="content-type.product.input.pharmaceuticalForm">Pharmaceutical Form</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="TextLine" name="strength">
 			<label i18n="content-type.product.input.strength">Strength</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="ContentSelector" name="usage">
 			<label i18n="content-type.product.input.usage">Usage</label>
@@ -71,6 +109,7 @@
 				<allowPath>${site}/*</allowPath>
 				<treeMode>false</treeMode>
 				<allowContentType>usage</allowContentType>
+				<hideToggleIcon/>
 			</config>
 			<help-text/>
 		</input>
@@ -78,11 +117,23 @@
 			<label i18n="content-type.product.input.itemNumber">Item Number</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input type="TextLine" name="marketingStatus">
 			<label i18n="content-type.product.input.marketingStatus">Marketing Status</label>
 			<occurrences minimum="0" maximum="1"/>
 			<help-text/>
+			<default/>
+			<config>
+				<max-length/>
+				<show-counter/>
+				<regexp/>
+			</config>
 		</input>
 		<input name="myhtmlarea" type="HtmlArea">
 			<label>My HTML Area</label>
@@ -103,6 +154,12 @@
 					<label i18n="content-type.product.item-set.stockStatus.input.number">Number</label>
 					<occurrences minimum="0" maximum="1"/>
 					<help-text/>
+					<default/>
+					<config>
+						<max-length/>
+						<show-counter/>
+						<regexp/>
+					</config>
 				</input>
 				<input type="ContentSelector" name="hospital">
 					<label i18n="content-type.product.item-set.stockStatus.input.hospital">Hospital</label>
@@ -111,6 +168,7 @@
 						<allowPath>${site}/*</allowPath>
 						<treeMode>false</treeMode>
 						<allowContentType>storage_facilities</allowContentType>
+						<hideToggleIcon/>
 					</config>
 					<help-text/>
 				</input>
@@ -118,6 +176,12 @@
 					<label i18n="content-type.product.item-set.stockStatus.input.storageFacilitie">Storage Facilitie</label>
 					<occurrences minimum="0" maximum="1"/>
 					<help-text/>
+					<default/>
+					<config>
+						<max-length/>
+						<show-counter/>
+						<regexp/>
+					</config>
 				</input>
 			</items>
 		</item-set>
