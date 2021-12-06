@@ -30,10 +30,13 @@
         return {
           fileHandle: null,
           placeholderText: "Use NEW/LOAD buttons to create or open a content type schema.",
-          warnings: {
+          dialogMessages: {
+            'save': "Your changes have been saved.",
+            'load': "Loading content type schema...",
+            'error': "Failed to save the content type schema.",
             'select-cty-folder': "Please select the content-types folder.",
             'incorrect-cty-folder': (selectedFolderName) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
-            'select-xml': "Please select the xml file of a content-type.",
+            'select-xml': "Please select a content type XML schema.",
             'file-not-xml': "This is not a XML file.",
             'incompatible-browser': "This application is using features that are currently not supported by your browser. Please use Google Chrome."
           }
@@ -44,7 +47,7 @@
           // 1 - Select folder
           const showFirstDialog = async () => {
             return Swal.fire({
-              text: this.warnings['select-cty-folder'],
+              text: this.dialogMessages['select-cty-folder'],
               showCancelButton: true,
             }).then(async (result) => result.isConfirmed);
           };
@@ -61,7 +64,7 @@
             if (dirHandle.name !== "content-types") {
               Swal.fire({
                 icon: "warning",
-                text: this.warnings['incorrect-cty-folder'](dirHandle.name),
+                text: this.dialogMessages['incorrect-cty-folder'](dirHandle.name),
               });
               return {};
             }
@@ -152,7 +155,7 @@
         async getFileContent() {
           if(this.checkBrowserCompatibility()){
             Swal.fire({
-              text: this.warnings['select-xml'],
+              text: this.dialogMessages['select-xml'],
               showCancelButton: true,
             }).then(async (result) => {
               if (!result.isConfirmed) return;
@@ -163,7 +166,7 @@
 
               if (file.type !== "text/xml") {
                 Swal.fire({
-                  text: this.warnings['file-not-xml'],
+                  text: this.dialogMessages['file-not-xml'],
                   icon: "error",
                   showConfirmButton: false,
                   timer: 1500,
@@ -179,6 +182,7 @@
                 customClass: {
                   icon: "no-border",
                 },
+                text: this.dialogMessages.load,
                 showConfirmButton: false,
                 timer: 1500,
               }).then(() => {
@@ -199,6 +203,7 @@
 
             Swal.fire({
               icon: "error",
+              text: this.dialogMessages.error,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -215,12 +220,7 @@
 
             Swal.fire({
               icon: "success",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
+              text: this.dialogMessages.save,
               showConfirmButton: false,
               timer: 1500,
             });
@@ -231,7 +231,7 @@
         checkBrowserCompatibility(){
           if(!window.showDirectoryPicker || !window.showOpenFilePicker){
             Swal.fire({
-              text: this.warnings['incompatible-browser'],
+              text: this.dialogMessages['incompatible-browser'],
               icon: "warning",
             });
             return false;
