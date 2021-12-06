@@ -393,7 +393,7 @@
           const xmlWithoutComments = xml.replaceAll(/<!--[\s\S]*?-->/g, "");
           const request = { mode: "xml2json", xml: xmlWithoutComments };
           fetch(
-            "http://localhost:8080/_/service/tool.content.type.manager/test",
+            app.$root._data.services.xml2JsonConverter,
             {
               method: "POST",
               body: JSON.stringify(request),
@@ -409,7 +409,7 @@
           const request = { mode: "json2xml", json };
 
           return fetch(
-            "http://localhost:8080/_/service/tool.content.type.manager/test",
+            app.$root._data.services.xml2JsonConverter,
             {
               method: "POST",
               body: JSON.stringify(request),

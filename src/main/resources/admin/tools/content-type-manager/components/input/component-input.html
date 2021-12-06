@@ -88,7 +88,7 @@
         this.map = app.$root._data.map;
 
         // TODO: Add cache to avoid unecessary requests
-        fetch(`${app.$root._data.services.test2}?schemaName=${this.inputType}`)
+        fetch(`${app.$root._data.services.jsonSchemas}?schemaName=${this.inputType}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(response.statusText);

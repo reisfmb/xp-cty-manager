@@ -210,10 +210,7 @@
           map: {},
         },
         created() {
-          fetch(
-            "http://localhost:8080/_/service/tool.content.type.manager/test3",
-            { method: "GET" }
-          )
+          fetch(this.services.fieldComponentMap, { method: "GET" })
             .then((response) => response.json())
             .then((data) => (this.map = data.map));
         },
