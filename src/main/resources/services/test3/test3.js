@@ -230,19 +230,10 @@ exports.get = _ => {
             rules: [],
             i18n: false
         },
-        ['is-built-in']: {
-            componentName: "component-input-boolean",
-            field: { 
-                label: "Is Built In", 
-                hint: "Only specified by built-in content types." 
-            },
-            rules: [],
-            i18n: false
-        },
         ['allow-child-content']: {
             componentName: "component-input-boolean",
             field: { 
-                label: "Allow Child Content", 
+                label: "Allow new content", 
                 hint: "If false, no content will be allowed to be created or moved under content of this content type (e.g. prevents child content under media)" 
             },
             rules: [],
