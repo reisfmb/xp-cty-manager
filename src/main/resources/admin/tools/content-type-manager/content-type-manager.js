@@ -1,28 +1,28 @@
 'use strict'
 
-const Portal = require('/lib/xp/portal');
-const Thymeleaf = require('/lib/thymeleaf');
-const AdminLib = require('/lib/xp/admin');
+const portalLib = require('/lib/xp/portal');
+const thymeleafLib = require('/lib/thymeleaf');
+const adminLib = require('/lib/xp/admin');
 
 exports.get = () => {
 
 	const view = resolve('content-type-manager.html');
 
-	const assetsUrl = Portal.assetUrl({
+	const assetsUrl = portalLib.assetUrl({
         path: "",
     });
 
 	const model = {
 		assetsUrl,
-		loadingIcon: Portal.assetUrl({ path: 'img/spinning-loader.gif' }),
-		launcherUrl: AdminLib.getLauncherUrl(),
-		launcherPath: AdminLib.getLauncherPath(),
+		loadingIcon: portalLib.assetUrl({ path: 'img/spinning-loader.gif' }),
+		launcherUrl: adminLib.getLauncherUrl(),
+		launcherPath: adminLib.getLauncherPath(),
 		services: {
-			test1: Portal.serviceUrl({ service: 'test1' }),
-			test2: Portal.serviceUrl({ service: 'test2' }),
-			test3: Portal.serviceUrl({ service: 'test3' }),
+			xml2JsonConverter: portalLib.serviceUrl({ service: 'xml2JsonConverter' }),
+			jsonSchemas: portalLib.serviceUrl({ service: 'jsonSchemas' }),
+			fieldComponentMap: portalLib.serviceUrl({ service: 'fieldComponentMap' }),
 		}
 	}
 
-	return { body: Thymeleaf.render(view, model) }
+	return { body: thymeleafLib.render(view, model) }
 }

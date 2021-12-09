@@ -1,31 +1,18 @@
 <div th:fragment="component-content-type" th:remove="tag">
   <template>
-    <v-card v-if="fileName">
-      <div class="row pointer" @click="showConfig = !showConfig">
-        <v-col cols="11">
-          <v-card-title>{{ fileName }}</v-card-title>
-        </v-col>
-        <v-col cols="1" class="d-flex align-center justify-end">
-          <v-btn class="mr-2" icon>
-              <v-icon>{{ showConfig ? 'mdi-menu-up' : 'mdi-menu-down' }}</v-icon>
-          </v-btn>
-        </v-col>
-      </div>
+    <v-card v-if="showContentType">
+      <v-card-title>{{ fileName }}</v-card-title>
+      <v-card-text>
+        <component
+          :is="'component-form-definition'"
+          v-bind="{ path }"
+        ></component>
 
-      <transition name="fade">
-        <v-card-text v-show="showConfig">
-
-          <component
-            :is="'component-form-definition'"
-            v-bind="{ path }"
-          ></component>
-
-          <component
-            :is="'component-recursive-element-render'"
-            v-bind="{ path }"
-          ></component>
-        </v-card-text>
-      </transition>
+        <component
+          :is="'component-recursive-element-render'"
+          v-bind="{ path }"
+        ></component>
+      </v-card-text>
     </v-card>
   </template>
 
@@ -39,15 +26,13 @@
       props: {
         path: String,
       },
-      data() {
-        return {
-          showConfig: true
-        };
-      },
       computed: {
         fileName() {
           return this.$store.getters.fileName;
         },
+        showContentType() {
+          return this.fileName.length > 0;
+        }
       },
     });
   </script>

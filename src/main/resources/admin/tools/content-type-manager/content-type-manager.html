@@ -28,13 +28,14 @@
   </head>
   <body>
     <v-app id="app">
+      <component-file-picker-and-saver></component-file-picker-and-saver>
+      
       <v-form ref="form" lazy-validation>
-        <component-file-picker-and-saver></component-file-picker-and-saver>
-
         <component-recursive-element-render
           :path="''"
         ></component-recursive-element-render>
       </v-form>
+
     </v-app>
 
     <!-- JS Dependencies -->
@@ -222,10 +223,7 @@
           map: {},
         },
         created() {
-          fetch(
-            "http://localhost:8080/_/service/tool.content.type.manager/test3",
-            { method: "GET" }
-          )
+          fetch(this.services.fieldComponentMap, { method: "GET" })
             .then((response) => response.json())
             .then((data) => (this.map = data.map));
         },

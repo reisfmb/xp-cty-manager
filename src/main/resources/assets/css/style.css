@@ -11,6 +11,14 @@
   }
 }
 
+.h-100 {
+  height: 100vh;
+}
+
+.required label::after {
+  content: " *";
+}
+
 /* Seet alert rules */
 
 .swal2-container {
@@ -25,7 +33,6 @@
 
 .v-card .v-card-error {
   border: 2px solid red;
-  background-color: #ff000005;
 }
 
 .v-card__title,

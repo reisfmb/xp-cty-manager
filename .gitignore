@@ -92,3 +92,6 @@ crashlytics-build.properties
 
 # Node Modules
 node_modules/
+
+# Content types
+src/main/resources/site/content-types/
