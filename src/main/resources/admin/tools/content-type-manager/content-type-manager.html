@@ -7,6 +7,19 @@
 
     <title>Content Type Manager</title>
 
+    <link rel="stylesheet" type="text/css" data-th-href="|${assetsUrl}/admin/common/styles/lib.css|">
+    <script data-th-inline="javascript">
+      var CONFIG = {
+          launcherUrl: /*[[${launcherUrl}]]*/ '', // Required for launcher
+          launcher: {
+            theme: 'light'
+          }
+      };
+    </script>
+    <script data-th-src="|${assetsUrl}/admin/common/js/lib.js|"></script>
+    <script async data-th-src="${launcherPath}" type="text/javascript"></script>
+
+
     <!-- CSS Dependencies -->
     <fragment
       th:replace="./fragments/dependencies/css.html"
