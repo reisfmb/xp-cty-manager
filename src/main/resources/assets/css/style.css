@@ -1,3 +1,7 @@
+body {
+  overflow: auto;
+}
+
 #app {
   background-color: rgb(235, 235, 235);
   padding: 25px;
@@ -28,7 +32,7 @@
 /* Vuetify overwrite rules */
 
 .v-card {
-  margin: 25px 0px;
+  margin: 25px 0 40px 0;
 }
 
 .v-card .v-card-error {
@@ -48,6 +52,10 @@
   padding-top: 16px;
 }
 
+form .v-card__text {
+  padding-top: 0;
+}
+
 .v-dialog .v-card {
   margin: 0px;
 }
@@ -59,7 +67,6 @@
 .spacer-2-icons-left {
   margin-left: 72px;
 }
-
 /* Icon */
 
 .loading-icon {
