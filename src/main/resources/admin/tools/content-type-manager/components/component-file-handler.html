@@ -126,9 +126,16 @@
             });
         },
         async saveCty(){
+          this.resetColorOfVcards();
 
           if(!this.checkBrowserCompatibility()){
             this.showIncompatibleBrowserDialog();
+            return;
+          }          
+          
+          if (!app.$refs.form.validate()) {
+            this.setBorderOfVcardsWithErrors();
+            this.showValidationErrorDialog();
             return;
           }
 
@@ -248,22 +255,6 @@
             );
         },
         async saveContentType() {
-          const isFormValid = app.$refs.form.validate();
-
-          this.resetColorOfVcards();
-
-          if (!isFormValid) {
-            this.setBorderOfVcardsWithErrors();
-
-            Swal.fire({
-              icon: "error",
-              text: this.dialogMessages.error,
-              showConfirmButton: false,
-              timer: 1500,
-            });
-
-            return;
-          }
 
           const xml = await this.getXmlFromJson(this.json);
           const writable = await this.fileHandle.createWritable();
@@ -384,6 +375,14 @@
           Swal.fire({
             text: this.dialogMessages['incompatible-browser'],
             icon: "warning",
+          });
+        },
+        showValidationErrorDialog() {
+          Swal.fire({
+            icon: "error",
+            text: this.dialogMessages.error,
+            showConfirmButton: false,
+            timer: 1500,
           });
         },
         copyObject(obj) {
