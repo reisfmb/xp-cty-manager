@@ -311,26 +311,13 @@
         setBorderOfVcardsWithErrors() {
           // Get all error DOM elements
           const getAllDOMelementsWithErrors = () =>
-            Array.from(
-              document.getElementsByClassName("v-messages error--text")
-            );
+            Array.from(document.getElementsByClassName("v-messages error--text"));
 
           // For each error elements, find it's Vcard father and colorize it
           const colorizeElementsWithErrors = (elements) => {
             elements.forEach((div) => {
-              let i = 0;
               let el = div;
-              const m = 10;
-
-              while (el && i < m) {
-                if (isElementVCard(el)) {
-                  break;
-                } else {
-                  el = el.parentElement;
-                  i += 1;
-                }
-              }
-
+              while (! isElementVCard(el) && el.parentElement) { el = el.parentElement };
               el.classList.add("v-card-error");
             });
 
@@ -343,6 +330,7 @@
               getAllElementParents(el)
                 .filter((el) => isElementVCard(el))
                 .forEach((el) => {
+                  el.__vue__.showConfig = true;
                   el.__vue__.$parent.showConfig = true;
                 });
             });
@@ -351,12 +339,8 @@
           ///
 
           // Check if an element is a vuetify card
-          const isElementVCard = (el) => {
-            return (
-              (((el.__vue__ || {}).$options || {})._componentTag || "") ===
-              "v-card"
-            );
-          };
+          const isElementVCard = (el) => 
+            el && el.classList && Array.from(el.classList).indexOf('v-card') >= 0 || false;
 
           // Get all father parents of el
           const getAllElementParents = (el) => {
