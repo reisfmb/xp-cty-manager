@@ -1,5 +1,6 @@
 const xmlJs = require('/lib/external/xml-js')
 const xmlBeautifier = require('../../lib/external/xml-beautifier')
+const ctyXmlSanitizer = require('../../lib/internal/cty-xml-sanitizer')
 
 exports.post = req => {
 
@@ -14,7 +15,11 @@ exports.post = req => {
     else if(executionMode === 'json2xml'){
         const json = (JSON.parse(req.body) || {}).json || {}
 
-        body.xml = xmlBeautifier(xmlJs.js2xml(json))
+        let xml = xmlJs.js2xml(json)
+        xml = ctyXmlSanitizer.sanitize(xml)
+        xml = xmlBeautifier(xml)
+        
+        body.xml = xml
     }
 
     return { body, contentType: 'application/json' }
