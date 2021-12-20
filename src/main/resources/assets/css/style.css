@@ -6,8 +6,7 @@ body {
   background-color: rgb(235, 235, 235);
   padding: 25px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
 }
 @media only screen and (min-width: 960px) {
   #app {
@@ -16,7 +15,7 @@ body {
 }
 
 .h-100 {
-  height: 100vh;
+  height: 100%;
 }
 
 .required label::after {
@@ -30,6 +29,10 @@ body {
 }
 
 /* Vuetify overwrite rules */
+
+.v-application--wrap {
+  min-height: auto;
+}
 
 .v-card {
   margin: 25px 0 40px 0;
