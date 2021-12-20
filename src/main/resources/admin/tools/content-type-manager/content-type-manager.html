@@ -7,7 +7,6 @@
 
     <title>Content Type Manager</title>
 
-    <link rel="stylesheet" type="text/css" data-th-href="|${assetsUrl}/admin/common/styles/lib.css|">
     <script data-th-inline="javascript">
       var CONFIG = {
           launcherUrl: /*[[${launcherUrl}]]*/ '', // Required for launcher
@@ -16,9 +15,6 @@
           }
       };
     </script>
-    <script data-th-src="|${assetsUrl}/admin/common/js/lib.js|"></script>
-    <script async data-th-src="${launcherPath}" type="text/javascript"></script>
-
 
     <!-- CSS Dependencies -->
     <fragment
@@ -265,5 +261,6 @@
         },
       });
     </script>
+    <script async data-th-src="${launcherPath}" type="text/javascript"></script>
   </body>
 </html>
