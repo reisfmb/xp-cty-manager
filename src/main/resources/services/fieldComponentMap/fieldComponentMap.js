@@ -23,7 +23,7 @@ exports.get = _ => {
         default: {
             componentName: "component-input-text",
             field: { 
-                label: "Default", 
+                label: "Default value",
                 hint: "Is an optional field that lets you specify default values to be used by the input type." 
             },
             rules: [],
