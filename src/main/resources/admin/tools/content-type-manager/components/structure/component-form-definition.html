@@ -114,7 +114,11 @@
       },
       created() {
         this.addCommonFieldsToElements();
-        setTimeout(() => (this.map = app.$root._data.map), 500);
+        
+        setTimeout(() => {
+          this.map = app.$root._data.map;
+          this.setShowConfigBasedOnDisplayName();
+        }, 500);   
       },
       mounted() {},
       watch: {
@@ -136,6 +140,12 @@
             }
           }, this);
         },
+
+        setShowConfigBasedOnDisplayName() {
+          const displayName = _.get(this.elements.find(el => el.name === 'display-name') || [], 'elements[0].text') || '';
+          this.showConfig = !Boolean(displayName);
+          console.log(displayName);
+        }
       },
       computed: {
         json() {
