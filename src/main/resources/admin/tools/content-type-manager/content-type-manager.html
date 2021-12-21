@@ -260,6 +260,19 @@
               }
             });
           },
+          setShowConfigBasedOnValidation(component) {
+            setTimeout(() => {
+              const json = this.$store.getters.jsonPath(component.path || '');
+              const elements = json && json.elements || [];
+              const labelElement = elements.find(el => el.name === 'label' ) || {};
+              
+              if(Object.keys(labelElement).length === 0) return;
+              
+              const labelIsSet = Object.keys(labelElement).indexOf('elements') >= 0;
+              
+              component.showConfig = !labelIsSet;
+            }, 1);
+          },
         },
       });
     </script>

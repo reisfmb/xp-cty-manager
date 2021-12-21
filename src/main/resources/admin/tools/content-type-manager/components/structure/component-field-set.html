@@ -71,7 +71,7 @@
       },
       data() {
         return {
-          showConfig: false,
+          showConfig: app.$root.setShowConfigBasedOnValidation(this),
           map: {},
         };
       },
