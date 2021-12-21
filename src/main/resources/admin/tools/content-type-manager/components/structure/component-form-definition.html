@@ -144,7 +144,6 @@
         setShowConfigBasedOnDisplayName() {
           const displayName = _.get(this.elements.find(el => el.name === 'display-name') || [], 'elements[0].text') || '';
           this.showConfig = !Boolean(displayName);
-          console.log(displayName);
         }
       },
       computed: {
