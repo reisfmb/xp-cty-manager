@@ -1,6 +1,6 @@
 <div th:fragment="component-file-picker-and-saver" th:remove="tag">
   <template>
-    <div class="d-flex flex-column h-100">
+    <div :class="'d-flex flex-column' + (!fileName ? ' h-100' : '')">
       <div>
         <v-btn @click="newCty">New</v-btn>
         <v-btn @click="loadCty">Load</v-btn>
