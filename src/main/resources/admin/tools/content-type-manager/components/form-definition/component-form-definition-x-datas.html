@@ -4,7 +4,7 @@
       <template v-for="(_, index) in xDatas">
         <v-card>
           <v-row>
-            <v-col cols="9">
+            <v-col cols="10">
               <v-card-subtitle>
                 <v-text-field
                   @blur="save(index)"
@@ -17,7 +17,7 @@
                 </v-text-field>
             </v-card-subtitle>
             </v-col>
-            <v-col cols="3" class="d-flex align-center justify-center">
+            <v-col cols="2" class="d-flex align-center justify-end">
               <v-btn @click="remove(index)" icon class="spacer-2-icons-left">
                 <v-icon color="red">mdi-delete-circle-outline</v-icon>
               </v-btn>
