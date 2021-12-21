@@ -15,7 +15,7 @@ exports.post = req => {
     else if(executionMode === 'json2xml'){
         const json = (JSON.parse(req.body) || {}).json || {}
 
-        let xml = xmlJs.js2xml(json)
+        let xml = xmlJs.js2xml(json,{ fullTagEmptyElement: true })
         xml = ctyXmlSanitizer.sanitize(xml)
         xml = xmlBeautifier(xml)
         
