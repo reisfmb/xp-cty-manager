@@ -82,6 +82,10 @@ form .v-card__text {
   border: 0 !important;
 }
 
+.new-schema-placeholder {
+  font-size: 1.200rem;
+}
+
 /* Transitions */
 
 .fade-enter-active,
