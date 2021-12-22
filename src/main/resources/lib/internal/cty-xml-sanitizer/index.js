@@ -15,13 +15,10 @@ const sanitize = (xmlString) => {
     // Remove each one of those tags.
     tagsToBeRemoved.forEach(s => { xmlString = xmlString.replace(s, '') });
 
-    // After removing, there might be empty config tags. Remove them if there are.
-    xmlString = xmlString.replaceAll('<config></config>', '');
-
     // Place <form>...</form> as the last thing before ending the cty.
     xmlString = adjustFormInXmlString(xmlString);
 
-    return xmlString;
+    return finalAdjustments(xmlString);
 }
 
 const getAllEmptyTagsInXmlString = xmlString => {
@@ -33,7 +30,9 @@ const getSpecificTagsToBeIgnored = () => [
     '</x-data>',
     '</mixin>',
     '</occurrences>',
-    '</form>'
+    '</form>',
+    '</options>',
+    '</items>'
 ];
 
 const getSpecificTagsToBeRemoved = () => [
@@ -48,6 +47,11 @@ const adjustFormInXmlString = (xmlString) => {
     const formString = xmlString.match(formRegex);
     xmlString = xmlString.replace(formString, '');
     return xmlString.replace('</content-type>', formString + '</content-type>');
+}
+
+const finalAdjustments = (xmlString) => {
+    xmlString = xmlString.replaceAll('<config></config>', '');
+    return xmlString.replaceAll('></occurrences>', '/>');
 }
 
 module.exports = { sanitize };
