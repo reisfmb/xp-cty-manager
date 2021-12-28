@@ -1,0 +1,11 @@
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+import { IRootState } from './rootState';
+import { ModuleFileHandle } from './ModuleFileHandle';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store<IRootState>({
+  modules: { ModuleFileHandle },
+});
