@@ -8,20 +8,11 @@ exports.get = () => {
 
 	const view = resolve('content-type-manager.html');
 
-	const assetsUrl = portalLib.assetUrl({
-        path: "",
-    });
-
 	const model = {
-		assetsUrl,
+		assetsUrl: portalLib.assetUrl({ path: "" }),
 		loadingIcon: portalLib.assetUrl({ path: 'img/spinning-loader.gif' }),
 		launcherUrl: adminLib.getLauncherUrl(),
 		launcherPath: adminLib.getLauncherPath(),
-		services: {
-			xml2JsonConverter: portalLib.serviceUrl({ service: 'xml2JsonConverter' }),
-			jsonSchemas: portalLib.serviceUrl({ service: 'jsonSchemas' }),
-			fieldComponentMap: portalLib.serviceUrl({ service: 'fieldComponentMap' }),
-		}
 	}
 
 	return { body: thymeleafLib.render(view, model) }
