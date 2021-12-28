@@ -13,15 +13,18 @@
     <script data-th-inline="javascript">
       var CONFIG = {
           launcherUrl: /*[[${launcherUrl}]]*/ '', // Required for launcher
-          launcher: {
-            theme: 'light'
-          }
+          launcher: { theme: 'light' }
       };
     </script>
 
   </head>
 
   <body>
+
+    <div id="app"></div>
+
+    <script th:src="${scripts.vendor}"></script>
+    <script th:src="${scripts.app}"></script>
     
     <script async data-th-src="${launcherPath}" type="text/javascript"></script>
   
