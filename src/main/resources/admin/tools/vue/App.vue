@@ -1,26 +1,24 @@
 <template lang="pug">
 
-    LoadButton
+    div
+      HeaderButtons
+      RecursiveComponentRender(:path="[]")
 
 </template>
 
 <script>
 
-import LoadButton from './components/LoadButton.vue';
+import HeaderButtons from './components/HeaderButtons.vue';
+import RecursiveComponentRender from './components/RecursiveComponentRender.vue';
 
 export default {
   name: 'App',
-  components: { LoadButton },
+  components: {
+    HeaderButtons,
+    RecursiveComponentRender,
+  },
 };
 
 </script>
 
-<style>
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-</style>
+<style></style>
