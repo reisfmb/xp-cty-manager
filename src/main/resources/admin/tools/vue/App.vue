@@ -1,6 +1,6 @@
 <template lang="pug">
 
-    div
+    v-app
       HeaderButtons
       RecursiveComponentRender(:path="[]")
 

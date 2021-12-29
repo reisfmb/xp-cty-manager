@@ -6,7 +6,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 module.exports = {
   entry: {
     app: './src/main/resources/admin/tools/vue/main.ts',
-    vendor: ['vue', 'vuex', 'pug', 'ramda', 'sweetalert2'],
+    vendor: ['vue', 'vuex', 'vuetify', 'pug', 'ramda', 'sweetalert2'],
   },
 
   output: {
