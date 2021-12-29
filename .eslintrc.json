@@ -23,6 +23,7 @@
       "import/extensions": "off",
       "import/no-unresolved": "off",
       "no-undef": "off",
-      "max-len": "off"
+      "max-len": "off",
+      "global-require": "off",
     }
 }

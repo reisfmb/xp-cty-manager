@@ -95,3 +95,6 @@ node_modules/
 
 # Content types
 src/main/resources/site/content-types/
+
+# Webpack assets
+src/main/resources/assets/js/

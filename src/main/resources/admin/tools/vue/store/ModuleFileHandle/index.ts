@@ -17,6 +17,9 @@ const mutations = {
   setFileHandle(state: IState, fileHandle: FileSystemFileHandle) {
     state.fileHandle = fileHandle;
   },
+  resetFileHandle(state: IState) {
+    state.fileHandle = null;
+  },
 };
 
 const actions = {
@@ -37,5 +40,6 @@ const { commit } = getStoreAccessors<IState, IRootState>('ModuleFileHandle');
 
 // Mutations ( commit )
 export const setFileHandle = commit(ModuleFileHandle.mutations.setFileHandle);
+export const resetFileHandle = commit(ModuleFileHandle.mutations.resetFileHandle);
 
 // Actions ( dispatch )
