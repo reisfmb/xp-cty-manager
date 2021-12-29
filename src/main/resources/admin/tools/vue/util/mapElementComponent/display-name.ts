@@ -1,4 +1,4 @@
-import IComponentProps from './type';
+import { IComponentProps } from './type';
 
 export default {
     component: "TextInput",
