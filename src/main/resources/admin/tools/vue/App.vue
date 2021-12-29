@@ -1,13 +1,16 @@
 <template lang="pug">
 
-    p Hello World
+    LoadButton
 
 </template>
 
 <script>
 
+import LoadButton from './components/LoadButton.vue';
+
 export default {
   name: 'App',
+  components: { LoadButton },
 };
 
 </script>
