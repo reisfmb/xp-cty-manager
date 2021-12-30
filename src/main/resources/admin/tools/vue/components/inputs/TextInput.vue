@@ -1,19 +1,77 @@
 <template lang="pug">
-    div
-        p Text Input - {{ field.label }}
+div
+  v-text-field(
+    @blur="save",
+    @click:append="i18n ? dialog() : null",
+    :append-icon="i18n ? 'mdi-translate' : ''",
+    v-model="states.text",
+    :label="field.label",
+    :hint="field.hint",
+    :rules="usedRules",
+    :class="{ required: usesRequiredRule }"
+  )
 
+  I18nDialog(v-if="i18n", :showDialog="showI18nDialog", :path="path")
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
+import I18nDialog from "../dialogs/I18nDialog.vue";
+import * as ModuleContentType from "../../store/ModuleContentType";
+import rules from "../../util/rules";
+import * as R from "ramda";
 
 export default Vue.extend({
-  name: 'TextInput',
-  props: { 
-    field: Object, // label, hint
-    rules: Array,
-    i18n: Boolean,
+  name: "TextInput",
+  components: { I18nDialog },
+  props: {
+    initialValue: String,
     path: Array,
+    rules: Array, // name of the used rules
+    i18n: Boolean,
+    field: Object, // label, hint
+  },
+  data: () => ({
+    states: { text: "" },
+    showI18nDialog: false,
+  }),
+  mounted() {
+    this.states.text = this.value || this.initialValue;
+  },
+  watch: {
+    value() {
+      this.states.text = this.value;
+    },
+  },
+  methods: {
+    save() {
+      ModuleContentType.setContentTypeByPath(this.$store, {
+        path: this.pathToValue,
+        value: this.states.text,
+      });
+    },
+    dialog() {
+      this.showI18nDialog = false;
+      setTimeout(() => (this.showI18nDialog = true), 100);
+    },
+  },
+  computed: {
+    pathToValue(): string[] {
+      return [...(this.path as string[]), "elements", "0", "text"];
+    },
+    value(): string {
+      return ModuleContentType.getContentTypeByPath(this.$store)(
+        this.pathToValue
+      );
+    },
+    usedRules(): Function[] {
+      return R.props(this.rules as string[], rules);
+    },
+    usesRequiredRule(): boolean {
+      return (this.rules as string[]).some((ruleName: string) =>
+        ruleName.includes("required")
+      );
+    },
   },
 });
 </script>
