@@ -1,7 +1,8 @@
-import { getStoreAccessors } from 'vuex-typescript';
+import { getStoreAccessors } from "vuex-typescript";
+import { ModuleContentType } from "../ModuleContentType";
 // import { ActionContext } from 'vuex';
-import { IRootState } from '../rootState';
-import { IState } from './types';
+import { IRootState } from "../rootState";
+import { IState } from "./types";
 
 // type ModuleFileHandleContext = ActionContext<IState, IRootState>;
 
@@ -11,6 +12,14 @@ const initialStateValues: IState = {
 };
 
 const getters = {
+  async getFileName(state: IState) {
+    if (!state.fileHandle) {
+      return null;
+    }
+
+    const file = await state.fileHandle.getFile();
+    return file.name.split(".")[0] || null;
+  },
 };
 
 const mutations = {
@@ -22,9 +31,7 @@ const mutations = {
   },
 };
 
-const actions = {
-
-};
+const actions = {};
 
 export const ModuleFileHandle = {
   namespaced: true,
@@ -34,12 +41,17 @@ export const ModuleFileHandle = {
   actions,
 };
 
-const { commit } = getStoreAccessors<IState, IRootState>('ModuleFileHandle');
+const { read, commit } = getStoreAccessors<IState, IRootState>(
+  "ModuleFileHandle"
+);
 
 // Getters ( read )
+export const getFileName = read(ModuleFileHandle.getters.getFileName);
 
 // Mutations ( commit )
 export const setFileHandle = commit(ModuleFileHandle.mutations.setFileHandle);
-export const resetFileHandle = commit(ModuleFileHandle.mutations.resetFileHandle);
+export const resetFileHandle = commit(
+  ModuleFileHandle.mutations.resetFileHandle
+);
 
 // Actions ( dispatch )

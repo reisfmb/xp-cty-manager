@@ -26,6 +26,9 @@ const mutations = {
   resetContentType(state: IState) {
     state.contentType = null;
   },
+  setContentTypeByPath(state: IState, data: {path: string[], value: string}) {
+    state.contentType = R.set(R.lensPath(data.path), data.value, state.contentType);
+  },
 };
 
 const actions = {
@@ -50,6 +53,7 @@ export const getContentTypeByPath = read(ModuleContentType.getters.getContentTyp
 
 // Mutations ( commit )
 export const resetContentType = commit(ModuleContentType.mutations.resetContentType);
+export const setContentTypeByPath = commit(ModuleContentType.mutations.setContentTypeByPath);
 
 // Actions ( dispatch )
 export const setContentTypeFromXmlString = dispatch(ModuleContentType.actions.setContentTypeFromXmlString);
