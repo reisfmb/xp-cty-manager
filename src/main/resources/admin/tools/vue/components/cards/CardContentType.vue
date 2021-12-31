@@ -3,16 +3,28 @@ v-card
   v-card-title {{ fileName }}
   v-card-text
     RecursiveComponentRender(:path="path")
+    CardMultipleTextInput(
+      :path="elementsPath",
+      :pathToValue="['elements', '0', 'text']",
+      elementName="allow-child-content-type",
+      buttonAddLabel="Add Allow Child Content Type"
+    )
+    CardMultipleTextInput(
+      :path="elementsPath",
+      :pathToValue="['attributes', 'name']",
+      elementName="x-data",
+      buttonAddLabel="Add X-Data"
+    )
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { Element } from "@reginaldlee/xml-js";
-import * as ModuleContentType from "../../store/ModuleContentType";
 import * as ModuleFileHandle from "../../store/ModuleFileHandle";
+import CardMultipleTextInput from "./CardMultipleTextInput.vue";
 
 export default Vue.extend({
   name: "CardContentType",
+  components: { CardMultipleTextInput },
   props: { path: Array },
   data: () => ({
     fileName: "",
@@ -32,9 +44,8 @@ export default Vue.extend({
     },
   },
   computed: {
-    elements(): Element[] | null {
-      const path = [...(this.path as string[]), "elements"];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || null;
+    elementsPath(): string[] {
+      return [...(this.path as string[]), "elements"];
     },
   },
 });
