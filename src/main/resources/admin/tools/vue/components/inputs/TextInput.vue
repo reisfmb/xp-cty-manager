@@ -25,7 +25,7 @@ export default Vue.extend({
   name: "TextInput",
   components: { I18nDialog },
   props: {
-    initialValue: String,
+    fallbackValue: String,
     path: Array,
     rules: Array, // name of the used rules
     i18n: Boolean,
@@ -36,7 +36,7 @@ export default Vue.extend({
     showI18nDialog: false,
   }),
   mounted() {
-    this.states.text = this.value || this.initialValue;
+    this.states.text = this.value || this.fallbackValue;
   },
   watch: {
     value() {
