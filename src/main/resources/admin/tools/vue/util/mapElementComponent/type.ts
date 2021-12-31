@@ -1,6 +1,6 @@
 export interface IComponentProps {
   component: string;
-  initialValue?: string | number;
+  fallbackValue?: string | number | boolean;
   path?: string[];
   rules?: string[];
   i18n?: boolean;
