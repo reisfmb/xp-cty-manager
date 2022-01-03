@@ -1,8 +1,6 @@
 <template lang="pug">
-
-  div
-    button(@click="execute") {{ labels.button }}
-
+div
+  button(@click="execute") {{ labels.button }}
 </template>
 
 <script lang="ts">
@@ -11,17 +9,17 @@
 // [x] - 3. Reset file handle in the ModuleFileHandle
 // [x] - 4. Reset content type in the ModuleContentType
 
-import Vue from 'vue';
-import * as R from 'ramda';
-import * as ModuleFileHandle from '../store/ModuleFileHandle';
-import * as ModuleContentType from '../store/ModuleContentType';
+import Vue from "vue";
+import * as R from "ramda";
+import * as ModuleFileHandle from "../../store/ModuleFileHandle";
+import * as ModuleContentType from "../../store/ModuleContentType";
 
 export default Vue.extend({
-  name: 'NewButton',
+  name: "NewButton",
 
   data: () => ({
     labels: {
-      button: 'New',
+      button: "New",
     },
   }),
 
@@ -37,9 +35,7 @@ export default Vue.extend({
     resetContentType() {
       ModuleContentType.resetContentType(this.$store);
     },
-
   },
-
 });
 </script>
 
