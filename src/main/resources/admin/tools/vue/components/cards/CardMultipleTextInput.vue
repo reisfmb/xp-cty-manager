@@ -19,6 +19,8 @@
 </template>
 
 <script lang="ts">
+// TODO: Add rules
+
 import Vue from "vue";
 import * as R from "ramda";
 import * as ModuleContentType from "../../store/ModuleContentType";
@@ -69,7 +71,7 @@ export default Vue.extend({
 
       if (objToBeAdded.elements) {
         objToBeAdded = R.set(
-          R.lensPath(["elements", "0", "type"]),
+          R.lensPath(["elements", 0, "type"]),
           "text",
           objToBeAdded
         );
