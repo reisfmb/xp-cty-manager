@@ -14,11 +14,13 @@ import { Element } from "@reginaldlee/xml-js";
 import * as ModuleContentType from "../store/ModuleContentType";
 
 import TextInput from "./inputs/TextInput.vue";
+import TextAttributeInput from "./inputs/TextAttributeInput.vue";
 import BooleanInput from "./inputs/BooleanInput.vue";
+import CardInput from "./cards/CardInput.vue";
 
 export default Vue.extend({
   name: "RecursiveComponentRender",
-  components: { TextInput, BooleanInput },
+  components: { TextInput, TextAttributeInput, BooleanInput, CardInput },
   props: { path: Array },
   beforeCreate() {
     ((this.$options || {}).components || {}).CardContentType =
@@ -39,7 +41,7 @@ export default Vue.extend({
         return null;
       }
 
-      props.path = this.$gf.innerPath(this.path as string[], index);
+      props.path = this.$gf.innerPath(this.path as (string | number)[], index);
       return props;
     },
   },
