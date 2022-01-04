@@ -1,5 +1,5 @@
 import { IComponentProps } from "../type";
 
 export default {
-  component: "CardContentType",
+  component: "RecursiveComponentRender",
 } as IComponentProps;
