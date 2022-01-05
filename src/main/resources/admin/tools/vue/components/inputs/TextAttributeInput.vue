@@ -37,12 +37,20 @@ export default Vue.extend({
       Vue.set(this.states, attr, attrsInCty[attr]);
     });
   },
-  watch: {},
   methods: {
     save() {
+      const ctyAttributes = ModuleContentType.getContentTypeByPath(this.$store)(
+        this.pathToAttributes
+      );
+
+      const updatedAttributes = {
+        ...ctyAttributes,
+        ...this.states,
+      };
+
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.pathToAttributes,
-        value: this.states,
+        value: updatedAttributes,
       });
     },
     capitalize(s: string): string {
