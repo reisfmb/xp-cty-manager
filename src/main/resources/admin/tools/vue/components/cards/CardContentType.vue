@@ -5,13 +5,13 @@ v-card
     RecursiveComponentRender(:path="path")
     CardMultipleTextInput(
       :path="elementsPath",
-      :pathToValue="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       elementName="allow-child-content-type",
       buttonAddLabel="Add Allow Child Content Type"
     )
     CardMultipleTextInput(
       :path="elementsPath",
-      :pathToValue="['attributes', 'name']",
+      :pathToText="['attributes', 'name']",
       elementName="x-data",
       buttonAddLabel="Add X-Data"
     )
