@@ -14,17 +14,23 @@ v-card
         v-icon {{ buttons.remove.icon }}
 
   v-card-text(v-show="show")
+    TextAttributeInput(
+      :path="path",
+      :attributes="['name']",
+      :rules="['requiredText', 'noSpaces']"
+    )
     RecursiveComponentRender(:path="path")
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import TextAttributeInput from "../inputs/TextAttributeInput.vue";
 import TextInput from "../inputs/TextInput.vue";
 import * as ModuleContentType from "../../store/ModuleContentType";
 
 export default Vue.extend({
   name: "CardInput",
-  components: { TextInput },
+  components: { TextInput, TextAttributeInput },
   props: {
     path: Array,
   },
