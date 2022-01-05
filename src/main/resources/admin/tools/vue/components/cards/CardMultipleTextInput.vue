@@ -1,19 +1,25 @@
 <template lang="pug">
 .my-5
   v-card.my-5(v-for="(item, index) in states.array")
-    v-row
-      v-col(cols="10")
-        v-card-subtitle
+    v-card-subtitle
+      v-row
+        v-col(:cols="pathToAttributes ? '5' : '10'")
           v-text-field(
-            @change="setVModel($event, index)",
-            :value="getVModel(index)",
+            @change="setVModel($event, index, 'text')",
+            :value="getVModel(index, 'text')",
             :label="getFieldLabel()",
             :rules="[]"
           )
-
-      v-col(cols="2")
-        v-btn(@click="remove(index)", icon)
-          v-icon {{ buttons.remove.icon }}
+        v-col(cols="5", v-if="pathToAttributes")
+          v-text-field(
+            @change="setVModel($event, index, 'attributes')",
+            :value="getVModel(index, 'attributes')",
+            label="Value",
+            :rules="[]"
+          )
+        v-col(cols="2")
+          v-btn(@click="remove(index)", icon)
+            v-icon {{ buttons.remove.icon }}
 
   v-btn.my-5(@click="add") {{ buttonAddLabel }}
 </template>
@@ -30,7 +36,8 @@ export default Vue.extend({
   name: "CardMultipleTextInput",
   props: {
     path: Array,
-    pathToValue: Array,
+    pathToText: Array,
+    pathToAttributes: Array,
     elementName: String,
     buttonAddLabel: String,
   },
@@ -63,16 +70,26 @@ export default Vue.extend({
         name: this.elementName,
       } as Element;
 
-      objToBeAdded = R.set(
-        R.lensPath(this.pathToValue as string[]),
-        "",
-        objToBeAdded
-      );
+      if (this.pathToText) {
+        objToBeAdded = R.set(
+          R.lensPath(this.pathToText as string[]),
+          "",
+          objToBeAdded
+        );
+      }
 
       if (objToBeAdded.elements) {
         objToBeAdded = R.set(
           R.lensPath(["elements", 0, "type"]),
           "text",
+          objToBeAdded
+        );
+      }
+
+      if (this.pathToAttributes) {
+        objToBeAdded = R.set(
+          R.lensPath(this.pathToAttributes as string[]),
+          "",
           objToBeAdded
         );
       }
@@ -87,18 +104,24 @@ export default Vue.extend({
       this.save();
     },
 
-    getVModel(index: number): string {
-      return R.view(
-        R.lensPath(this.pathToValue as string[]),
-        this.states.array[index]
-      ) as string;
+    setLens(type: "text" | "attributes") {
+      let lens = R.lensPath(this.pathToText as string[]);
+
+      if (type === "attributes") {
+        lens = R.lensPath(this.pathToAttributes as string[]);
+      }
+
+      return lens;
     },
-    setVModel(value: string, index: number): void {
-      this.states.array[index] = R.set(
-        R.lensPath(this.pathToValue as string[]),
-        value,
-        this.states.array[index]
-      );
+    getVModel(index: number, type: "text" | "attributes"): string {
+      const lens = this.setLens(type);
+
+      return R.view(lens, this.states.array[index]) as string;
+    },
+    setVModel(value: string, index: number, type: "text" | "attributes"): void {
+      const lens = this.setLens(type);
+
+      this.states.array[index] = R.set(lens, value, this.states.array[index]);
 
       this.save();
     },
