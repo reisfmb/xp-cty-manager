@@ -34,7 +34,6 @@ export default Vue.extend({
   },
   methods: {
     execute() {
-      console.log(this.elementsPath, this.elements);
       const updatedElements = [
         ...Array.from(this.elements),
         this.getElement(),
@@ -44,6 +43,8 @@ export default Vue.extend({
         path: this.elementsPath,
         value: updatedElements,
       });
+
+      this.states.option = "";
     },
 
     getElement(): Element | null {
