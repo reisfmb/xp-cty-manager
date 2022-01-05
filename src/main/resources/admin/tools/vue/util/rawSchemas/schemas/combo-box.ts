@@ -6,10 +6,10 @@ export default xml2js(
   <label/>
   <help-text/>
   <occurrences minimum="0" maximum="1"/>
+  <default/>
   <config>
     <option value="one">Option One</option>
     <option value="two">Option Two</option>
   </config>
-  <default/>
 </input>`.trim()
 );

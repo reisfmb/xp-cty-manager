@@ -2,14 +2,15 @@ import { xml2js } from "@reginaldlee/xml-js";
 
 export default xml2js(
   `
-<input name="mytextline" type="TextLine">
+<input name="myhtmlarea" type="HtmlArea">
   <label/>
   <help-text/>
   <occurrences minimum="0" maximum="1"/>
+  <default/>
   <config>
-    <show-counter></show-counter>
-    <max-length></max-length>
-    <regexp></regexp>
+    <exclude></exclude>
+    <include></include>
+    <allowHeadings></allowHeadings>
   </config>
 </input>`.trim()
 );
