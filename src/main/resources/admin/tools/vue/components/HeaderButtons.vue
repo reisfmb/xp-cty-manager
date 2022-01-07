@@ -1,7 +1,8 @@
 <template lang="pug">
-div
-  LoadButton
+.d-flex
   NewButton
+  LoadButton
+  SaveButton
 </template>
 
 <script lang="ts">
@@ -9,10 +10,11 @@ import Vue from "vue";
 
 import LoadButton from "./buttons/LoadButton.vue";
 import NewButton from "./buttons/NewButton.vue";
+import SaveButton from "./buttons/SaveButton.vue";
 
 export default Vue.extend({
   name: "HeaderButtons",
-  components: { LoadButton, NewButton },
+  components: { LoadButton, NewButton, SaveButton },
 });
 </script>
 

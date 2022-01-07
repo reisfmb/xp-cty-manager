@@ -1,14 +1,8 @@
 <template lang="pug">
-div
-  button(@click="execute") {{ labels.button }}
+v-btn(@click="execute") {{ labels.button }}
 </template>
 
 <script lang="ts">
-// [ TODO ] - 1. Check browser compatibility // Maybe not here ?
-// [ TODO ] - 2. Suggest save if changes exists
-// [x] - 3. Reset file handle in the ModuleFileHandle
-// [x] - 4. Reset content type in the ModuleContentType
-
 import Vue from "vue";
 import * as R from "ramda";
 import * as ModuleFileHandle from "../../store/ModuleFileHandle";
