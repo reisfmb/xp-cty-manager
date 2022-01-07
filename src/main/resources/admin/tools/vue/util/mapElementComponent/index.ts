@@ -12,6 +12,7 @@ import DisplayNameProps from "./props/display-name";
 import DisplayNameExpressionProps from "./props/display-name-expression";
 import DisplayNameLabelProps from "./props/display-name-label";
 import ExcludeProps from "./props/exclude";
+import ExpandedProps from "./props/expanded";
 import FieldSetProps from "./props/field-set";
 import HelpTextProps from "./props/help-text";
 import HideToggleIconProps from "./props/hide-toggle-icon";
@@ -25,6 +26,8 @@ import MaxProps from "./props/max";
 import MaxLengthProps from "./props/max-length";
 import LabelProps from "./props/label";
 import OccurencesProps from "./props/occurrences";
+import OptionSetProps from "./props/option-set";
+import OptionsProps from "./props/options";
 import RegexpProps from "./props/regexp";
 import ServiceProps from "./props/service";
 import ShowCounterProps from "./props/show-counter";
@@ -49,6 +52,7 @@ export default {
   ["display-name-expression"]: DisplayNameExpressionProps,
   ["display-name-label"]: DisplayNameLabelProps,
   ["exclude"]: ExcludeProps,
+  ["expanded"]: ExpandedProps,
   ["field-set"]: FieldSetProps,
   ["help-text"]: HelpTextProps,
   ["hideToggleIcon"]: HideToggleIconProps,
@@ -62,6 +66,8 @@ export default {
   ["max"]: MaxProps,
   ["max-length"]: MaxLengthProps,
   ["occurrences"]: OccurencesProps,
+  ["option-set"]: OptionSetProps,
+  ["options"]: OptionsProps,
   ["regexp"]: RegexpProps,
   ["service"]: ServiceProps,
   ["show-counter"]: ShowCounterProps,

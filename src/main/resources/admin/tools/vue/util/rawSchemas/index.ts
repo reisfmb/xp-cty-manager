@@ -2,6 +2,7 @@ import AttachmentUploader from "./schemas/attachment-uploader";
 import CheckBox from "./schemas/check-box";
 import ComboBox from "./schemas/combo-box";
 import ContentSelector from "./schemas/content-selector";
+import ContentType from "./schemas/content-type";
 import ContentTypeFilter from "./schemas/content-type-filter";
 import CustomSelector from "./schemas/custom-selector";
 import _Date from "./schemas/date";
@@ -14,6 +15,8 @@ import ImageSelector from "./schemas/image-selector";
 import ItemSet from "./schemas/item-set";
 import Long from "./schemas/long";
 import MediaSelector from "./schemas/media-selector";
+import Option from "./schemas/option";
+import OptionSet from "./schemas/option-set";
 import RadioButton from "./schemas/radio-button";
 import Tag from "./schemas/tag";
 import TextArea from "./schemas/text-area";
@@ -27,6 +30,7 @@ export default {
   CheckBox,
   ComboBox,
   ContentSelector,
+  ContentType,
   ContentTypeFilter,
   CustomSelector,
   ["Date"]: _Date,
@@ -39,6 +43,8 @@ export default {
   ItemSet,
   Long,
   MediaSelector,
+  Option,
+  OptionSet,
   RadioButton,
   Tag,
   TextArea,

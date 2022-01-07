@@ -7,6 +7,6 @@ export default xml2js(
   <help-text />
   <occurrences minimum="0" maximum="1"/>
   <expanded />
-  <options minimum="1" maximum="1" />
+  <options minimum="0" maximum="1" />
 </option-set>`.trim()
 );
