@@ -33,7 +33,7 @@ import * as ModuleContentType from "../../store/ModuleContentType";
 import { Element } from "@reginaldlee/xml-js";
 
 export default Vue.extend({
-  name: "CardMultipleTextInput",
+  name: "TextMultipleInput",
   props: {
     path: Array,
     pathToText: Array,

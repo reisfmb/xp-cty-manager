@@ -8,7 +8,7 @@ div(v-if="elements")
   )
 
   div(v-if="inputType === 'ComboBox' || inputType === 'RadioButton'")
-    CardMultipleTextInput(
+    TextMultipleInput(
       :path="getPathToElementsInConfig()",
       :pathToText="['elements', '0', 'text']",
       :pathToAttributes="['attributes', 'value']",
@@ -17,13 +17,13 @@ div(v-if="elements")
     )
 
   div(v-if="inputType === 'ContentSelector' || inputType === 'MediaSelector'")
-    CardMultipleTextInput(
+    TextMultipleInput(
       :path="getPathToElementsInConfig()",
       :pathToText="['elements', '0', 'text']",
       elementName="allowContentType",
       buttonAddLabel="Add Allowed Content Type"
     )
-    CardMultipleTextInput(
+    TextMultipleInput(
       :path="getPathToElementsInConfig()",
       :pathToText="['elements', '0', 'text']",
       elementName="allowPath",
@@ -31,7 +31,7 @@ div(v-if="elements")
     )
 
   div(v-if="inputType === 'CustomSelector'")
-    CardMultipleTextInput(
+    TextMultipleInput(
       :path="getPathToElementsInConfig()",
       :pathToText="['elements', '0', 'text']",
       :pathToAttributes="['attributes', 'value']",
@@ -40,7 +40,7 @@ div(v-if="elements")
     )
 
   div(v-if="inputType === 'ImageSelector'")
-    CardMultipleTextInput(
+    TextMultipleInput(
       :path="getPathToElementsInConfig()",
       :pathToText="['elements', '0', 'text']",
       elementName="allowPath",
@@ -57,7 +57,7 @@ import TextInput from "./inputs/TextInput.vue";
 import TextAttributeInput from "./inputs/TextAttributeInput.vue";
 import BooleanInput from "./inputs/BooleanInput.vue";
 import CardInput from "./cards/CardInput.vue";
-import CardMultipleTextInput from "./cards/CardMultipleTextInput.vue";
+import TextMultipleInput from "./inputs/TextMultipleInput.vue";
 
 export default Vue.extend({
   name: "RecursiveComponentRender",
@@ -66,7 +66,7 @@ export default Vue.extend({
     TextAttributeInput,
     BooleanInput,
     CardInput,
-    CardMultipleTextInput,
+    TextMultipleInput,
   },
   props: { path: Array },
   beforeCreate() {
@@ -75,6 +75,9 @@ export default Vue.extend({
 
     ((this.$options || {}).components || {}).FieldOrItemSet =
       require("./sets/FieldOrItemSet.vue").default;
+
+    ((this.$options || {}).components || {}).OptionSet =
+      require("./sets/OptionSet.vue").default;
   },
   methods: {
     getComponentName(elementName: string) {
