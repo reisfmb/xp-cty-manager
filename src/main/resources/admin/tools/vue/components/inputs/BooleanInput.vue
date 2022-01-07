@@ -23,7 +23,8 @@ export default Vue.extend({
     states: { bool: false },
   }),
   mounted() {
-    this.states.bool = this.value;
+    this.states.bool = this.value || false;
+    this.save();
   },
   watch: {
     value() {
@@ -33,14 +34,17 @@ export default Vue.extend({
   methods: {
     save() {
       ModuleContentType.setContentTypeByPath(this.$store, {
-        path: this.pathToValue,
-        value: this.states.bool.toString(),
+        path: this.pathToElement,
+        value: { text: this.states.bool.toString(), type: "text" },
       });
     },
   },
   computed: {
-    pathToValue(): string[] {
-      return [...(this.path as string[]), "elements", "0", "text"];
+    pathToElement(): (string | number)[] {
+      return [...(this.path as string[]), "elements", 0];
+    },
+    pathToValue(): (string | number)[] {
+      return [...(this.pathToElement as string[]), "text"];
     },
     value(): boolean {
       return (
