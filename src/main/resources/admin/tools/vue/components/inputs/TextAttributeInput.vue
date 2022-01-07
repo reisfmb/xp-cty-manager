@@ -5,7 +5,7 @@
       v-text-field(
         @blur="save",
         v-model="states[attribute]",
-        :label="capitalize(attribute)",
+        :label="getLabel(attribute)",
         :rules="usedRules",
         :class="{ required: usesRequiredRule }"
       )
@@ -21,6 +21,7 @@ export default Vue.extend({
   name: "TextAttributeInput",
   props: {
     path: Array,
+    field: Object, // label
     attributes: Array,
     rules: Array, // name of the used rules
   },
@@ -52,6 +53,12 @@ export default Vue.extend({
         path: this.pathToAttributes,
         value: updatedAttributes,
       });
+    },
+    getLabel(attribute: string) {
+      const first = this.capitalize((this.field || {}).label || "");
+      const last = this.capitalize(attribute);
+
+      return first ? first + " " + last : last;
     },
     capitalize(s: string): string {
       return s.charAt(0).toUpperCase() + s.slice(1);
