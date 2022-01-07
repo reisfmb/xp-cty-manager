@@ -1,17 +1,12 @@
 <template lang="pug">
 v-card
-  .row(@click="show = !show")
+  .row
     v-col(cols="9")
       v-card-title {{ inputName }}
       v-card-subtitle {{ inputType }}
 
     v-col.d-flex.align-center.justify-end(cols="3")
-      v-btn(icon)
-        v-icon {{ buttons.moveUp.icon }}
-      v-btn(icon)
-        v-icon {{ buttons.moveDown.icon }}
-      v-btn(icon)
-        v-icon {{ buttons.remove.icon }}
+      ElementButtons(:path="path")
 
   v-card-text(v-show="show")
     TextAttributeInput(
@@ -24,23 +19,19 @@ v-card
 
 <script lang="ts">
 import Vue from "vue";
+import ElementButtons from "../buttons/ElementButtons.vue";
 import TextAttributeInput from "../inputs/TextAttributeInput.vue";
 import TextInput from "../inputs/TextInput.vue";
 import * as ModuleContentType from "../../store/ModuleContentType";
 
 export default Vue.extend({
   name: "CardInput",
-  components: { TextInput, TextAttributeInput },
+  components: { TextInput, TextAttributeInput, ElementButtons },
   props: {
     path: Array,
   },
   data: () => ({
     show: true,
-    buttons: {
-      moveUp: { icon: "mdi-arrow-up" },
-      moveDown: { icon: "mdi-arrow-down" },
-      remove: { icon: "mdi-delete-circle-outline" },
-    },
   }),
   beforeCreate() {
     ((this.$options || {}).components || {}).RecursiveComponentRender =
