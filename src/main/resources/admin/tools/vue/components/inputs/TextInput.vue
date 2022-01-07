@@ -36,7 +36,8 @@ export default Vue.extend({
     showI18nDialog: false,
   }),
   mounted() {
-    this.states.text = this.value || this.fallbackValue;
+    this.states.text = this.value || this.fallbackValue || "";
+    this.save();
   },
   watch: {
     value() {
@@ -46,8 +47,8 @@ export default Vue.extend({
   methods: {
     save() {
       ModuleContentType.setContentTypeByPath(this.$store, {
-        path: this.pathToValue,
-        value: this.states.text,
+        path: this.pathToElement,
+        value: { text: this.states.text, type: "text" },
       });
     },
     dialog() {
@@ -56,8 +57,11 @@ export default Vue.extend({
     },
   },
   computed: {
-    pathToValue(): string[] {
-      return [...(this.path as string[]), "elements", "0", "text"];
+    pathToElement(): (string | number)[] {
+      return [...(this.path as string[]), "elements", 0];
+    },
+    pathToValue(): (string | number)[] {
+      return [...(this.pathToElement as string[]), "text"];
     },
     value(): string {
       return ModuleContentType.getContentTypeByPath(this.$store)(
