@@ -12,6 +12,9 @@ const initialStateValues: IState = {
 };
 
 const getters = {
+  getFileHandle(state: IState) {
+    return state.fileHandle;
+  },
   async getFileName(state: IState) {
     if (!state.fileHandle) {
       return null;
@@ -46,6 +49,7 @@ const { read, commit } = getStoreAccessors<IState, IRootState>(
 );
 
 // Getters ( read )
+export const getFileHandle = read(ModuleFileHandle.getters.getFileHandle);
 export const getFileName = read(ModuleFileHandle.getters.getFileName);
 
 // Mutations ( commit )

@@ -1,5 +1,7 @@
+import xmlBeautifier from "../../util/xmlBeautifier";
 import * as xml2jsonConverter from "@reginaldlee/xml-js";
 import * as R from "ramda";
+import RawSchemas from "../../util/rawSchemas";
 import { getStoreAccessors } from "vuex-typescript";
 import { ActionContext } from "vuex";
 import { IRootState } from "../rootState";
@@ -14,12 +16,17 @@ const initialStateValues: IState = {
 const getters = {
   getContentTypeByPath:
     (state: IState) =>
-    (path: string[] = []) => {
+    (path: (string | number)[] = []) => {
       if (!state.contentType) {
         return null;
       }
       return R.view(R.lensPath(path), state.contentType);
     },
+  getContentTypeAsXmlString(state: IState): string | null {
+    return state.contentType
+      ? xmlBeautifier(xml2jsonConverter.js2xml(state.contentType))
+      : null;
+  },
 };
 
 const mutations = {
@@ -27,11 +34,11 @@ const mutations = {
     state.contentType = contentType;
   },
   resetContentType(state: IState) {
-    state.contentType = null;
+    state.contentType = RawSchemas.ContentType;
   },
   setContentTypeByPath(
     state: IState,
-    data: { path: string[]; value: IAllowedValuesToBeAdded }
+    data: { path: (string | number)[]; value: IAllowedValuesToBeAdded }
   ) {
     state.contentType = R.set(
       R.lensPath(data.path),
@@ -68,6 +75,9 @@ const { read, commit, dispatch } = getStoreAccessors<IState, IRootState>(
 // Getters ( read )
 export const getContentTypeByPath = read(
   ModuleContentType.getters.getContentTypeByPath
+);
+export const getContentTypeAsXmlString = read(
+  ModuleContentType.getters.getContentTypeAsXmlString
 );
 
 // Mutations ( commit )
