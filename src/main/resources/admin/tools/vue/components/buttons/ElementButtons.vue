@@ -1,14 +1,14 @@
 <template lang="pug">
 div
-  v-btn(@click="move('up')", icon, :disabled="getElementIndex() === 0")
+  v-btn(@click.stop="move('up')", icon, :disabled="getElementIndex() === 0")
     v-icon {{ buttons.moveUp.icon }}
   v-btn(
-    @click="move('down')",
+    @click.stop="move('down')",
     icon,
     :disabled="getElementIndex() === elements.length - 1"
   )
     v-icon {{ buttons.moveDown.icon }}
-  v-btn(@click="remove", icon)
+  v-btn(@click.stop="remove", icon, color="red")
     v-icon {{ buttons.remove.icon }}
 </template>
 
@@ -73,7 +73,7 @@ export default Vue.extend({
 
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.elementsPath,
-        value: updatedElements,
+        value: [...updatedElements],
       });
     },
   },
