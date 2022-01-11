@@ -1,12 +1,14 @@
 <template lang="pug">
-template(v-for="attribute in attributes")
-  v-text-field(
-    @blur="save",
-    v-model="states[attribute]",
-    :label="getLabel(attribute)",
-    :rules="usedRules",
-    :class="{ required: usesRequiredRule }"
-  )
+.row
+  template(v-for="attribute in attributes")
+    v-col
+      v-text-field(
+        @blur="save",
+        v-model="states[attribute]",
+        :label="getLabel(attribute)",
+        :rules="usedRules",
+        :class="{ required: usesRequiredRule }"
+      )
 </template>
 
 <script lang="ts">
