@@ -61,8 +61,19 @@ const mutations = {
   },
   setContentTypeByPath(
     state: IState,
-    data: { path: (string | number)[]; value: IAllowedValuesToBeAdded }
+    data: {
+      path: (string | number)[];
+      value: IAllowedValuesToBeAdded;
+      action?: "ADDING-NEW-SCHEMA";
+    }
   ) {
+    if (data.action === "ADDING-NEW-SCHEMA") {
+      data.value = renameNameAttributeIfNeeded(
+        JSON.stringify(state.contentType),
+        data.value
+      );
+    }
+
     state.contentType = R.set(
       R.lensPath(data.path),
       data.value,
@@ -127,3 +138,38 @@ export const setContentTypeAfterLastSave = commit(
 export const setContentTypeFromXmlString = dispatch(
   ModuleContentType.actions.setContentTypeFromXmlString
 );
+
+// Helpers
+
+// Will rename name attribute of an element if needed using counters.
+function renameNameAttributeIfNeeded(
+  ctyAsString: string,
+  value: IAllowedValuesToBeAdded
+) {
+  if (value && Array.isArray(value) && value.length > 0) {
+    const lastIndex = value.length - 1;
+    let lastElement = R.view(R.lensIndex(lastIndex), value);
+    const schemaAttributeName =
+      (lastElement.attributes || {}).name?.toString() || "";
+
+    if (
+      schemaAttributeName &&
+      ctyAsString.indexOf(schemaAttributeName) !== -1 &&
+      lastElement.attributes
+    ) {
+      const counter =
+        ctyAsString.split(`"name":"${schemaAttributeName}`).length - 1;
+      const newName = `${schemaAttributeName}-${counter + 1}`;
+      lastElement = R.set(
+        R.lensPath(["attributes", "name"]),
+        newName,
+        lastElement
+      );
+    }
+
+    value = value.map((el: xml2jsonConverter.Element, index: number) =>
+      index === lastIndex ? lastElement : el
+    );
+  }
+  return value;
+}
