@@ -39,7 +39,7 @@ export default Vue.extend({
     path: Array,
   },
   data: () => ({
-    show: true,
+    show: false,
   }),
   computed: {
     optionName(): string {

@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   RecursiveComponentRender(:path="path")
-  NewElementButton(:path="path", :hide="['Option']")
+  NewElementButton(:path="path", :hide="['ContentType', 'Option']")
 </template>
 
 <script lang="ts">

@@ -13,9 +13,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import rules from "../../util/rules";
 import * as R from "ramda";
+import * as ModuleContentType from "../../store/ModuleContentType";
+import { Element } from "@reginaldlee/xml-js";
+import rules from "../../util/rules";
 
 export default Vue.extend({
   name: "TextAttributeInput",
@@ -29,14 +30,12 @@ export default Vue.extend({
     states: {} as { [key: string]: string },
     showI18nDialog: false,
   }),
-  mounted() {
-    const attrsInCty = ModuleContentType.getContentTypeByPath(this.$store)(
-      this.pathToAttributes
-    );
-
-    (this.attributes as string[]).forEach((attr: string) => {
-      Vue.set(this.states, attr, attrsInCty[attr]);
-    });
+  watch: {
+    attributesInContentType() {
+      (this.attributes as string[]).forEach((attr: string) => {
+        Vue.set(this.states, attr, this.attributesInContentType[attr]);
+      });
+    },
   },
   methods: {
     save() {
@@ -67,6 +66,11 @@ export default Vue.extend({
   computed: {
     pathToAttributes(): string[] {
       return [...(this.path as string[]), "attributes"];
+    },
+    attributesInContentType(): { [key: string]: string } {
+      return ModuleContentType.getContentTypeByPath(this.$store)(
+        this.pathToAttributes
+      );
     },
     usedRules(): Function[] {
       return R.props(this.rules as string[], rules);

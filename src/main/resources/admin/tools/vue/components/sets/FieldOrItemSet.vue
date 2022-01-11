@@ -35,7 +35,7 @@ export default Vue.extend({
     field: Object, // label, hint
   },
   data: () => ({
-    show: true,
+    show: false,
   }),
   beforeCreate() {
     ((this.$options || {}).components || {}).RecursiveComponentRender =

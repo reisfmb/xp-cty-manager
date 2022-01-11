@@ -3,22 +3,22 @@
   v-card.my-5(v-for="(item, index) in states.array")
     v-card-subtitle
       v-row
-        v-col(:cols="pathToAttributes ? '5' : '10'")
+        v-col(:cols="pathToAttributes ? '5' : '11'")
           v-text-field(
             @change="setVModel($event, index, 'text')",
             :value="getVModel(index, 'text')",
             :label="getFieldLabel()",
             :rules="[]"
           )
-        v-col(cols="5", v-if="pathToAttributes")
+        v-col(cols="6", v-if="pathToAttributes")
           v-text-field(
             @change="setVModel($event, index, 'attributes')",
             :value="getVModel(index, 'attributes')",
             label="Value",
             :rules="[]"
           )
-        v-col(cols="2")
-          v-btn(@click="remove(index)", icon)
+        v-col.d-flex.align-center(cols="1")
+          v-btn.spacer-1-icon-left(@click="remove(index)", icon, color="red")
             v-icon {{ buttons.remove.icon }}
 
   v-btn.my-5(@click="add") {{ buttonAddLabel }}

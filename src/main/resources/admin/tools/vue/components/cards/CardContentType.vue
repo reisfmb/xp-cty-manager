@@ -1,27 +1,27 @@
 <template lang="pug">
-v-card
-  v-card-title {{ fileName }}
-  v-card-text
-    RecursiveComponentRender(:path="path")
-    TextMultipleInput(
-      :path="elementsPath",
-      :pathToText="['elements', 0, 'text']",
-      elementName="allow-child-content-type",
-      buttonAddLabel="Add Allow Child Content Type"
-    )
-    TextMultipleInput(
-      :path="elementsPath",
-      :pathToText="['attributes', 'name']",
-      elementName="x-data",
-      buttonAddLabel="Add X-Data"
-    )
-    CardForm(:path="formPath")
+transition(name="fade")
+  v-card(v-show="show")
+    v-card-title {{ contentTypeDisplayName }}
+    v-card-text
+      RecursiveComponentRender(:path="path")
+      TextMultipleInput(
+        :path="elementsPath",
+        :pathToText="['elements', 0, 'text']",
+        elementName="allow-child-content-type",
+        buttonAddLabel="Add Allow Child Content Type"
+      )
+      TextMultipleInput(
+        :path="elementsPath",
+        :pathToText="['attributes', 'name']",
+        elementName="x-data",
+        buttonAddLabel="Add X-Data"
+      )
+      CardForm(:path="formPath")
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import * as ModuleContentType from "../../store/ModuleContentType";
-import * as ModuleFileHandle from "../../store/ModuleFileHandle";
 import { Element } from "@reginaldlee/xml-js";
 import TextMultipleInput from "../inputs/TextMultipleInput.vue";
 import CardForm from "./CardForm.vue";
@@ -31,21 +31,15 @@ export default Vue.extend({
   components: { TextMultipleInput, CardForm },
   props: { path: Array },
   data: () => ({
+    show: false,
     fileName: "",
   }),
   beforeCreate() {
     ((this.$options || {}).components || {}).RecursiveComponentRender =
       require("../RecursiveComponentRender.vue").default;
   },
-  created() {
-    this.setFileName();
-  },
-  methods: {
-    setFileName() {
-      ModuleFileHandle.getFileName(this.$store).then(
-        (fn) => (this.fileName = fn || "")
-      );
-    },
+  mounted() {
+    this.show = true;
   },
   computed: {
     elementsPath(): string[] {
@@ -63,6 +57,9 @@ export default Vue.extend({
       return formIndexInElements >= 0
         ? [...this.elementsPath, formIndexInElements]
         : [];
+    },
+    contentTypeDisplayName(): string | null {
+      return ModuleContentType.getContentTypeDisplayName(this.$store);
     },
   },
 });

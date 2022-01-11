@@ -1,6 +1,6 @@
 <template lang="pug">
 v-card
-  .row
+  .row(@click="show = !show")
     v-col(cols="9")
       v-card-title {{ inputName }}
       v-card-subtitle {{ inputType }}
@@ -31,7 +31,7 @@ export default Vue.extend({
     path: Array,
   },
   data: () => ({
-    show: true,
+    show: false,
   }),
   beforeCreate() {
     ((this.$options || {}).components || {}).RecursiveComponentRender =
