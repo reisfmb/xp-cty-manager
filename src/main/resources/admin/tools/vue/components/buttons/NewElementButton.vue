@@ -42,6 +42,7 @@ export default Vue.extend({
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.elementsPath,
         value: updatedElements,
+        action: "ADDING-NEW-SCHEMA",
       });
 
       this.states.option = "";
