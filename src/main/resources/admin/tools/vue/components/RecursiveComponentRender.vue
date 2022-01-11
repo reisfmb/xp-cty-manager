@@ -10,7 +10,7 @@ div(v-if="elements")
   div(v-if="inputType === 'ComboBox' || inputType === 'RadioButton'")
     TextMultipleInput(
       :path="getPathToElementsInConfig()",
-      :pathToText="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       :pathToAttributes="['attributes', 'value']",
       elementName="option",
       buttonAddLabel="Add Option"
@@ -19,13 +19,13 @@ div(v-if="elements")
   div(v-if="inputType === 'ContentSelector' || inputType === 'MediaSelector'")
     TextMultipleInput(
       :path="getPathToElementsInConfig()",
-      :pathToText="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       elementName="allowContentType",
       buttonAddLabel="Add Allowed Content Type"
     )
     TextMultipleInput(
       :path="getPathToElementsInConfig()",
-      :pathToText="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       elementName="allowPath",
       buttonAddLabel="Add Allowed Path"
     )
@@ -33,7 +33,7 @@ div(v-if="elements")
   div(v-if="inputType === 'CustomSelector'")
     TextMultipleInput(
       :path="getPathToElementsInConfig()",
-      :pathToText="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       :pathToAttributes="['attributes', 'value']",
       elementName="param",
       buttonAddLabel="Add Parameter"
@@ -42,7 +42,7 @@ div(v-if="elements")
   div(v-if="inputType === 'ImageSelector'")
     TextMultipleInput(
       :path="getPathToElementsInConfig()",
-      :pathToText="['elements', '0', 'text']",
+      :pathToText="['elements', 0, 'text']",
       elementName="allowPath",
       buttonAddLabel="Add Allowed Path"
     )
@@ -52,6 +52,8 @@ div(v-if="elements")
 import Vue from "vue";
 import { Element } from "@reginaldlee/xml-js";
 import * as ModuleContentType from "../store/ModuleContentType";
+import * as R from "ramda";
+import rawSchemas from "../util/rawSchemas";
 
 import TextInput from "./inputs/TextInput.vue";
 import TextAttributeInput from "./inputs/TextAttributeInput.vue";
@@ -69,6 +71,9 @@ export default Vue.extend({
     TextMultipleInput,
   },
   props: { path: Array },
+  data: () => ({
+    rawElements: [] as Array<Element>,
+  }),
   beforeCreate() {
     ((this.$options || {}).components || {}).CardContentType =
       require("./cards/CardContentType.vue").default;
@@ -78,6 +83,12 @@ export default Vue.extend({
 
     ((this.$options || {}).components || {}).OptionSet =
       require("./sets/OptionSet.vue").default;
+  },
+  created() {
+    this.populateRawElements();
+  },
+  mounted() {
+    this.adjustFieldsOfCty();
   },
   methods: {
     getComponentName(elementName: string) {
@@ -97,7 +108,6 @@ export default Vue.extend({
       props.path = this.$gf.innerPath(this.path as (string | number)[], index);
       return props;
     },
-
     getPathToElementsInConfig(): (string | number)[] | null {
       if (!this.elements) {
         return null;
@@ -111,26 +121,106 @@ export default Vue.extend({
         ? [...this.elementsPath, indexOfConfigInElements, "elements"]
         : null;
     },
+    populateRawElements(): void {
+      if (!this.inputType) return;
+
+      const raw = ((rawSchemas as { [key: string]: Element })[this.inputType] ||
+        {}) as Element;
+
+      this.rawElements = Object.keys(raw)
+        ? ((raw.elements || [{ elements: [] }])[0] || {}).elements || []
+        : [];
+    },
+
+    ///
+
+    //TODO: Simplify this
+    adjustFieldsOfCty(): void {
+      if (this.inputType && this.elements !== null) {
+        this.rawElements.forEach((rawEl: Element, rawIndex: number) => {
+          const elIndex = this.elements.findIndex(
+            (el: Element) => el.name === rawEl.name
+          );
+
+          if (elIndex >= 0) {
+            if (this.rawElements[rawIndex].elements) {
+              (this.elements[elIndex].elements || []).forEach((el: Element) => {
+                const rawInnerIndex = (
+                  this.rawElements[rawIndex].elements || []
+                ).findIndex((rawEl: Element) => el.name === rawEl.name);
+
+                if (rawInnerIndex >= 0) {
+                  this.rawElements = R.set(
+                    R.lensPath([rawIndex, "elements", rawInnerIndex]),
+                    el,
+                    this.rawElements
+                  );
+                } else {
+                  const updatedElements = [
+                    ...(this.rawElements[rawIndex].elements || []),
+                    el,
+                  ];
+
+                  this.rawElements = R.set(
+                    R.lensPath([rawIndex, "elements"]),
+                    updatedElements,
+                    this.rawElements
+                  );
+                }
+              });
+            } else {
+              this.rawElements = R.set(
+                R.lensIndex(rawIndex),
+                this.elements[elIndex],
+                this.rawElements
+              );
+            }
+          }
+        });
+
+        setTimeout(() => {
+          this.elements = [...this.rawElements];
+        }, 100);
+      }
+    },
   },
   computed: {
+    inputType(): string | null {
+      const inputTypePath = [...this.path, "attributes", "type"] as string[];
+      const inputType = ModuleContentType.getContentTypeByPath(this.$store)(
+        inputTypePath
+      );
+      if (inputType) {
+        return inputType;
+      }
+
+      const contentTypeNamePath = [...this.path, "name"] as string[];
+      const contentTypeName = ModuleContentType.getContentTypeByPath(
+        this.$store
+      )(contentTypeNamePath);
+      if (contentTypeName && contentTypeName === "content-type") {
+        return "ContentType";
+      }
+
+      return null;
+    },
     elementsPath(): (string | number)[] {
       return [...(this.path as string[]), "elements"];
     },
-    elements(): Element[] | null {
-      return ModuleContentType.getContentTypeByPath(this.$store)(
-        this.elementsPath
-      );
-    },
-    inputType(): string | null {
-      const elementInPath = ModuleContentType.getContentTypeByPath(this.$store)(
-        this.path as (string | number)[]
-      ) as Element;
-
-      return elementInPath &&
-        elementInPath.attributes &&
-        elementInPath.attributes.type
-        ? elementInPath.attributes.type.toString()
-        : null;
+    elements: {
+      get(): Array<Element> {
+        return (
+          ModuleContentType.getContentTypeByPath(this.$store)(
+            this.elementsPath
+          ) || []
+        );
+      },
+      set(updatedElements: Array<Element>): void {
+        ModuleContentType.setContentTypeByPath(this.$store, {
+          path: this.elementsPath,
+          value: updatedElements,
+        });
+      },
     },
   },
 });
