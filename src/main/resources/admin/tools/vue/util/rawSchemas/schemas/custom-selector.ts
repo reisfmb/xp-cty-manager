@@ -7,9 +7,7 @@ export default xml2js(
   <help-text/>
   <occurrences minimum="0" maximum="1"/>
   <config>
-    <service>spotify-music-selector</service>
-    <param value="genre">classic</param>
-    <param value="sortBy">length</param>
+    <service></service>
   </config>
 </input>`.trim()
 );
