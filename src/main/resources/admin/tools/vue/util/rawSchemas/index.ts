@@ -15,6 +15,7 @@ import ImageSelector from "./schemas/image-selector";
 import ItemSet from "./schemas/item-set";
 import Long from "./schemas/long";
 import MediaSelector from "./schemas/media-selector";
+import Mixin from "./schemas/mixin";
 import Option from "./schemas/option";
 import OptionSet from "./schemas/option-set";
 import RadioButton from "./schemas/radio-button";
@@ -43,6 +44,7 @@ export default {
   ItemSet,
   Long,
   MediaSelector,
+  Mixin,
   Option,
   OptionSet,
   RadioButton,

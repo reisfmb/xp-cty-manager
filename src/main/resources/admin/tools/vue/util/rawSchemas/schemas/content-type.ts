@@ -5,6 +5,7 @@ export default xml2js(
 <content-type>
   <display-name></display-name>
   <display-name-label></display-name-label>
+  <display-name-expression></display-name-expression>
   <description></description>
   <super-type></super-type>
   <is-abstract></is-abstract>

@@ -22,6 +22,7 @@ import IsAbstractProps from "./props/is-abstract";
 import IsFinalProps from "./props/is-final";
 import ItemSetProps from "./props/item-set";
 import MinProps from "./props/min";
+import MixinProps from "./props/mixin";
 import MaxProps from "./props/max";
 import MaxLengthProps from "./props/max-length";
 import LabelProps from "./props/label";
@@ -63,6 +64,7 @@ export default {
   ["item-set"]: ItemSetProps,
   ["label"]: LabelProps,
   ["min"]: MinProps,
+  ["mixin"]: MixinProps,
   ["max"]: MaxProps,
   ["max-length"]: MaxLengthProps,
   ["occurrences"]: OccurencesProps,
