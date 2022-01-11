@@ -10,16 +10,17 @@ import * as ModuleContentType from "../../store/ModuleContentType";
 
 export default Vue.extend({
   name: "NewButton",
-
+  props: ["suggestSaveFunction"],
   data: () => ({
     labels: {
       button: "New",
     },
   }),
-
   methods: {
     execute() {
-      R.pipe(this.resetFileHandle, this.resetContentType)();
+      this.suggestSaveFunction().then(() => {
+        R.pipe(this.resetFileHandle, this.resetContentType)();
+      });
     },
 
     resetFileHandle() {

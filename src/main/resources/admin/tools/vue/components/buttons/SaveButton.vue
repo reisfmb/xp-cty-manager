@@ -1,5 +1,9 @@
 <template lang="pug">
-v-btn(@click="execute") {{ labels.button }}
+v-btn#saveButton(
+  @click="execute",
+  :disabled="!contentTypeAsXmlString",
+  color="green"
+) {{ labels.button }}
 </template>
 
 <script lang="ts">
@@ -9,6 +13,7 @@ import * as R from "ramda";
 import * as ModuleFileHandle from "../../store/ModuleFileHandle";
 import * as ModuleContentType from "../../store/ModuleContentType";
 import * as messages from "../../util/messages";
+import * as helpers from "../../util/helpers";
 
 export default Vue.extend({
   name: "SaveButton",
@@ -21,13 +26,17 @@ export default Vue.extend({
 
   methods: {
     async execute(): Promise<void> {
-      // validate
+      this.resetColorOfVcards();
+
+      // Validate
       if (!this.validateForm()) {
-        // expand cards
+        this.setBorderOfVcardsWithErrors();
+
+        Swal.fire({ icon: "error", text: messages.error.saveXml });
         return;
       }
 
-      // save or create
+      // Save or create then save
       (this.fileHandle ? this.save() : this.create().then(() => this.save()))
         .then(() => {
           Swal.fire({
@@ -38,7 +47,7 @@ export default Vue.extend({
           });
         })
         .catch((error: Error) => {
-          Swal.fire({ icon: "error", text: error.message });
+          error.message && Swal.fire({ icon: "error", text: error.message });
         });
     },
 
@@ -52,6 +61,7 @@ export default Vue.extend({
       if (this.contentTypeAsXmlString && writable) {
         await writable.write(this.contentTypeAsXmlString);
         await writable.close();
+        ModuleContentType.setContentTypeAfterLastSave(this.$store);
       } else {
         throw new Error(messages.error.saveXml);
       }
@@ -176,6 +186,18 @@ export default Vue.extend({
       }
 
       return arr;
+    },
+
+    setBorderOfVcardsWithErrors() {
+      setTimeout(() => {
+        const elementsWithErrors = helpers.getAllDOMelementsWithErrors();
+        helpers.colorizeElementsWithErrors(elementsWithErrors);
+        helpers.expandAllParentElements(elementsWithErrors);
+      }, 100);
+    },
+
+    resetColorOfVcards() {
+      helpers.resetVCardErrorClass();
     },
   },
 

@@ -15,14 +15,6 @@ const getters = {
   getFileHandle(state: IState) {
     return state.fileHandle;
   },
-  async getFileName(state: IState) {
-    if (!state.fileHandle) {
-      return null;
-    }
-
-    const file = await state.fileHandle.getFile();
-    return file.name.split(".")[0] || null;
-  },
 };
 
 const mutations = {
@@ -50,7 +42,6 @@ const { read, commit } = getStoreAccessors<IState, IRootState>(
 
 // Getters ( read )
 export const getFileHandle = read(ModuleFileHandle.getters.getFileHandle);
-export const getFileName = read(ModuleFileHandle.getters.getFileName);
 
 // Mutations ( commit )
 export const setFileHandle = commit(ModuleFileHandle.mutations.setFileHandle);

@@ -10,6 +10,7 @@ import { IContentType, IState, IAllowedValuesToBeAdded } from "./types";
 type ModuleContentTypeContext = ActionContext<IState, IRootState>;
 
 const initialStateValues: IState = {
+  contentTypeAfterLastSave: null,
   contentType: null,
 };
 
@@ -27,14 +28,36 @@ const getters = {
       ? xmlBeautifier(xml2jsonConverter.js2xml(state.contentType))
       : null;
   },
+  getContentTypeDisplayName(state: IState): string | null {
+    const ctyElements: Array<xml2jsonConverter.Element> = R.view(
+      R.lensPath(["elements", 0, "elements"]),
+      state.contentType
+    );
+
+    const displayNameElement = ctyElements.find(
+      (el: xml2jsonConverter.Element) => {
+        return el.name === "display-name";
+      }
+    );
+
+    return (
+      ((displayNameElement || {}).elements || [{}])[0].text?.toString() || null
+    );
+  },
+  isContentTypeSameAsContentTypeAfterLastSave(state: IState): boolean {
+    return R.equals(state.contentType, state.contentTypeAfterLastSave);
+  },
 };
 
 const mutations = {
   setContentType(state: IState, contentType: IContentType) {
-    state.contentType = contentType;
+    state.contentType = null;
+    setTimeout(() => {
+      state.contentType = contentType;
+    }, 100);
   },
-  resetContentType(state: IState) {
-    state.contentType = RawSchemas.ContentType;
+  setContentTypeAfterLastSave(state: IState) {
+    state.contentTypeAfterLastSave = { ...state.contentType };
   },
   setContentTypeByPath(
     state: IState,
@@ -45,6 +68,9 @@ const mutations = {
       data.value,
       state.contentType
     );
+  },
+  resetContentType(state: IState) {
+    state.contentType = RawSchemas.ContentType;
   },
 };
 
@@ -79,6 +105,12 @@ export const getContentTypeByPath = read(
 export const getContentTypeAsXmlString = read(
   ModuleContentType.getters.getContentTypeAsXmlString
 );
+export const getContentTypeDisplayName = read(
+  ModuleContentType.getters.getContentTypeDisplayName
+);
+export const isContentTypeSameAsContentTypeAfterLastSave = read(
+  ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave
+);
 
 // Mutations ( commit )
 export const resetContentType = commit(
@@ -86,6 +118,9 @@ export const resetContentType = commit(
 );
 export const setContentTypeByPath = commit(
   ModuleContentType.mutations.setContentTypeByPath
+);
+export const setContentTypeAfterLastSave = commit(
+  ModuleContentType.mutations.setContentTypeAfterLastSave
 );
 
 // Actions ( dispatch )
