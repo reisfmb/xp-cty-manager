@@ -4,7 +4,8 @@ export const dialog = {
   defineCtyName: "What is the name of the new content type?",
   loading: "Loading content type schema...",
   savedCty: "Your changes have been saved.",
-  changesInCty: "You have made changes to the schema which will be lost if you continue. Do you want to save your changes ?";
+  changesInCty:
+    "You have made changes to the schema which will be lost if you continue. Do you want to save your changes ?",
 };
 
 export const error = {
