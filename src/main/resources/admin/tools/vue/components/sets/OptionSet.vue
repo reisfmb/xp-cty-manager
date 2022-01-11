@@ -1,6 +1,6 @@
 <template lang="pug">
 v-card
-  .row(@click="show = !show")
+  .row.pointer(@click="show = !show")
     v-col(cols="9")
       v-card-title {{ setName }}
       v-card-subtitle {{ setType }}
@@ -8,14 +8,15 @@ v-card
     v-col.d-flex.align-center.justify-end(cols="3")
       ElementButtons(:path="path")
 
-  v-card-text(v-show="show")
-    TextAttributeInput(
-      :path="path",
-      :attributes="['name']",
-      :rules="['requiredText', 'noSpaces']"
-    )
-    RecursiveComponentRender(:path="path")
-    CardOptions(:path="optionsPath")
+  transition(name="fade")
+    v-card-text(v-show="show")
+      TextAttributeInput(
+        :path="path",
+        :attributes="['name']",
+        :rules="['requiredText', 'noSpaces']"
+      )
+      RecursiveComponentRender(:path="path")
+      CardOptions(:path="optionsPath")
 </template>
 
 <script lang="ts">

@@ -1,21 +1,23 @@
 <template lang="pug">
 transition(name="fade")
   v-card(v-show="show")
-    v-card-title {{ contentTypeDisplayName }}
+    v-card-title.pointer(@click="showDefinitions = !showDefinitions") {{ contentTypeDisplayName }}
     v-card-text
-      RecursiveComponentRender(:path="path")
-      TextMultipleInput(
-        :path="elementsPath",
-        :pathToText="['elements', 0, 'text']",
-        elementName="allow-child-content-type",
-        buttonAddLabel="Add Allow Child Content Type"
-      )
-      TextMultipleInput(
-        :path="elementsPath",
-        :pathToText="['attributes', 'name']",
-        elementName="x-data",
-        buttonAddLabel="Add X-Data"
-      )
+      transition(name="fade")
+        div(v-show="showDefinitions")
+          RecursiveComponentRender(:path="path")
+          TextMultipleInput(
+            :path="elementsPath",
+            :pathToText="['elements', 0, 'text']",
+            elementName="allow-child-content-type",
+            buttonAddLabel="Add Allow Child Content Type"
+          )
+          TextMultipleInput(
+            :path="elementsPath",
+            :pathToText="['attributes', 'name']",
+            elementName="x-data",
+            buttonAddLabel="Add X-Data"
+          )
       CardForm(:path="formPath")
 </template>
 
@@ -32,6 +34,7 @@ export default Vue.extend({
   props: { path: Array },
   data: () => ({
     show: false,
+    showDefinitions: true,
     fileName: "",
   }),
   beforeCreate() {

@@ -1,6 +1,6 @@
 <template lang="pug">
-.my-5
-  v-card.my-5(v-for="(item, index) in states.array")
+.mb-5
+  v-card.mb-5(v-for="(item, index) in states.array")
     v-card-subtitle
       v-row
         v-col(:cols="pathToAttributes ? '5' : '11'")
@@ -21,7 +21,7 @@
           v-btn.spacer-1-icon-left(@click="remove(index)", icon, color="red")
             v-icon {{ buttons.remove.icon }}
 
-  v-btn.my-5(@click="add") {{ buttonAddLabel }}
+  v-btn.mb-5(@click="add") {{ buttonAddLabel }}
 </template>
 
 <script lang="ts">

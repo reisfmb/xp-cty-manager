@@ -84,6 +84,9 @@ form .v-card__text {
 .h-100 {
   height: 100%;
 }
+.pointer:hover {
+  cursor: pointer;
+}
 .loading-icon {
   width: 50px;
   display: block;
