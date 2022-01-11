@@ -1,7 +1,7 @@
 import { IComponentProps } from "../type";
 
 export default {
-  component: "TextAttributeInput",
+  component: "CardMixin",
   field: { label: "Mixin" },
   attributes: ["name"],
   rules: ["requiredText", "noSpaces"],

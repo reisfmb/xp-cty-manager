@@ -1,21 +1,18 @@
 <template lang="pug">
-.row
-  template(v-for="attribute in attributes")
-    v-col
-      v-text-field(
-        @blur="save",
-        v-model="states[attribute]",
-        :label="getLabel(attribute)",
-        :rules="usedRules",
-        :class="{ required: usesRequiredRule }"
-      )
+template(v-for="attribute in attributes")
+  v-text-field(
+    @blur="save",
+    v-model="states[attribute]",
+    :label="getLabel(attribute)",
+    :rules="usedRules",
+    :class="{ required: usesRequiredRule }"
+  )
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import * as R from "ramda";
 import * as ModuleContentType from "../../store/ModuleContentType";
-import { Element } from "@reginaldlee/xml-js";
 import rules from "../../util/rules";
 
 export default Vue.extend({

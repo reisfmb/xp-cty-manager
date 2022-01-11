@@ -59,6 +59,7 @@ import TextInput from "./inputs/TextInput.vue";
 import TextAttributeInput from "./inputs/TextAttributeInput.vue";
 import BooleanInput from "./inputs/BooleanInput.vue";
 import CardInput from "./cards/CardInput.vue";
+import CardMixin from "./cards/CardMixin.vue";
 import TextMultipleInput from "./inputs/TextMultipleInput.vue";
 
 export default Vue.extend({
@@ -68,6 +69,7 @@ export default Vue.extend({
     TextAttributeInput,
     BooleanInput,
     CardInput,
+    CardMixin,
     TextMultipleInput,
   },
   props: { path: Array },
