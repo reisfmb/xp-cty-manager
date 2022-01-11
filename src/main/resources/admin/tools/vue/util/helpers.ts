@@ -1,3 +1,8 @@
+/**
+ * functions initiated with _ are used in other functions
+ * functions without _ in the start are exported
+ */
+
 // Get all father parents of el
 function _getAllElementParents(el: Element): Array<Element> {
   const parents = [];
@@ -55,9 +60,79 @@ function resetVCardErrorClass() {
   );
 }
 
+function sanitizeXml(xmlString: string) {
+  function _getAllEmptyTagsInXmlString(xmlString: string) {
+    const emptyTags = new RegExp(/<[^/>][^>]*><\/[^>]+>/g);
+    return xmlString.match(emptyTags) || [];
+  }
+
+  function _getSpecificTagsToBeIgnored() {
+    return [
+      "</x-data>",
+      "</mixin>",
+      "</occurrences>",
+      "</form>",
+      "</options>",
+      "</items>",
+    ];
+  }
+
+  function _getSpecificTagsToBeRemoved() {
+    return [
+      "<allow-child-content>true</allow-child-content>",
+      "<is-abstract>false</is-abstract>",
+      "<is-final>false</is-final>",
+      "<show-counter>false</show-counter>",
+    ];
+  }
+
+  function _adjustFormInXmlString(xmlString: string) {
+    const formRegex = new RegExp(/<form>(.*?)<\/form>/g);
+    const formString = xmlString.match(formRegex);
+    xmlString = xmlString.replace(formRegex, "");
+    return xmlString.replace("</content-type>", formString + "</content-type>");
+  }
+
+  function _finalAdjustments(xmlString: string) {
+    xmlString = xmlString.replace(/<config><\/config>/g, "");
+    return xmlString.replace(/><\/occurrences>/g, "/>");
+  }
+
+  ///
+
+  const specificTags = {
+    ignored: _getSpecificTagsToBeIgnored(),
+    removed: _getSpecificTagsToBeRemoved(),
+  };
+
+  let tagsToBeRemoved = _getAllEmptyTagsInXmlString(xmlString);
+
+  // Ignore specific tag.
+  tagsToBeRemoved = tagsToBeRemoved.filter(
+    (tagToBeRemoved) =>
+      !specificTags.ignored.some(
+        (ignoredTag) => tagToBeRemoved.indexOf(ignoredTag) >= 0
+      )
+  );
+
+  // Concat with other specific tags.
+  tagsToBeRemoved = tagsToBeRemoved.concat(specificTags.removed);
+
+  // Remove each one of those tags.
+  tagsToBeRemoved.forEach((s) => {
+    xmlString = xmlString.replace(s, "");
+  });
+
+  // Place <form>...</form> as the last thing before ending the cty.
+  xmlString = _adjustFormInXmlString(xmlString);
+
+  return _finalAdjustments(xmlString);
+}
+
 export {
   colorizeElementsWithErrors,
   expandAllParentElements,
   getAllDOMelementsWithErrors,
   resetVCardErrorClass,
+  sanitizeXml,
 };

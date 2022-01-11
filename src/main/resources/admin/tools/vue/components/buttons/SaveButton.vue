@@ -1,8 +1,8 @@
 <template lang="pug">
 v-btn#saveButton(
   @click="execute",
-  :disabled="!contentTypeAsXmlString",
-  color="green"
+  color="green",
+  :disabled="isContentTypeEmpty"
 ) {{ labels.button }}
 </template>
 
@@ -57,9 +57,10 @@ export default Vue.extend({
       }
 
       const writable = await this.fileHandle.createWritable();
+      const ctyAsXmlString = this.getContentTypeAsXmlString();
 
-      if (this.contentTypeAsXmlString && writable) {
-        await writable.write(this.contentTypeAsXmlString);
+      if (ctyAsXmlString && writable) {
+        await writable.write(ctyAsXmlString);
         await writable.close();
         ModuleContentType.setContentTypeAfterLastSave(this.$store);
       } else {
@@ -168,6 +169,10 @@ export default Vue.extend({
 
     ///
 
+    getContentTypeAsXmlString() {
+      return ModuleContentType.getContentTypeAsXmlString(this.$store);
+    },
+
     validateForm(): boolean {
       const appComponent = this.$root.$children[0] || null;
       if (!appComponent) throw new Error("Missing vue App component.");
@@ -205,8 +210,8 @@ export default Vue.extend({
     fileHandle() {
       return ModuleFileHandle.getFileHandle(this.$store);
     },
-    contentTypeAsXmlString() {
-      return ModuleContentType.getContentTypeAsXmlString(this.$store);
+    isContentTypeEmpty() {
+      return ModuleContentType.isContentTypeEmpty(this.$store);
     },
   },
 });

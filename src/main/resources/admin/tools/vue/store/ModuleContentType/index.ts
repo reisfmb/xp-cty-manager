@@ -6,6 +6,7 @@ import { getStoreAccessors } from "vuex-typescript";
 import { ActionContext } from "vuex";
 import { IRootState } from "../rootState";
 import { IContentType, IState, IAllowedValuesToBeAdded } from "./types";
+import { sanitizeXml } from "../../util/helpers";
 
 type ModuleContentTypeContext = ActionContext<IState, IRootState>;
 
@@ -25,7 +26,11 @@ const getters = {
     },
   getContentTypeAsXmlString(state: IState): string | null {
     return state.contentType
-      ? xmlBeautifier(xml2jsonConverter.js2xml(state.contentType))
+      ? R.pipe(
+          xml2jsonConverter.js2xml,
+          sanitizeXml,
+          xmlBeautifier
+        )(state.contentType, { fullTagEmptyElement: true })
       : null;
   },
   getContentTypeDisplayName(state: IState): string | null {
@@ -43,6 +48,9 @@ const getters = {
     return (
       ((displayNameElement || {}).elements || [{}])[0].text?.toString() || null
     );
+  },
+  isContentTypeEmpty(state: IState): boolean {
+    return state.contentType === null;
   },
   isContentTypeSameAsContentTypeAfterLastSave(state: IState): boolean {
     return R.equals(state.contentType, state.contentTypeAfterLastSave);
@@ -118,6 +126,9 @@ export const getContentTypeAsXmlString = read(
 );
 export const getContentTypeDisplayName = read(
   ModuleContentType.getters.getContentTypeDisplayName
+);
+export const isContentTypeEmpty = read(
+  ModuleContentType.getters.isContentTypeEmpty
 );
 export const isContentTypeSameAsContentTypeAfterLastSave = read(
   ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave
