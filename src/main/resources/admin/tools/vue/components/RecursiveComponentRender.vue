@@ -56,6 +56,7 @@ import * as R from "ramda";
 import rawSchemas from "../util/rawSchemas";
 
 import TextInput from "./inputs/TextInput.vue";
+import OptionsInput from "./inputs/OptionsInput.vue";
 import TextAttributeInput from "./inputs/TextAttributeInput.vue";
 import BooleanInput from "./inputs/BooleanInput.vue";
 import CardInput from "./cards/CardInput.vue";
@@ -66,6 +67,7 @@ export default Vue.extend({
   name: "RecursiveComponentRender",
   components: {
     TextInput,
+    OptionsInput,
     TextAttributeInput,
     BooleanInput,
     CardInput,

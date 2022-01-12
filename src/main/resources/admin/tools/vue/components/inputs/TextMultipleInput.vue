@@ -136,8 +136,10 @@ export default Vue.extend({
   },
   computed: {
     elements(): Array<Element> {
-      return ModuleContentType.getContentTypeByPath(this.$store)(
-        this.path as string[]
+      return (
+        ModuleContentType.getContentTypeByPath(this.$store)(
+          this.path as string[]
+        ) || []
       );
     },
     elementsOfInterest(): Array<Element> {
