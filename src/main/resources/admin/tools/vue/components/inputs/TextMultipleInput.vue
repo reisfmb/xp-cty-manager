@@ -7,15 +7,13 @@
           v-text-field(
             @change="setVModel($event, index, 'text')",
             :value="getVModel(index, 'text')",
-            :label="getFieldLabel()",
-            :rules="[]"
+            :label="getFieldLabel()"
           )
         v-col(cols="6", v-if="pathToAttributes")
           v-text-field(
             @change="setVModel($event, index, 'attributes')",
             :value="getVModel(index, 'attributes')",
-            label="Value",
-            :rules="[]"
+            label="Value"
           )
         v-col.d-flex.align-center(cols="1")
           v-btn.spacer-1-icon-left(@click="remove(index)", icon, color="red")
@@ -25,8 +23,6 @@
 </template>
 
 <script lang="ts">
-// TODO: Add rules
-
 import Vue from "vue";
 import * as R from "ramda";
 import * as ModuleContentType from "../../store/ModuleContentType";

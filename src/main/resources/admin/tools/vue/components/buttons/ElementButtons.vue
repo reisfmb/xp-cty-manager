@@ -1,5 +1,7 @@
 <template lang="pug">
 div
+  v-btn(@click.stop="duplicate", icon)
+    v-icon {{ buttons.duplicate.icon }}
   v-btn(@click.stop="move('up')", icon, :disabled="getElementIndex() === 0")
     v-icon {{ buttons.moveUp.icon }}
   v-btn(
@@ -16,6 +18,7 @@ div
 import Vue from "vue";
 import Swal from "sweetalert2";
 import { Element } from "@reginaldlee/xml-js";
+import * as R from "ramda";
 import * as ModuleContentType from "../../store/ModuleContentType";
 import * as messages from "../../util/messages";
 
@@ -27,6 +30,7 @@ export default Vue.extend({
   },
   data: () => ({
     buttons: {
+      duplicate: { icon: "mdi-content-copy" },
       moveUp: { icon: "mdi-arrow-up" },
       moveDown: { icon: "mdi-arrow-down" },
       remove: { icon: "mdi-delete-circle-outline" },
@@ -85,6 +89,24 @@ export default Vue.extend({
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.elementsPath,
         value: [...updatedElements],
+      });
+    },
+    duplicate() {
+      const currentElementIndex = this.getElementIndex();
+      const duplicatedElement = R.view(
+        R.lensIndex(currentElementIndex),
+        this.elements
+      );
+
+      const updatedElements = [
+        ...this.elements.slice(0, currentElementIndex),
+        duplicatedElement,
+        ...this.elements.slice(currentElementIndex),
+      ];
+
+      ModuleContentType.setContentTypeByPath(this.$store, {
+        path: this.elementsPath,
+        value: updatedElements,
       });
     },
   },
