@@ -9,6 +9,13 @@ export interface IComponentProps {
     label: string;
     hint: string;
   };
+  options?: {
+    items: Array<{ text: string; value: string }>;
+    config: {
+      multiple: boolean;
+      joinWith?: string;
+    };
+  };
 }
 
 export type IMap = {
