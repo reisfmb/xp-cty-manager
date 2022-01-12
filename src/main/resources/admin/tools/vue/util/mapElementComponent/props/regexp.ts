@@ -6,6 +6,6 @@ export default {
     label: "Regular Expression",
     hint: "Supports validation by defining regular expressions.",
   },
-  rules: [],
+  rules: ["validRegex"],
   i18n: false,
 } as IComponentProps;

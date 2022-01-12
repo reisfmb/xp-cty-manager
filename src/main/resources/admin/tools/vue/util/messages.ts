@@ -16,6 +16,7 @@ export const error = {
     `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
   rules: {
     required: "This field is required.",
+    validRegex: "This regular expression is not valid.",
     noSpaces: "This field does not allow spaces.",
     numbersOnly: "This field has to be a number.",
     numberNonNegative: "This field has to be a non negative number.",

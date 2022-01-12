@@ -1,5 +1,5 @@
 <template lang="pug">
-.row
+.row.my-1
   template(v-for="attribute in attributes")
     v-col
       v-text-field(
