@@ -8,8 +8,8 @@ export default xml2js(
   <occurrences minimum="0" maximum="1"/>
   <default/>
   <config>
-    <exclude></exclude>
     <include></include>
+    <exclude></exclude>
     <allowHeadings></allowHeadings>
   </config>
 </input>`.trim()
