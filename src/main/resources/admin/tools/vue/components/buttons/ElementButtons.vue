@@ -14,9 +14,10 @@ div
 
 <script lang="ts">
 import Vue from "vue";
-
+import Swal from "sweetalert2";
 import { Element } from "@reginaldlee/xml-js";
 import * as ModuleContentType from "../../store/ModuleContentType";
+import * as messages from "../../util/messages";
 
 export default Vue.extend({
   name: "ElementButtons",
@@ -38,15 +39,25 @@ export default Vue.extend({
       );
     },
     remove() {
-      const elementsWithoutThisElement = this.elements.filter(
-        (el: Element, index: number) => {
-          return index !== this.getElementIndex();
-        }
-      );
+      Swal.fire({
+        title: messages.dialog.confirm,
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: "Yes",
+        denyButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const elementsWithoutThisElement = this.elements.filter(
+            (el: Element, index: number) => {
+              return index !== this.getElementIndex();
+            }
+          );
 
-      ModuleContentType.setContentTypeByPath(this.$store, {
-        path: this.elementsPath,
-        value: elementsWithoutThisElement,
+          ModuleContentType.setContentTypeByPath(this.$store, {
+            path: this.elementsPath,
+            value: elementsWithoutThisElement,
+          });
+        }
       });
     },
     move(direction: "up" | "down") {
