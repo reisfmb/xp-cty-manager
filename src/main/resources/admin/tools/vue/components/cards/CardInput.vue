@@ -39,6 +39,22 @@ export default Vue.extend({
     ((this.$options || {}).components || {}).RecursiveComponentRender =
       require("../RecursiveComponentRender.vue").default;
   },
+  mounted() {
+    if (!this.getInputLabel()) this.show = true;
+  },
+  methods: {
+    getInputLabel() {
+      const path = [
+        ...this.path,
+        "elements",
+        0,
+        "elements",
+        0,
+        "text",
+      ] as string[];
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+    },
+  },
   computed: {
     inputName(): string {
       const path = [...this.path, "attributes", "name"] as string[];

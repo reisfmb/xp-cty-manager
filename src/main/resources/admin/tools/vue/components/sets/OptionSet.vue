@@ -42,8 +42,18 @@ export default Vue.extend({
     ((this.$options || {}).components || {}).RecursiveComponentRender =
       require("../RecursiveComponentRender.vue").default;
   },
-  created() {},
-  methods: {},
+  mounted() {
+    if (!this.setOptionsHasElements()) this.show = true;
+  },
+  methods: {
+    setOptionsHasElements() {
+      const options = ModuleContentType.getContentTypeByPath(this.$store)(
+        this.optionsPath
+      ) as Element;
+
+      return (options?.elements || []).length > 0;
+    },
+  },
   computed: {
     elementsPath(): string[] {
       return [...(this.path as string[]), "elements"];

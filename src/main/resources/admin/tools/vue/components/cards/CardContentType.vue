@@ -38,7 +38,7 @@ export default Vue.extend({
   props: { path: Array },
   data: () => ({
     showOnMounted: false,
-    show: true,
+    show: false,
     fileName: "",
   }),
   beforeCreate() {
@@ -47,6 +47,7 @@ export default Vue.extend({
   },
   mounted() {
     this.showOnMounted = true;
+    if (!this.contentTypeDisplayName) this.show = true;
   },
   computed: {
     elementsPath(): string[] {

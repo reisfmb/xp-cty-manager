@@ -43,8 +43,18 @@ export default Vue.extend({
     ((this.$options || {}).components || {}).RecursiveComponentRender =
       require("../RecursiveComponentRender.vue").default;
   },
-  created() {},
-  methods: {},
+  mounted() {
+    if (!this.setItemsHasElements()) this.show = true;
+  },
+  methods: {
+    setItemsHasElements() {
+      const items = ModuleContentType.getContentTypeByPath(this.$store)(
+        this.itemsPath
+      ) as Element;
+
+      return (items?.elements || []).length > 0;
+    },
+  },
   computed: {
     elementsPath(): string[] {
       return [...(this.path as string[]), "elements"];
