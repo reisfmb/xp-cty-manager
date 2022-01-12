@@ -1,23 +1,27 @@
 <template lang="pug">
 transition(name="fade")
-  v-card(v-show="show")
-    v-card-title.pointer(@click="showDefinitions = !showDefinitions") {{ contentTypeDisplayName }}
+  v-card(v-show="showOnMounted")
+    v-card-title {{ contentTypeDisplayName }}
     v-card-text
-      transition(name="fade")
-        div(v-show="showDefinitions")
-          RecursiveComponentRender(:path="path")
-          TextMultipleInput(
-            :path="elementsPath",
-            :pathToText="['elements', 0, 'text']",
-            elementName="allow-child-content-type",
-            buttonAddLabel="Add Allow Child Content Type"
-          )
-          TextMultipleInput(
-            :path="elementsPath",
-            :pathToText="['attributes', 'name']",
-            elementName="x-data",
-            buttonAddLabel="Add X-Data"
-          )
+      v-card.mt-0
+        v-card-title.pointer(@click="show = !show")
+          span Content Type
+          v-icon {{ show ? 'mdi-menu-down' : 'mdi-menu-up' }}
+        transition(name="fade")
+          v-card-text(v-show="show")
+            RecursiveComponentRender(:path="path")
+            TextMultipleInput(
+              :path="elementsPath",
+              :pathToText="['elements', 0, 'text']",
+              elementName="allow-child-content-type",
+              buttonAddLabel="Add Allow Child Content Type"
+            )
+            TextMultipleInput(
+              :path="elementsPath",
+              :pathToText="['attributes', 'name']",
+              elementName="x-data",
+              buttonAddLabel="Add X-Data"
+            )
       CardForm(:path="formPath")
 </template>
 
@@ -33,8 +37,8 @@ export default Vue.extend({
   components: { TextMultipleInput, CardForm },
   props: { path: Array },
   data: () => ({
-    show: false,
-    showDefinitions: true,
+    showOnMounted: false,
+    show: true,
     fileName: "",
   }),
   beforeCreate() {
@@ -42,7 +46,7 @@ export default Vue.extend({
       require("../RecursiveComponentRender.vue").default;
   },
   mounted() {
-    this.show = true;
+    this.showOnMounted = true;
   },
   computed: {
     elementsPath(): string[] {
@@ -69,4 +73,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+i {
+  margin-left: auto;
+}
 </style>

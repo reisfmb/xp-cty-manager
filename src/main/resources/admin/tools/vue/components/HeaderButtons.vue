@@ -1,5 +1,5 @@
 <template lang="pug">
-.d-flex.justify-space-between
+.d-flex
   NewButton(:suggestSaveFunction="suggestSaveIfThereAreChanges")
   LoadButton(:suggestSaveFunction="suggestSaveIfThereAreChanges")
   SaveButton
@@ -45,4 +45,13 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+button {
+  margin-right: 16px;
+
+  &:last-child {
+    margin-left: auto;
+    margin-right: 0px;
+  }
+}
+</style>

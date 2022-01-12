@@ -47,37 +47,24 @@ export default {
 }
 
 /* Vuetify overwrite rules */
+.col {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 .v-application--wrap {
   min-height: auto;
 }
-
 .v-card {
-  margin: 25px 0 40px 0;
-}
+  margin: 25px 0px;
 
-.v-card .v-card-error {
-  border: 2px solid red;
+  .v-card-error {
+    border: 2px solid red;
+  }
 }
-
-.v-card__title,
-.v-card__subtitle {
-  padding: 5px 16px;
-}
-
-.v-card__title + .v-card__subtitle {
-  padding-top: 5px;
-}
-
-.v-card > .v-card__subtitle {
-  padding-top: 16px;
-}
-
-form .v-card__text {
-  padding-top: 0;
-}
-
-.v-dialog .v-card {
-  margin: 0px;
+.v-dialog {
+  .v-card {
+    margin: 0px;
+  }
 }
 
 /* Custom classes */
