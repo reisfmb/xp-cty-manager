@@ -3,7 +3,8 @@ v-card
   .row.pointer(@click="show = !show")
     v-col(cols="9")
       v-card-title {{ inputName }}
-      v-card-subtitle {{ inputType }}
+      v-card-subtitle
+        a(:href="docsUrl", target="_blank", @click.stop) {{ inputType }}
 
     v-col.d-flex.align-center.justify-end(cols="3")
       ElementButtons(:path="path")
@@ -46,6 +47,9 @@ export default Vue.extend({
     inputType(): string {
       const path = [...this.path, "attributes", "type"] as string[];
       return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+    },
+    docsUrl(): string {
+      return `https://developer.enonic.com/docs/xp/stable/cms/input-types#${this.inputType.toLowerCase()}`;
     },
   },
 });
