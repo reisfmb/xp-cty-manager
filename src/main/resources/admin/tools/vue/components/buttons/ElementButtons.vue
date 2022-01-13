@@ -107,6 +107,8 @@ export default Vue.extend({
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.elementsPath,
         value: updatedElements,
+        action: "DUPLICATING-SCHEMA",
+        duplicatedIndex: currentElementIndex + 1,
       });
     },
   },

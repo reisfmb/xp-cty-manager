@@ -72,13 +72,18 @@ const mutations = {
     data: {
       path: (string | number)[];
       value: IAllowedValuesToBeAdded;
-      action?: "ADDING-NEW-SCHEMA";
+      action?: "ADDING-NEW-SCHEMA" | "DUPLICATING-SCHEMA";
+      duplicatedIndex?: number;
     }
   ) {
-    if (data.action === "ADDING-NEW-SCHEMA") {
+    if (
+      data.action === "ADDING-NEW-SCHEMA" ||
+      data.action === "DUPLICATING-SCHEMA"
+    ) {
       data.value = renameNameAttributeIfNeeded(
         JSON.stringify(state.contentType),
-        data.value
+        data.value,
+        data.duplicatedIndex
       );
     }
 
@@ -155,31 +160,32 @@ export const setContentTypeFromXmlString = dispatch(
 // Will rename name attribute of an element if needed using counters.
 function renameNameAttributeIfNeeded(
   ctyAsString: string,
-  value: IAllowedValuesToBeAdded
+  value: IAllowedValuesToBeAdded,
+  duplicatedIndex?: number
 ) {
   if (value && Array.isArray(value) && value.length > 0) {
-    const lastIndex = value.length - 1;
-    let lastElement = R.view(R.lensIndex(lastIndex), value);
+    const idx = duplicatedIndex ? duplicatedIndex : value.length - 1;
+    let desiredElement = R.view(R.lensIndex(idx), value);
     const schemaAttributeName =
-      (lastElement.attributes || {}).name?.toString() || "";
+      (desiredElement.attributes || {}).name?.toString() || "";
 
     if (
       schemaAttributeName &&
       ctyAsString.indexOf(schemaAttributeName) !== -1 &&
-      lastElement.attributes
+      desiredElement.attributes
     ) {
       const counter =
         ctyAsString.split(`"name":"${schemaAttributeName}`).length - 1;
       const newName = `${schemaAttributeName}-${counter + 1}`;
-      lastElement = R.set(
+      desiredElement = R.set(
         R.lensPath(["attributes", "name"]),
         newName,
-        lastElement
+        desiredElement
       );
     }
 
     value = value.map((el: xml2jsonConverter.Element, index: number) =>
-      index === lastIndex ? lastElement : el
+      index === idx ? desiredElement : el
     );
   }
   return value;
