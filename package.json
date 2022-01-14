@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "webpack": "export NODE_ENV=development && webpack",
-    "webpack-watch": "export NODE_ENV=development && webpack --watch",
-    "lint": "eslint --ext ts,js,vue src/main/resources/admin/tools/vue/"
+    "build": "webpack --color",
+    "dev": "export NODE_ENV=development && webpack --watch",
+    "lint": "eslint --ext ts,js,vue src/main/resources/admin/tools/vue/",
+    "fix": "eslint --ext ts,js,vue src/main/resources/admin/tools/vue/ --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
