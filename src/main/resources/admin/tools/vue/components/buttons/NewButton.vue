@@ -1,5 +1,5 @@
 <template lang="pug">
-v-btn(@click="execute") {{ labels.button }}
+v-btn(data-testid="v-btn__new", @click="execute") {{ labels.button }}
 </template>
 
 <script lang="ts">

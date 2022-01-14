@@ -1,16 +1,31 @@
 <template lang="pug">
 div
-  v-btn(@click.stop="duplicate", icon)
+  v-btn(
+    data-testid="v-btn__duplicate",
+    @click.stop="duplicate",
+    icon
+  )
     v-icon {{ buttons.duplicate.icon }}
-  v-btn(@click.stop="move('up')", icon, :disabled="getElementIndex() === 0")
+
+  v-btn(
+    @click.stop="move('up')",
+    icon,
+    :disabled="getElementIndex() === 0"
+  )
     v-icon {{ buttons.moveUp.icon }}
+
   v-btn(
     @click.stop="move('down')",
     icon,
     :disabled="getElementIndex() === elements.length - 1"
   )
     v-icon {{ buttons.moveDown.icon }}
-  v-btn(@click.stop="remove", icon, color="red")
+
+  v-btn(
+    data-testid="v-btn__remove"
+    @click.stop="remove",
+    icon,
+    color="red")
     v-icon {{ buttons.remove.icon }}
 </template>
 

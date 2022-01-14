@@ -6,7 +6,11 @@ div
     :label="autocomplete.label",
     :prepend-inner-icon="autocomplete.icon"
   )
-  v-btn(@click="execute", :disabled="!states.option") {{ button.label }}
+  v-btn(
+    data-testid="v-btn__addSchema",
+    @click="execute",
+    :disabled="!states.option"
+  ) {{ button.label }}
 </template>
 
 <script lang="ts">

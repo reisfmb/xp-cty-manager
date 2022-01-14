@@ -4,7 +4,7 @@ v-card
     v-col(cols="9")
       v-card-title {{ inputName }}
       v-card-subtitle
-        a(:href="docsUrl", target="_blank", @click.stop) {{ inputType }}
+        a(:href="docsUrl", target="_blank", @click.stop="") {{ inputType }}
 
     v-col.d-flex.align-center.justify-end(cols="3")
       ElementButtons(:path="path")
