@@ -48,7 +48,15 @@ task lint( type: NpmTask, dependsOn: npmInstall ) {
     outputs.upToDateWhen { false }
 }
 
-task webpack( type: NpmTask, dependsOn: [npmInstall, lint] ) {
+task tests( type: NpmTask, dependsOn: [npmInstall, lint] ) {
+    description = 'Testing Application.'
+    args = [ 'run', 'test' ]
+    inputs.dir 'src/main/resources/admin/tools/vue/'
+    outputs.dir file('gradle')
+    outputs.upToDateWhen { false }
+}
+
+task webpack( type: NpmTask, dependsOn: [npmInstall, lint, tests] ) {
     description = 'Building Application.'
     environment = [ 'NODE_ENV': nodeEnvironment() ]
     args = [ 'run', 'build' ]

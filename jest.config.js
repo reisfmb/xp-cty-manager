@@ -1,5 +1,6 @@
 module.exports = {
   testEnvironment: 'jsdom',
+  rootDir: 'src/main/resources/admin/tools/vue/',
   transform: {
     '^.+\\.vue$': '@vue/vue2-jest',
     '^.+\\.[t|j]sx?$': 'babel-jest',
