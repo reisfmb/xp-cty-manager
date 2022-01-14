@@ -53,11 +53,12 @@ task webpack( type: NpmTask, dependsOn: [npmInstall, lint] ) {
     environment = [ 'NODE_ENV': nodeEnvironment() ]
     args = [ 'run', 'build' ]
     inputs.dir 'src/main/resources/admin/tools/vue'
-    outputs.dir "src/main/resources/assets/js"
     inputs.file 'webpack.config.js'
     inputs.file 'tsconfig.json'
     inputs.file 'build.gradle'
     inputs.file 'package.json'
+    outputs.dir "src/main/resources/assets/js"
+    outputs.upToDateWhen { false }
 }
 
 jar {
