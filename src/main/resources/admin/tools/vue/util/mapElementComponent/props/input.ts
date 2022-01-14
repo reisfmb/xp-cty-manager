@@ -1,5 +1,5 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "CardInput",
+  component: 'CardInput',
 } as IComponentProps;

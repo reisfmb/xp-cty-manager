@@ -1,64 +1,64 @@
 // @ts-nocheck
+/* eslint-disable */
 export default function (xml) {
-  var reg = /(>)\s*(<)(\/*)/g;
-  var wsexp = / *(.*) +\n/g;
-  var contexp = /(<.+>)(.+\n)/g;
+  const reg = /(>)\s*(<)(\/*)/g;
+  const wsexp = / *(.*) +\n/g;
+  const contexp = /(<.+>)(.+\n)/g;
   xml = xml
-    .replace(reg, "$1\n$2$3")
-    .replace(wsexp, "$1\n")
-    .replace(contexp, "$1\n$2");
-  var formatted = "";
-  var lines = xml.split("\n");
-  var indent = 0;
-  var lastType = "other";
-  var transitions = {
-    "single->single": 0,
-    "single->closing": -1,
-    "single->opening": 0,
-    "single->other": 0,
-    "closing->single": 0,
-    "closing->closing": -1,
-    "closing->opening": 0,
-    "closing->other": 0,
-    "opening->single": 1,
-    "opening->closing": 0,
-    "opening->opening": 1,
-    "opening->other": 1,
-    "other->single": 0,
-    "other->closing": -1,
-    "other->opening": 0,
-    "other->other": 0,
+    .replace(reg, '$1\n$2$3')
+    .replace(wsexp, '$1\n')
+    .replace(contexp, '$1\n$2');
+  let formatted = '';
+  const lines = xml.split('\n');
+  let indent = 0;
+  let lastType = 'other';
+  const transitions = {
+    'single->single': 0,
+    'single->closing': -1,
+    'single->opening': 0,
+    'single->other': 0,
+    'closing->single': 0,
+    'closing->closing': -1,
+    'closing->opening': 0,
+    'closing->other': 0,
+    'opening->single': 1,
+    'opening->closing': 0,
+    'opening->opening': 1,
+    'opening->other': 1,
+    'other->single': 0,
+    'other->closing': -1,
+    'other->opening': 0,
+    'other->other': 0,
   };
 
-  for (var i = 0; i < lines.length; i++) {
-    var ln = lines[i];
+  for (let i = 0; i < lines.length; i++) {
+    const ln = lines[i];
 
     if (ln.match(/\s*<\?xml/)) {
-      formatted += ln + "\n";
+      formatted += `${ln}\n`;
       continue;
     }
-    var x = typeof transitions;
-    var single = Boolean(ln.match(/<.+\/>/));
-    var closing = Boolean(ln.match(/<\/.+>/));
-    var opening = Boolean(ln.match(/<[^!].*>/));
-    var type = single
-      ? "single"
+    const x = typeof transitions;
+    const single = Boolean(ln.match(/<.+\/>/));
+    const closing = Boolean(ln.match(/<\/.+>/));
+    const opening = Boolean(ln.match(/<[^!].*>/));
+    const type = single
+      ? 'single'
       : closing
-      ? "closing"
-      : opening
-      ? "opening"
-      : "other";
-    var fromTo = lastType + "->" + type;
+        ? 'closing'
+        : opening
+          ? 'opening'
+          : 'other';
+    const fromTo = `${lastType}->${type}`;
     lastType = type;
-    var padding = "";
+    let padding = '';
 
     indent += transitions[fromTo];
-    for (var j = 0; j < indent; j++) {
-      padding += "\t";
+    for (let j = 0; j < indent; j++) {
+      padding += '\t';
     }
-    if (fromTo == "opening->closing")
-      formatted = formatted.substr(0, formatted.length - 1) + ln + "\n";
-    else formatted += padding + ln + "\n";
+    if (fromTo == 'opening->closing') formatted = `${formatted.substr(0, formatted.length - 1) + ln}\n`;
+    else formatted += `${padding + ln}\n`;
   }
 
   return formatted;

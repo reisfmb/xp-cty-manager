@@ -1,12 +1,12 @@
-import xmlBeautifier from "../../util/xmlBeautifier";
-import * as xml2jsonConverter from "@reginaldlee/xml-js";
-import * as R from "ramda";
-import RawSchemas from "../../util/rawSchemas";
-import { getStoreAccessors } from "vuex-typescript";
-import { ActionContext } from "vuex";
-import { IRootState } from "../rootState";
-import { IContentType, IState, IAllowedValuesToBeAdded } from "./types";
-import { sanitizeXml } from "../../util/helpers";
+import * as xml2jsonConverter from '@reginaldlee/xml-js';
+import * as R from 'ramda';
+import { getStoreAccessors } from 'vuex-typescript';
+import { ActionContext } from 'vuex';
+import RawSchemas from '../../util/rawSchemas';
+import xmlBeautifier from '../../util/xmlBeautifier';
+import { IRootState } from '../rootState';
+import { IContentType, IState, IAllowedValuesToBeAdded } from './types';
+import { sanitizeXml } from '../../util/helpers';
 
 type ModuleContentTypeContext = ActionContext<IState, IRootState>;
 
@@ -17,8 +17,7 @@ const initialStateValues: IState = {
 
 const getters = {
   getContentTypeByPath:
-    (state: IState) =>
-    (path: (string | number)[] = []) => {
+    (state: IState) => (path: (string | number)[] = []) => {
       if (!state.contentType) {
         return null;
       }
@@ -27,22 +26,20 @@ const getters = {
   getContentTypeAsXmlString(state: IState): string | null {
     return state.contentType
       ? R.pipe(
-          xml2jsonConverter.js2xml,
-          sanitizeXml,
-          xmlBeautifier
-        )(state.contentType, { fullTagEmptyElement: true })
+        xml2jsonConverter.js2xml,
+        sanitizeXml,
+        xmlBeautifier,
+      )(state.contentType, { fullTagEmptyElement: true })
       : null;
   },
   getContentTypeDisplayName(state: IState): string | null {
     const ctyElements: Array<xml2jsonConverter.Element> = R.view(
-      R.lensPath(["elements", 0, "elements"]),
-      state.contentType
+      R.lensPath(['elements', 0, 'elements']),
+      state.contentType,
     );
 
     const displayNameElement = ctyElements.find(
-      (el: xml2jsonConverter.Element) => {
-        return el.name === "display-name";
-      }
+      (el: xml2jsonConverter.Element) => el.name === 'display-name',
     );
 
     return (
@@ -72,25 +69,26 @@ const mutations = {
     data: {
       path: (string | number)[];
       value: IAllowedValuesToBeAdded;
-      action?: "ADDING-NEW-SCHEMA" | "DUPLICATING-SCHEMA";
+      action?: 'ADDING-NEW-SCHEMA' | 'DUPLICATING-SCHEMA';
       duplicatedIndex?: number;
-    }
+    },
   ) {
     if (
-      data.action === "ADDING-NEW-SCHEMA" ||
-      data.action === "DUPLICATING-SCHEMA"
+      data.action === 'ADDING-NEW-SCHEMA'
+      || data.action === 'DUPLICATING-SCHEMA'
     ) {
+      // eslint-disable-next-line no-use-before-define
       data.value = renameNameAttributeIfNeeded(
         JSON.stringify(state.contentType),
         data.value,
-        data.duplicatedIndex
+        data.duplicatedIndex,
       );
     }
 
     state.contentType = R.set(
       R.lensPath(data.path),
       data.value,
-      state.contentType
+      state.contentType,
     );
   },
   resetContentType(state: IState) {
@@ -101,12 +99,12 @@ const mutations = {
 const actions = {
   setContentTypeFromXmlString(
     context: ModuleContentTypeContext,
-    contentTypeAsXmlString: string
+    contentTypeAsXmlString: string,
   ) {
     const contentType = xml2jsonConverter.xml2js(contentTypeAsXmlString, {
       compact: false,
     });
-    context.commit("setContentType", contentType);
+    context.commit('setContentType', contentType);
   },
 };
 
@@ -119,40 +117,40 @@ export const ModuleContentType = {
 };
 
 const { read, commit, dispatch } = getStoreAccessors<IState, IRootState>(
-  "ModuleContentType"
+  'ModuleContentType',
 );
 
 // Getters ( read )
 export const getContentTypeByPath = read(
-  ModuleContentType.getters.getContentTypeByPath
+  ModuleContentType.getters.getContentTypeByPath,
 );
 export const getContentTypeAsXmlString = read(
-  ModuleContentType.getters.getContentTypeAsXmlString
+  ModuleContentType.getters.getContentTypeAsXmlString,
 );
 export const getContentTypeDisplayName = read(
-  ModuleContentType.getters.getContentTypeDisplayName
+  ModuleContentType.getters.getContentTypeDisplayName,
 );
 export const isContentTypeEmpty = read(
-  ModuleContentType.getters.isContentTypeEmpty
+  ModuleContentType.getters.isContentTypeEmpty,
 );
 export const isContentTypeSameAsContentTypeAfterLastSave = read(
-  ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave
+  ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave,
 );
 
 // Mutations ( commit )
 export const resetContentType = commit(
-  ModuleContentType.mutations.resetContentType
+  ModuleContentType.mutations.resetContentType,
 );
 export const setContentTypeByPath = commit(
-  ModuleContentType.mutations.setContentTypeByPath
+  ModuleContentType.mutations.setContentTypeByPath,
 );
 export const setContentTypeAfterLastSave = commit(
-  ModuleContentType.mutations.setContentTypeAfterLastSave
+  ModuleContentType.mutations.setContentTypeAfterLastSave,
 );
 
 // Actions ( dispatch )
 export const setContentTypeFromXmlString = dispatch(
-  ModuleContentType.actions.setContentTypeFromXmlString
+  ModuleContentType.actions.setContentTypeFromXmlString,
 );
 
 // Helpers
@@ -161,32 +159,28 @@ export const setContentTypeFromXmlString = dispatch(
 function renameNameAttributeIfNeeded(
   ctyAsString: string,
   value: IAllowedValuesToBeAdded,
-  duplicatedIndex?: number
+  duplicatedIndex?: number,
 ) {
   if (value && Array.isArray(value) && value.length > 0) {
-    const idx = duplicatedIndex ? duplicatedIndex : value.length - 1;
+    const idx = duplicatedIndex || value.length - 1;
     let desiredElement = R.view(R.lensIndex(idx), value);
-    const schemaAttributeName =
-      (desiredElement.attributes || {}).name?.toString() || "";
+    const schemaAttributeName = (desiredElement.attributes || {}).name?.toString() || '';
 
     if (
-      schemaAttributeName &&
-      ctyAsString.indexOf(schemaAttributeName) !== -1 &&
-      desiredElement.attributes
+      schemaAttributeName
+      && ctyAsString.indexOf(schemaAttributeName) !== -1
+      && desiredElement.attributes
     ) {
-      const counter =
-        ctyAsString.split(`"name":"${schemaAttributeName}`).length - 1;
+      const counter = ctyAsString.split(`"name":"${schemaAttributeName}`).length - 1;
       const newName = `${schemaAttributeName}-${counter + 1}`;
       desiredElement = R.set(
-        R.lensPath(["attributes", "name"]),
+        R.lensPath(['attributes', 'name']),
         newName,
-        desiredElement
+        desiredElement,
       );
     }
 
-    value = value.map((el: xml2jsonConverter.Element, index: number) =>
-      index === idx ? desiredElement : el
-    );
+    value = value.map((el: xml2jsonConverter.Element, index: number) => (index === idx ? desiredElement : el));
   }
   return value;
 }

@@ -3,19 +3,19 @@ v-btn(@click="execute") {{ labels.button }}
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Swal from "sweetalert2";
-import * as R from "ramda";
-import * as ModuleFileHandle from "../../store/ModuleFileHandle";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import * as messages from "../../util/messages";
+import Vue from 'vue';
+import Swal from 'sweetalert2';
+import * as R from 'ramda';
+import * as ModuleFileHandle from '../../store/ModuleFileHandle';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import * as messages from '../../util/messages';
 
 export default Vue.extend({
-  name: "LoadButton",
-  props: ["suggestSaveFunction"],
+  name: 'LoadButton',
+  props: ['suggestSaveFunction'],
   data: () => ({
     labels: {
-      button: "Load",
+      button: 'Load',
     },
   }),
   methods: {
@@ -31,7 +31,7 @@ export default Vue.extend({
           setTimeout(this.closeLoadingDialog, 500);
         })
         .catch((error: Error) => {
-          error.message && Swal.fire({ icon: "error", text: error.message });
+          error.message && Swal.fire({ icon: 'error', text: error.message });
         });
     },
 
@@ -41,14 +41,14 @@ export default Vue.extend({
         showCancelButton: true,
       });
       if (!result.isConfirmed) {
-        throw new Error("");
+        throw new Error('');
       }
     },
 
     async setFileHandlerIfXml() {
       const [fileHandle] = await window.showOpenFilePicker();
       const file = await fileHandle.getFile();
-      if (fileHandle.kind === "file" && file.type === "text/xml") {
+      if (fileHandle.kind === 'file' && file.type === 'text/xml') {
         ModuleFileHandle.setFileHandle(this.$store, fileHandle);
       } else {
         throw new Error(messages.error.fileNotXml);
@@ -58,10 +58,10 @@ export default Vue.extend({
 
     async openLoadingDialog(file: File) {
       Swal.fire({
-        //@ts-ignore
+        // @ts-ignore
         iconHtml: `<img class="loading-icon" src="${CONFIG.loadingIcon}">`,
-        customClass: { icon: "no-border" },
-        icon: "warning",
+        customClass: { icon: 'no-border' },
+        icon: 'warning',
         text: messages.dialog.loading,
         showConfirmButton: false,
       });
@@ -74,13 +74,12 @@ export default Vue.extend({
 
       ModuleContentType.setContentTypeFromXmlString(
         this.$store,
-        contentTypeXmlString
+        contentTypeXmlString,
       );
     },
 
     closeLoadingDialog() {
-      const contentTypeDisplayName =
-        ModuleContentType.getContentTypeDisplayName(this.$store);
+      const contentTypeDisplayName = ModuleContentType.getContentTypeDisplayName(this.$store);
 
       if (contentTypeDisplayName) {
         Swal.close();

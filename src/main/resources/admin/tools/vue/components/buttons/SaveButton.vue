@@ -7,20 +7,20 @@ v-btn#saveButton(
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Swal from "sweetalert2";
-import * as R from "ramda";
-import * as ModuleFileHandle from "../../store/ModuleFileHandle";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import * as messages from "../../util/messages";
-import * as helpers from "../../util/helpers";
+import Vue from 'vue';
+import Swal from 'sweetalert2';
+import * as R from 'ramda';
+import * as ModuleFileHandle from '../../store/ModuleFileHandle';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import * as messages from '../../util/messages';
+import * as helpers from '../../util/helpers';
 
 export default Vue.extend({
-  name: "SaveButton",
+  name: 'SaveButton',
 
   data: () => ({
     labels: {
-      button: "Save",
+      button: 'Save',
     },
   }),
 
@@ -32,7 +32,7 @@ export default Vue.extend({
       if (!this.validateForm()) {
         this.setBorderOfVcardsWithErrors();
 
-        Swal.fire({ icon: "error", text: messages.error.saveXml });
+        Swal.fire({ icon: 'error', text: messages.error.saveXml });
         return;
       }
 
@@ -40,14 +40,14 @@ export default Vue.extend({
       (this.fileHandle ? this.save() : this.create().then(() => this.save()))
         .then(() => {
           Swal.fire({
-            icon: "success",
+            icon: 'success',
             text: messages.dialog.savedCty,
             showConfirmButton: false,
             timer: 1500,
           });
         })
         .catch((error: Error) => {
-          error.message && Swal.fire({ icon: "error", text: error.message });
+          error.message && Swal.fire({ icon: 'error', text: error.message });
         });
     },
 
@@ -76,7 +76,7 @@ export default Vue.extend({
           showCancelButton: true,
         }).then(async (result) => {
           if (!result.isConfirmed) {
-            throw new Error("");
+            throw new Error('');
           }
         });
       }
@@ -84,7 +84,7 @@ export default Vue.extend({
       // 2 - Validate if selected folder is called 'content-types'
       async function selectFolder() {
         const dirHandle = await window.showDirectoryPicker();
-        if (dirHandle.name !== "content-types") {
+        if (dirHandle.name !== 'content-types') {
           throw new Error(messages.error.folderNotCty(dirHandle.name));
         }
         return dirHandle;
@@ -92,50 +92,50 @@ export default Vue.extend({
 
       // 3 - Check if the name of the new content type is valid
       const getValidCtyName = (async (
-        dirHandle: FileSystemDirectoryHandle
+        dirHandle: FileSystemDirectoryHandle,
       ): Promise<{ dirHandle: FileSystemDirectoryHandle; ctyName: string }> => {
-        if (!("name" in dirHandle)) {
-          throw new Error("");
+        if (!('name' in dirHandle)) {
+          throw new Error('');
         }
 
-        let ctyName = "";
+        let ctyName = '';
         const existingCtyNames = await this.getAllExistingCtynames(dirHandle);
 
-        const isCtyNameValid = (ctyName: string) =>
-          ctyName.length > 0 && !ctyName.includes(" ");
+        const isCtyNameValid = (ctyName: string) => ctyName.length > 0 && !ctyName.includes(' ');
 
-        const ctyNameExists = (ctyName: string, existingCtyNames: string[]) =>
-          existingCtyNames.indexOf(ctyName) === -1;
+        const ctyNameExists = (ctyName: string, existingCtyNames: string[]) => existingCtyNames.indexOf(ctyName) === -1;
 
         const dialogText = (ctyName: string, existingCtyNames: string[]) => {
           if (!ctyName) return messages.dialog.defineCtyName;
 
-          let errorMessages = [];
+          const errorMessages = [];
           if (!isCtyNameValid(ctyName)) {
-            errorMessages.push("is invalid");
+            errorMessages.push('is invalid');
           }
           if (!ctyNameExists(ctyName, existingCtyNames)) {
-            errorMessages.push("is used by another content type");
+            errorMessages.push('is used by another content type');
           }
 
           if (errorMessages.length > 0) {
             return `<b>"${ctyName}"</b> ${errorMessages.join(
-              " and "
+              ' and ',
             )}. Please provide a different name.`;
           }
+
+          return '';
         };
 
         do {
           const text = dialogText(ctyName, existingCtyNames);
-          const r = await Swal.fire({ html: text, input: "text" });
+          const r = await Swal.fire({ html: text, input: 'text' });
           ctyName = r.value;
         } while (
-          !isCtyNameValid(ctyName) ||
-          !ctyNameExists(ctyName, existingCtyNames)
+          !isCtyNameValid(ctyName)
+          || !ctyNameExists(ctyName, existingCtyNames)
         );
 
         return { dirHandle, ctyName };
-      }).bind(this);
+      });
 
       // 4 - Create the directory and the xml files for the content type
       const createDirAndXmlFile = (async (DTO: {
@@ -153,7 +153,7 @@ export default Vue.extend({
         });
 
         ModuleFileHandle.setFileHandle(this.$store, fileHandle);
-      }).bind(this);
+      });
 
       ///
 
@@ -175,19 +175,19 @@ export default Vue.extend({
 
     validateForm(): boolean {
       const appComponent = this.$root.$children[0] || null;
-      if (!appComponent) throw new Error("Missing vue App component.");
+      if (!appComponent) throw new Error('Missing vue App component.');
 
-      //@ts-ignore
+      // @ts-ignore
       return appComponent.$refs.form.validate();
     },
 
     async getAllExistingCtynames(
-      dirHandle: FileSystemDirectoryHandle
+      dirHandle: FileSystemDirectoryHandle,
     ): Promise<string[]> {
-      let arr = [];
+      const arr = [];
 
       for await (const entry of dirHandle.values()) {
-        entry.kind === "directory" && arr.push(entry.name);
+        entry.kind === 'directory' && arr.push(entry.name);
       }
 
       return arr;

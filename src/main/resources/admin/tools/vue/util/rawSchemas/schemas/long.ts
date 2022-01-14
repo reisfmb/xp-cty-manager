@@ -1,4 +1,4 @@
-import { xml2js } from "@reginaldlee/xml-js";
+import { xml2js } from '@reginaldlee/xml-js';
 
 export default xml2js(
   `
@@ -10,5 +10,5 @@ export default xml2js(
     <min></min>
     <max></max>
   </config>
-</input>`.trim()
+</input>`.trim(),
 );

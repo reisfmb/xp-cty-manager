@@ -8,6 +8,7 @@ function _getAllElementParents(el: Element): Array<Element> {
   const parents = [];
   do {
     parents.push(el);
+  // eslint-disable-next-line no-cond-assign
   } while ((el = el.parentNode as Element));
   return parents;
 }
@@ -15,8 +16,8 @@ function _getAllElementParents(el: Element): Array<Element> {
 // Check if an element is a vuetify card
 function _isElementVCard(el: Element): boolean {
   return (
-    (el && el.classList && Array.from(el.classList).indexOf("v-card") >= 0) ||
-    false
+    (el && el.classList && Array.from(el.classList).indexOf('v-card') >= 0)
+    || false
   );
 }
 
@@ -29,7 +30,7 @@ const colorizeElementsWithErrors = (elements: Array<Element>) => {
     while (!_isElementVCard(el) && el.parentElement) {
       el = el.parentElement;
     }
-    el.classList.add("v-card-error");
+    el.classList.add('v-card-error');
   });
 
   return elements;
@@ -41,9 +42,9 @@ const expandAllParentElements = (elements: Array<Element>) => {
     _getAllElementParents(el)
       .filter((el) => _isElementVCard(el))
       .forEach((el) => {
-        //@ts-ignore
+        // @ts-ignore
         el.__vue__.show = true;
-        //@ts-ignore
+        // @ts-ignore
         el.__vue__.$parent.show = true;
       });
   });
@@ -51,51 +52,51 @@ const expandAllParentElements = (elements: Array<Element>) => {
 
 // Get all error DOM elements
 function getAllDOMelementsWithErrors(): Array<Element> {
-  return Array.from(document.getElementsByClassName("v-messages error--text"));
+  return Array.from(document.getElementsByClassName('v-messages error--text'));
 }
 
 function resetVCardErrorClass() {
-  Array.from(document.getElementsByClassName("v-card")).forEach((el) =>
-    el.classList.remove("v-card-error")
-  );
+  Array.from(document.getElementsByClassName('v-card')).forEach((el) => el.classList.remove('v-card-error'));
 }
 
 function sanitizeXml(xmlString: string) {
   function _getAllEmptyTagsInXmlString(xmlString: string) {
+    // eslint-disable-next-line prefer-regex-literals
     const emptyTags = new RegExp(/<[^/>][^>]*><\/[^>]+>/g);
     return xmlString.match(emptyTags) || [];
   }
 
   function _getSpecificTagsToBeIgnored() {
     return [
-      "</x-data>",
-      "</mixin>",
-      "</occurrences>",
-      "</form>",
-      "</options>",
-      "</items>",
+      '</x-data>',
+      '</mixin>',
+      '</occurrences>',
+      '</form>',
+      '</options>',
+      '</items>',
     ];
   }
 
   function _getSpecificTagsToBeRemoved() {
     return [
-      "<allow-child-content>true</allow-child-content>",
-      "<is-abstract>false</is-abstract>",
-      "<is-final>false</is-final>",
-      "<show-counter>false</show-counter>",
+      '<allow-child-content>true</allow-child-content>',
+      '<is-abstract>false</is-abstract>',
+      '<is-final>false</is-final>',
+      '<show-counter>false</show-counter>',
     ];
   }
 
   function _adjustFormInXmlString(xmlString: string) {
+    // eslint-disable-next-line prefer-regex-literals
     const formRegex = new RegExp(/<form>(.*?)<\/form>/g);
     const formString = xmlString.match(formRegex);
-    xmlString = xmlString.replace(formRegex, "");
-    return xmlString.replace("</content-type>", formString + "</content-type>");
+    xmlString = xmlString.replace(formRegex, '');
+    return xmlString.replace('</content-type>', `${formString}</content-type>`);
   }
 
   function _finalAdjustments(xmlString: string) {
-    xmlString = xmlString.replace(/<config><\/config>/g, "");
-    return xmlString.replace(/><\/occurrences>/g, "/>");
+    xmlString = xmlString.replace(/<config><\/config>/g, '');
+    return xmlString.replace(/><\/occurrences>/g, '/>');
   }
 
   ///
@@ -109,10 +110,9 @@ function sanitizeXml(xmlString: string) {
 
   // Ignore specific tag.
   tagsToBeRemoved = tagsToBeRemoved.filter(
-    (tagToBeRemoved) =>
-      !specificTags.ignored.some(
-        (ignoredTag) => tagToBeRemoved.indexOf(ignoredTag) >= 0
-      )
+    (tagToBeRemoved) => !specificTags.ignored.some(
+      (ignoredTag) => tagToBeRemoved.indexOf(ignoredTag) >= 0,
+    ),
   );
 
   // Concat with other specific tags.
@@ -120,7 +120,7 @@ function sanitizeXml(xmlString: string) {
 
   // Remove each one of those tags.
   tagsToBeRemoved.forEach((s) => {
-    xmlString = xmlString.replace(s, "");
+    xmlString = xmlString.replace(s, '');
   });
 
   // Place <form>...</form> as the last thing before ending the cty.

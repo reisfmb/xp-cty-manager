@@ -1,4 +1,4 @@
-import * as xml2jsonConverter from "@reginaldlee/xml-js";
+import * as xml2jsonConverter from '@reginaldlee/xml-js';
 
 export interface IContentType extends xml2jsonConverter.ElementCompact {}
 

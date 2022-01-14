@@ -10,14 +10,14 @@ div
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as R from "ramda";
-import { Element, ElementCompact } from "@reginaldlee/xml-js";
-import RawSchemas from "../../util/rawSchemas";
-import * as ModuleContentType from "../../store/ModuleContentType";
+import Vue from 'vue';
+import * as R from 'ramda';
+import { Element, ElementCompact } from '@reginaldlee/xml-js';
+import RawSchemas from '../../util/rawSchemas';
+import * as ModuleContentType from '../../store/ModuleContentType';
 
 export default Vue.extend({
-  name: "NewElementButton",
+  name: 'NewElementButton',
   props: {
     path: Array,
     show: Array,
@@ -25,12 +25,12 @@ export default Vue.extend({
   },
   data: () => ({
     options: {} as { [key: string]: Element | ElementCompact },
-    states: { option: "" },
-    autocomplete: { label: "Select element", icon: "mdi-xml" },
-    button: { label: "Add" },
+    states: { option: '' },
+    autocomplete: { label: 'Select element', icon: 'mdi-xml' },
+    button: { label: 'Add' },
   }),
   mounted() {
-    this.options = R.omit(["content-type"], RawSchemas);
+    this.options = R.omit(['content-type'], RawSchemas);
   },
   methods: {
     execute() {
@@ -42,29 +42,29 @@ export default Vue.extend({
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.elementsPath,
         value: updatedElements,
-        action: "ADDING-NEW-SCHEMA",
+        action: 'ADDING-NEW-SCHEMA',
       });
 
-      this.states.option = "";
+      this.states.option = '';
     },
 
     getElement(): Element | null {
       return (
         R.view(
-          R.lensPath(["elements", 0]),
-          this.filteredOptions[this.states.option]
+          R.lensPath(['elements', 0]),
+          this.filteredOptions[this.states.option],
         ) || null
       );
     },
   },
   computed: {
     elementsPath(): string[] {
-      return [...(this.path as string[]), "elements"];
+      return [...(this.path as string[]), 'elements'];
     },
     elements(): Array<Element> {
       return (
         ModuleContentType.getContentTypeByPath(this.$store)(
-          this.elementsPath
+          this.elementsPath,
         ) || []
       );
     },
@@ -74,9 +74,7 @@ export default Vue.extend({
       return R.pick(show, R.omit(hide, RawSchemas));
     },
     filteredOptionsKeys(): string[] {
-      return Object.keys(this.filteredOptions).sort((a, b) =>
-        a.localeCompare(b)
-      );
+      return Object.keys(this.filteredOptions).sort((a, b) => a.localeCompare(b));
     },
   },
 });

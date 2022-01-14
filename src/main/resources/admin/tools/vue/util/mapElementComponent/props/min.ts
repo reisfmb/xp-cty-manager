@@ -1,11 +1,11 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "TextInput",
+  component: 'TextInput',
   field: {
-    label: "Minimum",
-    hint: "Optionally specifies the minimum allowed value.",
+    label: 'Minimum',
+    hint: 'Optionally specifies the minimum allowed value.',
   },
-  rules: ["numbersOnly"],
+  rules: ['numbersOnly'],
   i18n: false,
 } as IComponentProps;

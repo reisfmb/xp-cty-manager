@@ -1,8 +1,8 @@
-import map from "./mapElementComponent";
+import map from './mapElementComponent';
 
 export const innerPath = (path: (string | number)[], index: number) => [
   ...path,
-  "elements",
+  'elements',
   index,
 ];
 export const getComponentProps = (elementName: string) => map[elementName];

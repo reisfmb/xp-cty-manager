@@ -23,13 +23,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as R from "ramda";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import { Element } from "@reginaldlee/xml-js";
+import Vue from 'vue';
+import * as R from 'ramda';
+import { Element } from '@reginaldlee/xml-js';
+import * as ModuleContentType from '../../store/ModuleContentType';
 
 export default Vue.extend({
-  name: "TextMultipleInput",
+  name: 'TextMultipleInput',
   props: {
     path: Array,
     pathToText: Array,
@@ -40,7 +40,7 @@ export default Vue.extend({
   data: () => ({
     states: { array: [] as Array<Element> },
     buttons: {
-      remove: { icon: "mdi-delete-circle-outline" },
+      remove: { icon: 'mdi-delete-circle-outline' },
     },
   }),
   mounted() {
@@ -62,31 +62,31 @@ export default Vue.extend({
     },
     add() {
       let objToBeAdded = {
-        type: "element",
+        type: 'element',
         name: this.elementName,
       } as Element;
 
       if (this.pathToText) {
         objToBeAdded = R.set(
           R.lensPath(this.pathToText as string[]),
-          "",
-          objToBeAdded
+          '',
+          objToBeAdded,
         );
       }
 
       if (objToBeAdded.elements) {
         objToBeAdded = R.set(
-          R.lensPath(["elements", 0, "type"]),
-          "text",
-          objToBeAdded
+          R.lensPath(['elements', 0, 'type']),
+          'text',
+          objToBeAdded,
         );
       }
 
       if (this.pathToAttributes) {
         objToBeAdded = R.set(
           R.lensPath(this.pathToAttributes as string[]),
-          "",
-          objToBeAdded
+          '',
+          objToBeAdded,
         );
       }
 
@@ -100,21 +100,21 @@ export default Vue.extend({
       this.save();
     },
 
-    setLens(type: "text" | "attributes") {
+    setLens(type: 'text' | 'attributes') {
       let lens = R.lensPath(this.pathToText as string[]);
 
-      if (type === "attributes") {
+      if (type === 'attributes') {
         lens = R.lensPath(this.pathToAttributes as string[]);
       }
 
       return lens;
     },
-    getVModel(index: number, type: "text" | "attributes"): string {
+    getVModel(index: number, type: 'text' | 'attributes'): string {
       const lens = this.setLens(type);
 
       return R.view(lens, this.states.array[index]) as string;
     },
-    setVModel(value: string, index: number, type: "text" | "attributes"): void {
+    setVModel(value: string, index: number, type: 'text' | 'attributes'): void {
       const lens = this.setLens(type);
 
       this.states.array[index] = R.set(lens, value, this.states.array[index]);
@@ -125,16 +125,16 @@ export default Vue.extend({
     getFieldLabel(): string {
       const capitalize = R.replace(/^./, R.toUpper);
       return this.elementName
-        .split("-")
+        .split('-')
         .map((s) => capitalize(s))
-        .join(" ");
+        .join(' ');
     },
   },
   computed: {
     elements(): Array<Element> {
       return (
         ModuleContentType.getContentTypeByPath(this.$store)(
-          this.path as string[]
+          this.path as string[],
         ) || []
       );
     },

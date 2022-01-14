@@ -15,23 +15,23 @@ div
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import rules from "../../util/rules";
+import Vue from 'vue';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import rules from '../../util/rules';
 
 export default Vue.extend({
-  name: "I18nDialog",
+  name: 'I18nDialog',
   props: {
     showDialog: Boolean,
     path: Array,
   },
   data: () => ({
-    dialog: { show: false, title: "I18n Key" },
-    button: { label: "Apply" },
-    states: { text: "" },
-    rules: rules,
+    dialog: { show: false, title: 'I18n Key' },
+    button: { label: 'Apply' },
+    states: { text: '' },
+    rules,
     field: {
-      label: "Key value",
+      label: 'Key value',
       hint: `This i18n attribute will contain a key string that refers to the
       translated texts in the i18n/phrases.properties bundle files.`,
     },
@@ -63,11 +63,11 @@ export default Vue.extend({
   },
   computed: {
     pathToValue(): string[] {
-      return [...(this.path as string[]), "attributes", "i18n"];
+      return [...(this.path as string[]), 'attributes', 'i18n'];
     },
     value(): string {
       return ModuleContentType.getContentTypeByPath(this.$store)(
-        this.pathToValue
+        this.pathToValue,
       );
     },
   },

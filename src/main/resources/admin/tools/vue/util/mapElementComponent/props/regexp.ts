@@ -1,11 +1,11 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "TextInput",
+  component: 'TextInput',
   field: {
-    label: "Regular Expression",
-    hint: "Supports validation by defining regular expressions.",
+    label: 'Regular Expression',
+    hint: 'Supports validation by defining regular expressions.',
   },
-  rules: ["validRegex"],
+  rules: ['validRegex'],
   i18n: false,
 } as IComponentProps;

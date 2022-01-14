@@ -26,24 +26,23 @@ transition(name="fade")
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import { Element } from "@reginaldlee/xml-js";
-import TextMultipleInput from "../inputs/TextMultipleInput.vue";
-import CardForm from "./CardForm.vue";
+import Vue from 'vue';
+import { Element } from '@reginaldlee/xml-js';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import TextMultipleInput from '../inputs/TextMultipleInput.vue';
+import CardForm from './CardForm.vue';
 
 export default Vue.extend({
-  name: "CardContentType",
+  name: 'CardContentType',
   components: { TextMultipleInput, CardForm },
   props: { path: Array },
   data: () => ({
     showOnMounted: false,
     show: false,
-    fileName: "",
+    fileName: '',
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).RecursiveComponentRender =
-      require("../RecursiveComponentRender.vue").default;
+    ((this.$options || {}).components || {}).RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
   },
   mounted() {
     this.showOnMounted = true;
@@ -51,15 +50,15 @@ export default Vue.extend({
   },
   computed: {
     elementsPath(): string[] {
-      return [...(this.path as string[]), "elements"];
+      return [...(this.path as string[]), 'elements'];
     },
     formPath(): (string | number)[] {
       const elements = ModuleContentType.getContentTypeByPath(this.$store)(
-        this.elementsPath
+        this.elementsPath,
       ) as Array<Element>;
 
       const formIndexInElements = elements.findIndex(
-        (el: Element) => el.name === "form"
+        (el: Element) => el.name === 'form',
       );
 
       return formIndexInElements >= 0

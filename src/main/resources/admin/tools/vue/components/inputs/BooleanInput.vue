@@ -8,11 +8,11 @@ v-checkbox(
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
+import Vue from 'vue';
+import * as ModuleContentType from '../../store/ModuleContentType';
 
 export default Vue.extend({
-  name: "BooleanInput",
+  name: 'BooleanInput',
   props: {
     path: Array,
     rules: Array, // name of the used rules
@@ -35,22 +35,22 @@ export default Vue.extend({
     save() {
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.pathToElement,
-        value: { text: this.states.bool.toString(), type: "text" },
+        value: { text: this.states.bool.toString(), type: 'text' },
       });
     },
   },
   computed: {
     pathToElement(): (string | number)[] {
-      return [...(this.path as string[]), "elements", 0];
+      return [...(this.path as string[]), 'elements', 0];
     },
     pathToValue(): (string | number)[] {
-      return [...(this.pathToElement as string[]), "text"];
+      return [...(this.pathToElement as string[]), 'text'];
     },
     value(): boolean {
       return (
         ModuleContentType.getContentTypeByPath(this.$store)(
-          this.pathToValue
-        ) === "true"
+          this.pathToValue,
+        ) === 'true'
       );
     },
   },

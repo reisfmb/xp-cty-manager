@@ -49,22 +49,22 @@ div(v-if="elements")
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Element } from "@reginaldlee/xml-js";
-import * as ModuleContentType from "../store/ModuleContentType";
-import * as R from "ramda";
-import rawSchemas from "../util/rawSchemas";
+import Vue from 'vue';
+import { Element } from '@reginaldlee/xml-js';
+import * as R from 'ramda';
+import * as ModuleContentType from '../store/ModuleContentType';
+import rawSchemas from '../util/rawSchemas';
 
-import TextInput from "./inputs/TextInput.vue";
-import OptionsInput from "./inputs/OptionsInput.vue";
-import TextAttributeInput from "./inputs/TextAttributeInput.vue";
-import BooleanInput from "./inputs/BooleanInput.vue";
-import CardInput from "./cards/CardInput.vue";
-import CardMixin from "./cards/CardMixin.vue";
-import TextMultipleInput from "./inputs/TextMultipleInput.vue";
+import TextInput from './inputs/TextInput.vue';
+import OptionsInput from './inputs/OptionsInput.vue';
+import TextAttributeInput from './inputs/TextAttributeInput.vue';
+import BooleanInput from './inputs/BooleanInput.vue';
+import CardInput from './cards/CardInput.vue';
+import CardMixin from './cards/CardMixin.vue';
+import TextMultipleInput from './inputs/TextMultipleInput.vue';
 
 export default Vue.extend({
-  name: "RecursiveComponentRender",
+  name: 'RecursiveComponentRender',
   components: {
     TextInput,
     OptionsInput,
@@ -79,14 +79,11 @@ export default Vue.extend({
     rawElements: [] as Array<Element>,
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).CardContentType =
-      require("./cards/CardContentType.vue").default;
+    ((this.$options || {}).components || {}).CardContentType = require('./cards/CardContentType.vue').default;
 
-    ((this.$options || {}).components || {}).FieldOrItemSet =
-      require("./sets/FieldOrItemSet.vue").default;
+    ((this.$options || {}).components || {}).FieldOrItemSet = require('./sets/FieldOrItemSet.vue').default;
 
-    ((this.$options || {}).components || {}).OptionSet =
-      require("./sets/OptionSet.vue").default;
+    ((this.$options || {}).components || {}).OptionSet = require('./sets/OptionSet.vue').default;
   },
   created() {
     this.populateRawElements();
@@ -104,7 +101,7 @@ export default Vue.extend({
       return props.component;
     },
     getComponentProps(elementName: string, index: number) {
-      let props = this.$gf.getComponentProps(elementName);
+      const props = this.$gf.getComponentProps(elementName);
       if (!props) {
         return null;
       }
@@ -118,18 +115,18 @@ export default Vue.extend({
       }
 
       const indexOfConfigInElements = this.elements.findIndex(
-        (el: Element) => el.name === "config"
+        (el: Element) => el.name === 'config',
       );
 
       return indexOfConfigInElements >= 0
-        ? [...this.elementsPath, indexOfConfigInElements, "elements"]
+        ? [...this.elementsPath, indexOfConfigInElements, 'elements']
         : null;
     },
     populateRawElements(): void {
       if (!this.inputType) return;
 
-      const raw = ((rawSchemas as { [key: string]: Element })[this.inputType] ||
-        {}) as Element;
+      const raw = ((rawSchemas as { [key: string]: Element })[this.inputType]
+        || {}) as Element;
 
       this.rawElements = Object.keys(raw)
         ? ((raw.elements || [{ elements: [] }])[0] || {}).elements || []
@@ -138,12 +135,12 @@ export default Vue.extend({
 
     ///
 
-    //TODO: Simplify this
+    // TODO: Simplify this
     adjustFieldsOfCty(): void {
       if (this.inputType && this.elements !== null) {
         this.rawElements.forEach((rawEl: Element, rawIndex: number) => {
           const elIndex = this.elements.findIndex(
-            (el: Element) => el.name === rawEl.name
+            (el: Element) => el.name === rawEl.name,
           );
 
           if (elIndex >= 0) {
@@ -155,9 +152,9 @@ export default Vue.extend({
 
                 if (rawInnerIndex >= 0) {
                   this.rawElements = R.set(
-                    R.lensPath([rawIndex, "elements", rawInnerIndex]),
+                    R.lensPath([rawIndex, 'elements', rawInnerIndex]),
                     el,
-                    this.rawElements
+                    this.rawElements,
                   );
                 } else {
                   const updatedElements = [
@@ -166,9 +163,9 @@ export default Vue.extend({
                   ];
 
                   this.rawElements = R.set(
-                    R.lensPath([rawIndex, "elements"]),
+                    R.lensPath([rawIndex, 'elements']),
                     updatedElements,
-                    this.rawElements
+                    this.rawElements,
                   );
                 }
               });
@@ -176,7 +173,7 @@ export default Vue.extend({
               this.rawElements = R.set(
                 R.lensIndex(rawIndex),
                 this.elements[elIndex],
-                this.rawElements
+                this.rawElements,
               );
             }
           }
@@ -190,32 +187,32 @@ export default Vue.extend({
   },
   computed: {
     inputType(): string | null {
-      const inputTypePath = [...this.path, "attributes", "type"] as string[];
+      const inputTypePath = [...this.path, 'attributes', 'type'] as string[];
       const inputType = ModuleContentType.getContentTypeByPath(this.$store)(
-        inputTypePath
+        inputTypePath,
       );
       if (inputType) {
         return inputType;
       }
 
-      const contentTypeNamePath = [...this.path, "name"] as string[];
+      const contentTypeNamePath = [...this.path, 'name'] as string[];
       const contentTypeName = ModuleContentType.getContentTypeByPath(
-        this.$store
+        this.$store,
       )(contentTypeNamePath);
-      if (contentTypeName && contentTypeName === "content-type") {
-        return "ContentType";
+      if (contentTypeName && contentTypeName === 'content-type') {
+        return 'ContentType';
       }
 
       return null;
     },
     elementsPath(): (string | number)[] {
-      return [...(this.path as string[]), "elements"];
+      return [...(this.path as string[]), 'elements'];
     },
     elements: {
       get(): Array<Element> {
         return (
           ModuleContentType.getContentTypeByPath(this.$store)(
-            this.elementsPath
+            this.elementsPath,
           ) || []
         );
       },

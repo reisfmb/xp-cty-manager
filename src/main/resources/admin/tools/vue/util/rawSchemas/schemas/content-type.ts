@@ -1,4 +1,4 @@
-import { xml2js } from "@reginaldlee/xml-js";
+import { xml2js } from '@reginaldlee/xml-js';
 
 export default xml2js(
   `
@@ -13,5 +13,5 @@ export default xml2js(
   <is-built-in></is-built-in>
   <allow-child-content></allow-child-content>
   <form></form>
-</content-type>`.trim()
+</content-type>`.trim(),
 );

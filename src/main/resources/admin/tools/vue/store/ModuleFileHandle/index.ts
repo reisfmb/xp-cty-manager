@@ -1,8 +1,6 @@
-import { getStoreAccessors } from "vuex-typescript";
-import { ModuleContentType } from "../ModuleContentType";
-// import { ActionContext } from 'vuex';
-import { IRootState } from "../rootState";
-import { IState } from "./types";
+import { getStoreAccessors } from 'vuex-typescript';
+import { IRootState } from '../rootState';
+import { IState } from './types';
 
 // type ModuleFileHandleContext = ActionContext<IState, IRootState>;
 
@@ -37,7 +35,7 @@ export const ModuleFileHandle = {
 };
 
 const { read, commit } = getStoreAccessors<IState, IRootState>(
-  "ModuleFileHandle"
+  'ModuleFileHandle',
 );
 
 // Getters ( read )
@@ -46,7 +44,7 @@ export const getFileHandle = read(ModuleFileHandle.getters.getFileHandle);
 // Mutations ( commit )
 export const setFileHandle = commit(ModuleFileHandle.mutations.setFileHandle);
 export const resetFileHandle = commit(
-  ModuleFileHandle.mutations.resetFileHandle
+  ModuleFileHandle.mutations.resetFileHandle,
 );
 
 // Actions ( dispatch )

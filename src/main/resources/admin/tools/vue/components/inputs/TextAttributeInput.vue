@@ -12,13 +12,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as R from "ramda";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import rules from "../../util/rules";
+import Vue from 'vue';
+import * as R from 'ramda';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import rules from '../../util/rules';
 
 export default Vue.extend({
-  name: "TextAttributeInput",
+  name: 'TextAttributeInput',
   props: {
     path: Array,
     field: Object, // label
@@ -39,7 +39,7 @@ export default Vue.extend({
   methods: {
     save() {
       const ctyAttributes = ModuleContentType.getContentTypeByPath(this.$store)(
-        this.pathToAttributes
+        this.pathToAttributes,
       );
 
       const updatedAttributes = {
@@ -53,10 +53,10 @@ export default Vue.extend({
       });
     },
     getLabel(attribute: string) {
-      const first = this.capitalize((this.field || {}).label || "");
+      const first = this.capitalize((this.field || {}).label || '');
       const last = this.capitalize(attribute);
 
-      return first ? first + " " + last : last;
+      return first ? `${first} ${last}` : last;
     },
     capitalize(s: string): string {
       return s.charAt(0).toUpperCase() + s.slice(1);
@@ -64,20 +64,18 @@ export default Vue.extend({
   },
   computed: {
     pathToAttributes(): string[] {
-      return [...(this.path as string[]), "attributes"];
+      return [...(this.path as string[]), 'attributes'];
     },
     attributesInContentType(): { [key: string]: string } {
       return ModuleContentType.getContentTypeByPath(this.$store)(
-        this.pathToAttributes
+        this.pathToAttributes,
       );
     },
     usedRules(): Function[] {
       return R.props(this.rules as string[], rules);
     },
     usesRequiredRule(): boolean {
-      return (this.rules as string[]).some((ruleName: string) =>
-        ruleName.includes("required")
-      );
+      return (this.rules as string[]).some((ruleName: string) => ruleName.includes('required'));
     },
   },
 });

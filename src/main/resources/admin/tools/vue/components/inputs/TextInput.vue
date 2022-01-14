@@ -15,14 +15,14 @@ div
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import I18nDialog from "../dialogs/I18nDialog.vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import rules from "../../util/rules";
-import * as R from "ramda";
+import Vue from 'vue';
+import * as R from 'ramda';
+import I18nDialog from '../dialogs/I18nDialog.vue';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import rules from '../../util/rules';
 
 export default Vue.extend({
-  name: "TextInput",
+  name: 'TextInput',
   components: { I18nDialog },
   props: {
     fallbackValue: String,
@@ -32,11 +32,11 @@ export default Vue.extend({
     field: Object, // label, hint
   },
   data: () => ({
-    states: { text: "" },
+    states: { text: '' },
     showI18nDialog: false,
   }),
   mounted() {
-    this.states.text = this.value || this.fallbackValue || "";
+    this.states.text = this.value || this.fallbackValue || '';
     this.save();
   },
   watch: {
@@ -48,33 +48,31 @@ export default Vue.extend({
     save() {
       ModuleContentType.setContentTypeByPath(this.$store, {
         path: this.pathToElement,
-        value: { text: this.states.text, type: "text" },
+        value: { text: this.states.text, type: 'text' },
       });
     },
     dialog() {
       this.showI18nDialog = false;
-      setTimeout(() => (this.showI18nDialog = true), 100);
+      setTimeout(() => { this.showI18nDialog = true; }, 100);
     },
   },
   computed: {
     pathToElement(): (string | number)[] {
-      return [...(this.path as string[]), "elements", 0];
+      return [...(this.path as string[]), 'elements', 0];
     },
     pathToValue(): (string | number)[] {
-      return [...(this.pathToElement as string[]), "text"];
+      return [...(this.pathToElement as string[]), 'text'];
     },
     value(): string {
       return ModuleContentType.getContentTypeByPath(this.$store)(
-        this.pathToValue
+        this.pathToValue,
       );
     },
     usedRules(): Function[] {
       return R.props(this.rules as string[], rules);
     },
     usesRequiredRule(): boolean {
-      return (this.rules as string[]).some((ruleName: string) =>
-        ruleName.includes("required")
-      );
+      return (this.rules as string[]).some((ruleName: string) => ruleName.includes('required'));
     },
   },
 });

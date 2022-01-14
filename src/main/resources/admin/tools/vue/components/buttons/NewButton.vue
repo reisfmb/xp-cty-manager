@@ -3,17 +3,17 @@ v-btn(@click="execute") {{ labels.button }}
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as R from "ramda";
-import * as ModuleFileHandle from "../../store/ModuleFileHandle";
-import * as ModuleContentType from "../../store/ModuleContentType";
+import Vue from 'vue';
+import * as R from 'ramda';
+import * as ModuleFileHandle from '../../store/ModuleFileHandle';
+import * as ModuleContentType from '../../store/ModuleContentType';
 
 export default Vue.extend({
-  name: "NewButton",
-  props: ["suggestSaveFunction"],
+  name: 'NewButton',
+  props: ['suggestSaveFunction'],
   data: () => ({
     labels: {
-      button: "New",
+      button: 'New',
     },
   }),
   methods: {

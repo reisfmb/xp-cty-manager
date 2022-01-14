@@ -1,17 +1,17 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "OptionsInput",
+  component: 'OptionsInput',
   field: {
-    label: "Alignment",
-    hint: "Defines placement of checkbox relative to label text. Supported values are: left, right, top, bottom. Default is left.",
+    label: 'Alignment',
+    hint: 'Defines placement of checkbox relative to label text. Supported values are: left, right, top, bottom. Default is left.',
   },
   options: {
     items: [
-      { text: "Left", value: "left" },
-      { text: "Right", value: "right" },
-      { text: "Top", value: "top" },
-      { text: "Bottom", value: "bottom" },
+      { text: 'Left', value: 'left' },
+      { text: 'Right', value: 'right' },
+      { text: 'Top', value: 'top' },
+      { text: 'Bottom', value: 'bottom' },
     ],
     config: {
       multiple: false,

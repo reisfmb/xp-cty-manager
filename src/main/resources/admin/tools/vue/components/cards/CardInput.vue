@@ -20,14 +20,14 @@ v-card
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ElementButtons from "../buttons/ElementButtons.vue";
-import TextAttributeInput from "../inputs/TextAttributeInput.vue";
-import TextInput from "../inputs/TextInput.vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
+import Vue from 'vue';
+import ElementButtons from '../buttons/ElementButtons.vue';
+import TextAttributeInput from '../inputs/TextAttributeInput.vue';
+import TextInput from '../inputs/TextInput.vue';
+import * as ModuleContentType from '../../store/ModuleContentType';
 
 export default Vue.extend({
-  name: "CardInput",
+  name: 'CardInput',
   components: { TextInput, TextAttributeInput, ElementButtons },
   props: {
     path: Array,
@@ -36,8 +36,7 @@ export default Vue.extend({
     show: false,
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).RecursiveComponentRender =
-      require("../RecursiveComponentRender.vue").default;
+    ((this.$options || {}).components || {}).RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
   },
   mounted() {
     if (!this.getInputLabel()) this.show = true;
@@ -46,23 +45,23 @@ export default Vue.extend({
     getInputLabel() {
       const path = [
         ...this.path,
-        "elements",
+        'elements',
         0,
-        "elements",
+        'elements',
         0,
-        "text",
+        'text',
       ] as string[];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || '';
     },
   },
   computed: {
     inputName(): string {
-      const path = [...this.path, "attributes", "name"] as string[];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+      const path = [...this.path, 'attributes', 'name'] as string[];
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || '';
     },
     inputType(): string {
-      const path = [...this.path, "attributes", "type"] as string[];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+      const path = [...this.path, 'attributes', 'type'] as string[];
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || '';
     },
     docsUrl(): string {
       return `https://developer.enonic.com/docs/xp/stable/cms/input-types#${this.inputType.toLowerCase()}`;

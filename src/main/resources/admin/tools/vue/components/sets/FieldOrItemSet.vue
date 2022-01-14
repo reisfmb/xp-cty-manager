@@ -22,15 +22,15 @@ v-card
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import * as ModuleContentType from "../../store/ModuleContentType";
-import ElementButtons from "../buttons/ElementButtons.vue";
-import TextAttributeInput from "../inputs/TextAttributeInput.vue";
-import CardItems from "../cards/CardItems.vue";
-import { Element } from "@reginaldlee/xml-js";
+import Vue from 'vue';
+import { Element } from '@reginaldlee/xml-js';
+import * as ModuleContentType from '../../store/ModuleContentType';
+import ElementButtons from '../buttons/ElementButtons.vue';
+import TextAttributeInput from '../inputs/TextAttributeInput.vue';
+import CardItems from '../cards/CardItems.vue';
 
 export default Vue.extend({
-  name: "FieldOrItemSet",
+  name: 'FieldOrItemSet',
   components: { CardItems, TextAttributeInput, ElementButtons },
   props: {
     path: Array,
@@ -40,8 +40,7 @@ export default Vue.extend({
     show: false,
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).RecursiveComponentRender =
-      require("../RecursiveComponentRender.vue").default;
+    ((this.$options || {}).components || {}).RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
   },
   mounted() {
     if (!this.setItemsHasElements()) this.show = true;
@@ -49,7 +48,7 @@ export default Vue.extend({
   methods: {
     setItemsHasElements() {
       const items = ModuleContentType.getContentTypeByPath(this.$store)(
-        this.itemsPath
+        this.itemsPath,
       ) as Element;
 
       return (items?.elements || []).length > 0;
@@ -57,29 +56,29 @@ export default Vue.extend({
   },
   computed: {
     elementsPath(): string[] {
-      return [...(this.path as string[]), "elements"];
+      return [...(this.path as string[]), 'elements'];
     },
     setName(): string {
-      const path = [...this.path, "attributes", "name"] as string[];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+      const path = [...this.path, 'attributes', 'name'] as string[];
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || '';
     },
     setType(): string {
-      const path = [...this.path, "name"] as string[];
-      return ModuleContentType.getContentTypeByPath(this.$store)(path) || "";
+      const path = [...this.path, 'name'] as string[];
+      return ModuleContentType.getContentTypeByPath(this.$store)(path) || '';
     },
     setTypeBeautified(): string {
       return this.setType
-        .split("-")
+        .split('-')
         .map((s) => s[0].toUpperCase() + s.slice(1))
-        .join("");
+        .join('');
     },
     itemsPath(): (string | number)[] {
       const elements = ModuleContentType.getContentTypeByPath(this.$store)(
-        this.elementsPath
+        this.elementsPath,
       ) as Array<Element>;
 
       const itemsIndexInElements = elements.findIndex(
-        (el: Element) => el.name === "items"
+        (el: Element) => el.name === 'items',
       );
 
       return itemsIndexInElements >= 0
@@ -87,7 +86,7 @@ export default Vue.extend({
         : [];
     },
     docsUrl(): string {
-      const setType = this.setType.replace("-", "_").toLowerCase();
+      const setType = this.setType.replace('-', '_').toLowerCase();
       return `https://developer.enonic.com/docs/xp/stable/cms/sets#${setType}`;
     },
   },

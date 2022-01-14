@@ -1,10 +1,10 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "TextInput",
+  component: 'TextInput',
   field: {
-    label: "Display Name Expression",
-    hint: "",
+    label: 'Display Name Expression',
+    hint: '',
   },
   rules: [],
   i18n: false,

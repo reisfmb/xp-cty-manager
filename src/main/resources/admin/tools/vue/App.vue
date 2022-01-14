@@ -10,12 +10,12 @@ v-app#app
 </template>
 
 <script>
-import * as ModuleContentType from "./store/ModuleContentType";
-import HeaderButtons from "./components/HeaderButtons.vue";
-import RecursiveComponentRender from "./components/RecursiveComponentRender.vue";
+import * as ModuleContentType from './store/ModuleContentType';
+import HeaderButtons from './components/HeaderButtons.vue';
+import RecursiveComponentRender from './components/RecursiveComponentRender.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     HeaderButtons,
     RecursiveComponentRender,
@@ -23,7 +23,7 @@ export default {
   data: () => ({
     fileName: null,
     welcomeText:
-      "Use NEW/LOAD buttons to create or open a content type schema.",
+      'Use NEW/LOAD buttons to create or open a content type schema.',
   }),
   computed: {
     show() {

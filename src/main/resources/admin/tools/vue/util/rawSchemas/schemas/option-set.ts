@@ -1,4 +1,4 @@
-import { xml2js } from "@reginaldlee/xml-js";
+import { xml2js } from '@reginaldlee/xml-js';
 
 export default xml2js(
   `
@@ -8,5 +8,5 @@ export default xml2js(
   <occurrences minimum="0" maximum="1"/>
   <expanded />
   <options minimum="0" maximum="1" />
-</option-set>`.trim()
+</option-set>`.trim(),
 );

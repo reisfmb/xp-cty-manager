@@ -8,12 +8,12 @@ div
 // TODO: this.path can be empty if <form> tag wasn't found in the cty xml.
 //       If that is the case, there's the need to add a "form" element to the first "elements",
 //       rendered by CardContentType component.
-import Vue from "vue";
-import RecursiveComponentRender from "../RecursiveComponentRender.vue";
-import NewElementButton from "../buttons/NewElementButton.vue";
+import Vue from 'vue';
+import RecursiveComponentRender from '../RecursiveComponentRender.vue';
+import NewElementButton from '../buttons/NewElementButton.vue';
 
 export default Vue.extend({
-  name: "CardForm",
+  name: 'CardForm',
   components: { RecursiveComponentRender, NewElementButton },
   props: {
     path: Array,

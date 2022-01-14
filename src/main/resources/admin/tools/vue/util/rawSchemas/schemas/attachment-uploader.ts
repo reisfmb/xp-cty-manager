@@ -1,4 +1,4 @@
-import { xml2js } from "@reginaldlee/xml-js";
+import { xml2js } from '@reginaldlee/xml-js';
 
 export default xml2js(
   `
@@ -6,5 +6,5 @@ export default xml2js(
   <label/>
   <help-text/>
   <occurrences minimum="0" maximum="1"/>
-</input>`.trim()
+</input>`.trim(),
 );

@@ -15,12 +15,12 @@ v-card
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import TextAttributeInput from "../inputs/TextAttributeInput.vue";
-import ElementButtons from "../buttons/ElementButtons.vue";
+import Vue from 'vue';
+import TextAttributeInput from '../inputs/TextAttributeInput.vue';
+import ElementButtons from '../buttons/ElementButtons.vue';
 
 export default Vue.extend({
-  name: "CardMixin",
+  name: 'CardMixin',
   components: { TextAttributeInput, ElementButtons },
   props: {
     path: Array,

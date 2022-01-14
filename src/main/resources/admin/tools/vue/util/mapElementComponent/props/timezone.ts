@@ -1,10 +1,10 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "BooleanInput",
+  component: 'BooleanInput',
   field: {
-    label: "Timezone",
-    hint: "Set to true if timezone information should be used. Default is false.",
+    label: 'Timezone',
+    hint: 'Set to true if timezone information should be used. Default is false.',
   },
   rules: [],
   i18n: false,

@@ -1,10 +1,10 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "BooleanInput",
+  component: 'BooleanInput',
   field: {
-    label: "Show Counter",
-    hint: "Specifies whether text length counter should be shown (default: hidden).",
+    label: 'Show Counter',
+    hint: 'Specifies whether text length counter should be shown (default: hidden).',
   },
   rules: [],
   i18n: false,

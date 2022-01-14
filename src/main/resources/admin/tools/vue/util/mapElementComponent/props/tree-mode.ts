@@ -1,10 +1,10 @@
-import { IComponentProps } from "../type";
+import { IComponentProps } from '../type';
 
 export default {
-  component: "BooleanInput",
+  component: 'BooleanInput',
   field: {
-    label: "Tree Mode",
-    hint: "Toggles between tree and flat modes. Default value is false (flat mode).",
+    label: 'Tree Mode',
+    hint: 'Toggles between tree and flat modes. Default value is false (flat mode).',
   },
   rules: [],
   i18n: false,
