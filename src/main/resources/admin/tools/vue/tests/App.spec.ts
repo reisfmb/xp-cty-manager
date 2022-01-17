@@ -28,6 +28,9 @@ const renderWithVuetify = (component) => {
 };
 
 test('Click on New button should set initial state of content type.', async () => {
+  window.showDirectoryPicker = jest.fn();
+  window.showOpenFilePicker = jest.fn();
+
   const appWrapper = renderWithVuetify(App);
 
   await fireEvent.click(appWrapper.getByTestId('v-btn__new'));
