@@ -5,6 +5,7 @@ import { render, fireEvent } from '@testing-library/vue';
 import { Element } from '@reginaldlee/xml-js';
 import store from '../store/index';
 import * as gf from '../util/globalFunctions';
+import ctyToBeLoaded from './cty';
 
 import App from '../App.vue';
 
@@ -131,6 +132,53 @@ test('Click on Remove should remove element in the form of the content type.', a
   }
 
   expect(getFormElements().length).toBe(0);
+});
+
+test('Click on Load button should set state of content type.', async () => {
+  renderWithVuetify(App);
+
+  // Here it's not testing the click since it'd be necessary to have
+  // mocks for file system api functions, but instead it's testing
+  // what the load button triggers, the setContentTypeFromXmlString from
+  // the Content Type Module.
+
+  const xmlAsString = ctyToBeLoaded;
+
+  store.dispatch('ModuleContentType/setContentTypeFromXmlString', xmlAsString);
+
+  // eslint-disable-next-line no-promise-executor-return
+  await new Promise((x) => setTimeout(x, 200));
+
+  const contentTypeDefinitionElements:Array<Element> = store.getters['ModuleContentType/getContentTypeByPath'](['elements', 0, 'elements']);
+
+  const needToHaveInDefinitions = [
+    'display-name',
+    'display-name-label',
+    'display-name-expression',
+    'description',
+    'super-type',
+    'is-abstract',
+    'is-final',
+    'is-built-in',
+    'allow-child-content',
+    'form',
+  ];
+
+  needToHaveInDefinitions.forEach((elName: string) => {
+    const el = contentTypeDefinitionElements.find((el:Element) => el.name === elName);
+    expect(el?.name).toBe(elName);
+  });
+
+  const needToHaveInForm = [
+    'TextLine',
+    'HtmlArea',
+    'ContentSelector',
+  ];
+
+  needToHaveInForm.forEach((elName: string) => {
+    const el = getFormElements().find((el:Element) => el?.attributes?.type === elName);
+    expect(el?.attributes?.type).toBe(elName);
+  });
 });
 
 function getFormElements() {
