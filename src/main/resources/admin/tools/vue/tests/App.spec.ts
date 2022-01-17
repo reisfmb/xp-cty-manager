@@ -83,6 +83,40 @@ test('Click on Duplicate should duplicate existing element to the form of the co
   expect(JSON.stringify(formElements[0].elements) === JSON.stringify(formElements[1].elements)).toBe(true);
 });
 
+test('Click on Move Up should properly move up the element in the content type.', async () => {
+  const appWrapper = renderWithVuetify(App);
+
+  let formElements = getFormElements();
+
+  const moveUpButtons = appWrapper.getAllByTestId('v-btn__moveUp');
+
+  expect(formElements[0].attributes?.name).toBe('myattachmentuploader');
+  expect(formElements[1].attributes?.name).toBe('myattachmentuploader-2');
+
+  await fireEvent.click(moveUpButtons[moveUpButtons.length - 1]);
+  formElements = getFormElements();
+
+  expect(formElements[0].attributes?.name).toBe('myattachmentuploader-2');
+  expect(formElements[1].attributes?.name).toBe('myattachmentuploader');
+});
+
+test('Click on Move Down should properly move down the element in the content type.', async () => {
+  const appWrapper = renderWithVuetify(App);
+
+  let formElements = getFormElements();
+
+  const moveDownButtons = appWrapper.getAllByTestId('v-btn__moveDown');
+
+  expect(formElements[0].attributes?.name).toBe('myattachmentuploader-2');
+  expect(formElements[1].attributes?.name).toBe('myattachmentuploader');
+
+  await fireEvent.click(moveDownButtons[0]);
+  formElements = getFormElements();
+
+  expect(formElements[0].attributes?.name).toBe('myattachmentuploader');
+  expect(formElements[1].attributes?.name).toBe('myattachmentuploader-2');
+});
+
 test('Click on Remove should remove element in the form of the content type.', async () => {
   window.scrollTo = jest.fn();
 

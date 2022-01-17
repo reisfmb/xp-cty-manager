@@ -8,6 +8,7 @@ div
     v-icon {{ buttons.duplicate.icon }}
 
   v-btn(
+    data-testid="v-btn__moveUp"
     @click.stop="move('up')",
     icon,
     :disabled="getElementIndex() === 0"
@@ -15,6 +16,7 @@ div
     v-icon {{ buttons.moveUp.icon }}
 
   v-btn(
+    data-testid="v-btn__moveDown"
     @click.stop="move('down')",
     icon,
     :disabled="getElementIndex() === elements.length - 1"
