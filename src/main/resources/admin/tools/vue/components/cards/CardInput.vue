@@ -16,7 +16,7 @@ v-card
         :attributes="['name']",
         :rules="['requiredText', 'noSpaces']"
       )
-      RecursiveComponentRender(:path="path")
+      RecursiveComponentRender(:path="path", :show="show")
 </template>
 
 <script lang="ts">

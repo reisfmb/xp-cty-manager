@@ -9,7 +9,7 @@ transition(name="fade")
           v-icon {{ show ? 'mdi-menu-down' : 'mdi-menu-up' }}
         transition(name="fade")
           v-card-text(v-show="show")
-            RecursiveComponentRender(:path="path")
+            RecursiveComponentRender(:path="path", :show="show")
             TextMultipleInput(
               :path="elementsPath",
               :pathToText="['elements', 0, 'text']",

@@ -74,9 +74,11 @@ export default Vue.extend({
     CardMixin,
     TextMultipleInput,
   },
-  props: { path: Array },
+  props: { path: Array, show: Boolean },
   data: () => ({
     rawElements: [] as Array<Element>,
+
+    wereFieldsAdjusted: false,
   }),
   beforeCreate() {
     ((this.$options || {}).components || {}).CardContentType = require('./cards/CardContentType.vue').default;
@@ -88,8 +90,12 @@ export default Vue.extend({
   created() {
     this.populateRawElements();
   },
-  mounted() {
-    this.adjustFieldsOfCty();
+  watch: {
+    show() {
+      if (this.show === true && this.wereFieldsAdjusted === false) {
+        this.adjustFieldsOfCty();
+      }
+    },
   },
   methods: {
     getComponentName(elementName: string) {
@@ -135,7 +141,6 @@ export default Vue.extend({
 
     ///
 
-    // TODO: Simplify this
     adjustFieldsOfCty(): void {
       if (this.inputType && this.elements !== null) {
         this.rawElements.forEach((rawEl: Element, rawIndex: number) => {
@@ -179,9 +184,8 @@ export default Vue.extend({
           }
         });
 
-        setTimeout(() => {
-          this.elements = [...this.rawElements];
-        }, 100);
+        this.elements = [...this.rawElements];
+        this.wereFieldsAdjusted = true;
       }
     },
   },
