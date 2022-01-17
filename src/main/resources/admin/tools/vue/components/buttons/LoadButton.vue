@@ -20,6 +20,11 @@ export default Vue.extend({
   }),
   methods: {
     execute() {
+      if (!this.checkBroswerCompatibility()) {
+        this.showBrowserIncompatibilityDialog();
+        return;
+      }
+
       R.pipeWith(R.andThen, [
         this.suggestSaveFunction,
         this.showSelectXmlDialog,
@@ -33,6 +38,11 @@ export default Vue.extend({
         .catch((error: Error) => {
           error.message && Swal.fire({ icon: 'error', text: error.message });
         });
+    },
+
+    checkBroswerCompatibility() {
+      const keys = Object.keys(window);
+      return keys.includes('showDirectoryPicker') && keys.includes('showOpenFilePicker');
     },
 
     async showSelectXmlDialog() {
@@ -87,6 +97,13 @@ export default Vue.extend({
       }
 
       setTimeout(this.closeLoadingDialog, 500);
+    },
+
+    showBrowserIncompatibilityDialog() {
+      Swal.fire({
+        text: messages.error.incompatibleBrowser,
+        icon: 'warning',
+      });
     },
   },
 });

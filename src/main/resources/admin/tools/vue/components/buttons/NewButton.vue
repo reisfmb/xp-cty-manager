@@ -4,9 +4,11 @@ v-btn(data-testid="v-btn__new", @click="execute") {{ labels.button }}
 
 <script lang="ts">
 import Vue from 'vue';
+import Swal from 'sweetalert2';
 import * as R from 'ramda';
 import * as ModuleFileHandle from '../../store/ModuleFileHandle';
 import * as ModuleContentType from '../../store/ModuleContentType';
+import * as messages from '../../util/messages';
 
 export default Vue.extend({
   name: 'NewButton',
@@ -18,9 +20,19 @@ export default Vue.extend({
   }),
   methods: {
     execute() {
+      if (!this.checkBroswerCompatibility()) {
+        this.showBrowserIncompatibilityDialog();
+        return;
+      }
+
       this.suggestSaveFunction().then(() => {
         R.pipe(this.resetFileHandle, this.resetContentType)();
       });
+    },
+
+    checkBroswerCompatibility() {
+      const keys = Object.keys(window);
+      return keys.includes('showDirectoryPicker') && keys.includes('showOpenFilePicker');
     },
 
     resetFileHandle() {
@@ -29,6 +41,13 @@ export default Vue.extend({
 
     resetContentType() {
       ModuleContentType.resetContentType(this.$store);
+    },
+
+    showBrowserIncompatibilityDialog() {
+      Swal.fire({
+        text: messages.error.incompatibleBrowser,
+        icon: 'warning',
+      });
     },
   },
 });

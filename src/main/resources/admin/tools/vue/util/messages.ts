@@ -13,6 +13,7 @@ export const error = {
   fileNotXml: 'This is not a XML file.',
   saveXml: 'Failed to save the content type schema.',
   folderNotCty: (selectedFolderName: string) => `Please select the content-types folder, you've selected a folder named ${selectedFolderName}.`,
+  incompatibleBrowser: 'This application is using features that are currently not supported by your browser. Please use Google Chrome.',
   rules: {
     required: 'This field is required.',
     validRegex: 'This regular expression is not valid.',
