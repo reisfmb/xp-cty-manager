@@ -6,6 +6,7 @@ export default xml2js(
   <label/>
   <help-text/>
   <occurrences minimum="0" maximum="1"/>
+  <default/>
   <items/>
 </option>`.trim(),
 );
