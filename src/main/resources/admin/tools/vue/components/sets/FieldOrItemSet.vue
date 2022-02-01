@@ -18,7 +18,7 @@ v-card
         :rules="['requiredText', 'noSpaces']"
       )
       RecursiveComponentRender(:path="path", :show="show")
-      CardItems(:path="itemsPath")
+      CardItems(v-if="itemsPath.length > 0" :path="itemsPath")
 </template>
 
 <script lang="ts">
