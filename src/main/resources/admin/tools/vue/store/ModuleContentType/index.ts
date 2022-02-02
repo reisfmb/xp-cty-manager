@@ -50,7 +50,7 @@ const getters = {
   isContentTypeEmpty(state: IState): boolean {
     return state.contentType === null;
   },
-  isContentTypeSameAsContentTypeAfterLastSave(state: IState): boolean {
+  isCtySameAfterLastSave(state: IState): boolean {
     return R.equals(state.contentType, state.contentTypeAfterLastSave);
   },
 };
@@ -134,8 +134,8 @@ export const getContentTypeDisplayName = read(
 export const isContentTypeEmpty = read(
   ModuleContentType.getters.isContentTypeEmpty,
 );
-export const isContentTypeSameAsContentTypeAfterLastSave = read(
-  ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave,
+export const isCtySameAfterLastSave = read(
+  ModuleContentType.getters.isCtySameAfterLastSave,
 );
 
 // Mutations ( commit )
