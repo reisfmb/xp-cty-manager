@@ -1,281 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" data-th-href="${portal.assetUrl({'_path=img/favicon.svg'})}">
-    <link rel="icon" type="image/png" data-th-href="${portal.assetUrl({'_path=img/favicon.png'})}">
 
-    <title>Content Type Manager</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" th:href="${favicon.svg}" />
+  <link rel="icon" type="image/png" th:href="${favicon.png}" />
 
-    <script data-th-inline="javascript">
-      var CONFIG = {
-          launcherUrl: /*[[${launcherUrl}]]*/ '', // Required for launcher
-          launcher: {
-            theme: 'light'
-          }
-      };
-    </script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
 
-    <!-- CSS Dependencies -->
-    <fragment
-      th:replace="./fragments/dependencies/css.html"
-      th:remove="tag"
-    ></fragment>
-  </head>
-  <body>
-    <v-app id="app">
-      <component-file-picker-and-saver></component-file-picker-and-saver>
-      
-      <v-form ref="form" lazy-validation>
-        <component-recursive-element-render
-          :path="''"
-        ></component-recursive-element-render>
-      </v-form>
+  <title>Content Type Manager</title>
 
-    </v-app>
+  <script data-th-inline="javascript">
+    var CONFIG = {
+      loadingIcon: /*[[${loadingIcon}]]*/ "", // Required for loading dialog
+      launcherUrl: /*[[${launcherUrl}]]*/ "", // Required for launcher
+      launcher: { theme: "light" },
+    };
+  </script>
+</head>
 
-    <!-- JS Dependencies -->
-    <fragment
-      th:replace="./fragments/dependencies/js.html"
-      th:remove="tag"
-    ></fragment>
+<body>
+  <div id="app"></div>
 
-    <!-- Modules -->
-    <module th:replace="./modules/module-rules.html" th:remove="tag"></module>
-    <module th:replace="./modules/module-example.html" th:remove="tag"></module>
+  <script th:src="${scripts.vendor}"></script>
+  <script th:src="${scripts.app}"></script>
 
-    <!-- Components -->
-    <script th:inline="javascript">
-      let DOM = null;
-    </script>
+  <script async data-th-src="${launcherPath}" type="text/javascript"></script>
+</body>
 
-    <component
-      th:replace="./components/component-file-handler.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/component-recursive-element-render.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/component-schemas.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/component-i18n-dialog.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- Structure -->
-    <component
-      th:replace="./components/structure/component-content-type.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-form-definition.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-form.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-field-set.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-item-set.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-set-items.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-option-set.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-option-set-options.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/structure/component-option-set-options-option.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- Form Definition -->
-    <component
-      th:replace="./components/form-definition/component-form-definition-allow-child-content-types.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/form-definition/component-form-definition-x-datas.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- Input -->
-    <component
-      th:replace="./components/input/component-input.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- General Ones -->
-    <component
-      th:replace="./components/input/general/component-input-text.html"
-      th:remove="tag"
-    ></component>
-    <component
-      th:replace="./components/input/general/component-input-boolean.html"
-      th:remove="tag"
-    ></component>
-
-    <!-- Custom Ones -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-occurrences.html"
-      th:remove="tag"
-    ></component>
-    <!-- Text *2 -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-options.html"
-      th:remove="tag"
-    ></component>
-    <!-- List: Label/Value -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-params.html"
-      th:remove="tag"
-    ></component>
-    <!-- List: Label/Value -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-allowContentTypes.html"
-      th:remove="tag"
-    ></component>
-    <!-- List: Text -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-allowPaths.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-name.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-config.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-name.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-exclude.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-include.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-allowHeadings.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-exclude.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-include.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-    <component
-      th:replace="./components/input/fields/component-input-fields-allowHeadings.html"
-      th:remove="tag"
-    ></component>
-    <!-- Specific -->
-
-    <!-- Root Component -->
-    <script th:inline="javascript">
-      var app = new Vue({
-        el: "#app",
-        vuetify: new Vuetify(),
-        store: new Vuex.Store({
-          modules: {
-            moduleRules,
-            moduleExample,
-          },
-        }),
-        data: {
-          loadingIcon: /*[[${ loadingIcon }]]*/ "",
-          services: /*[[${ services }]]*/ {},
-          map: {},
-        },
-        created() {
-          fetch(this.services.fieldComponentMap, { method: "GET" })
-            .then((response) => response.json())
-            .then((data) => (this.map = data.map));
-        },
-        methods: {
-          // Those methods are ones that are shared through multiple components
-          ableToMoveSchema(path, direction) {
-            if (direction === "up" || direction === "down") {
-              const indexesWithBracketsInPath = path.match(/[[0-9]+]/g);
-              const lastIndexWithBrackets = _.last(indexesWithBracketsInPath);
-              const previousPath = path.slice(0, -lastIndexWithBrackets.length);
-              const currentIndex = parseInt(
-                lastIndexWithBrackets.replace("[", "").replace("]", "")
-              );
-              const desiredIndex =
-                direction === "up" ? currentIndex - 1 : currentIndex + 1;
-              const maxIndex = Math.max(
-                (this.$store.getters.jsonPath(previousPath) || []).length - 1,
-                0
-              );
-              return !(0 <= desiredIndex && desiredIndex <= maxIndex);
-            }
-          },
-          moveSchema(path, direction) {
-            this.$store.commit("moveSchemaInJson", { path, direction });
-          },
-          removeSchema(path) {
-            Swal.fire({
-              title: "Are you sure ?",
-              showDenyButton: true,
-              showCancelButton: false,
-              confirmButtonText: "Yes",
-              denyButtonText: "No",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.$store.commit("removeSchemaInJson", { path });
-              }
-            });
-          },
-          setShowConfigBasedOnValidation(component) {
-            setTimeout(() => {
-              const json = this.$store.getters.jsonPath(component.path || '');
-              const elements = json && json.elements || [];
-              const labelElement = elements.find(el => el.name === 'label' ) || {};
-              
-              if(Object.keys(labelElement).length === 0) return;
-              
-              const labelIsSet = Object.keys(labelElement).indexOf('elements') >= 0;
-              
-              component.showConfig = !labelIsSet;
-            }, 1);
-          },
-        },
-      });
-    </script>
-    <script async data-th-src="${launcherPath}" type="text/javascript"></script>
-  </body>
 </html>
