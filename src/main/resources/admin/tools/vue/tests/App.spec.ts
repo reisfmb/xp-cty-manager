@@ -81,7 +81,8 @@ test('Click on Duplicate should duplicate existing element to the form of the co
 
   expect(formElements.length).toBe(2);
   expect(formElements[1].attributes?.name).toBe(`${formElements[0].attributes?.name}-2`);
-  expect(JSON.stringify(formElements[0].elements) === JSON.stringify(formElements[1].elements)).toBe(true);
+  expect(JSON.stringify(formElements[0].elements) === JSON.stringify(formElements[1].elements))
+    .toBe(true);
 });
 
 test('Click on Move Up should properly move up the element in the content type.', async () => {

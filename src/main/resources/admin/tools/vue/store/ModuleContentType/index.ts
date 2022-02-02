@@ -1,4 +1,5 @@
 import * as xml2jsonConverter from '@reginaldlee/xml-js';
+import { Element } from '@reginaldlee/xml-js';
 import * as R from 'ramda';
 import { getStoreAccessors } from 'vuex-typescript';
 import { ActionContext } from 'vuex';
@@ -33,13 +34,13 @@ const getters = {
       : null;
   },
   getContentTypeDisplayName(state: IState): string | null {
-    const ctyElements: Array<xml2jsonConverter.Element> = R.view(
+    const ctyElements: Array<Element> = R.view(
       R.lensPath(['elements', 0, 'elements']),
       state.contentType,
     );
 
     const displayNameElement = ctyElements.find(
-      (el: xml2jsonConverter.Element) => el.name === 'display-name',
+      (el: Element) => el.name === 'display-name',
     );
 
     return (
@@ -49,7 +50,7 @@ const getters = {
   isContentTypeEmpty(state: IState): boolean {
     return state.contentType === null;
   },
-  isContentTypeSameAsContentTypeAfterLastSave(state: IState): boolean {
+  isCtySameAfterLastSave(state: IState): boolean {
     return R.equals(state.contentType, state.contentTypeAfterLastSave);
   },
 };
@@ -133,8 +134,8 @@ export const getContentTypeDisplayName = read(
 export const isContentTypeEmpty = read(
   ModuleContentType.getters.isContentTypeEmpty,
 );
-export const isContentTypeSameAsContentTypeAfterLastSave = read(
-  ModuleContentType.getters.isContentTypeSameAsContentTypeAfterLastSave,
+export const isCtySameAfterLastSave = read(
+  ModuleContentType.getters.isCtySameAfterLastSave,
 );
 
 // Mutations ( commit )
@@ -180,7 +181,7 @@ function renameNameAttributeIfNeeded(
       );
     }
 
-    value = value.map((el: xml2jsonConverter.Element, index: number) => (index === idx ? desiredElement : el));
+    value = value.map((el: Element, index: number) => (index === idx ? desiredElement : el));
   }
   return value;
 }

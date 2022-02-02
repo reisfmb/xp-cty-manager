@@ -101,11 +101,15 @@ export default Vue.extend({
         let ctyName = '';
         const existingCtyNames = await this.getAllExistingCtynames(dirHandle);
 
-        const isCtyNameValid = (ctyName: string) => ctyName.length > 0 && !ctyName.includes(' ');
+        function isCtyNameValid(ctyName: string) {
+          return ctyName.length > 0 && !ctyName.includes(' ');
+        }
 
-        const ctyNameExists = (ctyName: string, existingCtyNames: string[]) => existingCtyNames.indexOf(ctyName) === -1;
+        function ctyNameExists(ctyName: string, existingCtyNames: string[]) {
+          return existingCtyNames.indexOf(ctyName) === -1;
+        }
 
-        const dialogText = (ctyName: string, existingCtyNames: string[]) => {
+        function dialogText(ctyName: string, existingCtyNames: string[]) {
           if (!ctyName) return messages.dialog.defineCtyName;
 
           const errorMessages = [];
@@ -123,7 +127,7 @@ export default Vue.extend({
           }
 
           return '';
-        };
+        }
 
         do {
           const text = dialogText(ctyName, existingCtyNames);

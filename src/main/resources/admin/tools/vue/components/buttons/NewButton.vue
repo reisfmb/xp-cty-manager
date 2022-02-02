@@ -25,9 +25,13 @@ export default Vue.extend({
         return;
       }
 
-      this.suggestSaveFunction().then(() => {
-        R.pipe(this.resetFileHandle, this.resetContentType)();
-      });
+      this.suggestSaveFunction()
+        .then(() => {
+          R.pipe(this.resetFileHandle, this.resetContentType)();
+        })
+        .catch((error: Error) => {
+          error.message && Swal.fire({ icon: 'error', text: error.message });
+        });
     },
 
     checkBroswerCompatibility() {
