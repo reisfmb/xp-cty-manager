@@ -81,11 +81,11 @@ export default Vue.extend({
     wereFieldsAdjusted: false,
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).CardContentType = require('./cards/CardContentType.vue').default;
-
-    ((this.$options || {}).components || {}).FieldOrItemSet = require('./sets/FieldOrItemSet.vue').default;
-
-    ((this.$options || {}).components || {}).OptionSet = require('./sets/OptionSet.vue').default;
+    if (this.$options && this.$options.components) {
+      this.$options.components.CardContentType = require('./cards/CardContentType.vue').default;
+      this.$options.components.FieldOrItemSet = require('./sets/FieldOrItemSet.vue').default;
+      this.$options.components.OptionSet = require('./sets/OptionSet.vue').default;
+    }
   },
   created() {
     this.populateRawElements();

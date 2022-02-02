@@ -42,7 +42,9 @@ export default Vue.extend({
     fileName: '',
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
+    if (this.$options && this.$options.components) {
+      this.$options.components.RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
+    }
   },
   mounted() {
     this.showOnMounted = true;

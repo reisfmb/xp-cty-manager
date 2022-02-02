@@ -36,7 +36,9 @@ export default Vue.extend({
     show: false,
   }),
   beforeCreate() {
-    ((this.$options || {}).components || {}).RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
+    if (this.$options && this.$options.components) {
+      this.$options.components.RecursiveComponentRender = require('../RecursiveComponentRender.vue').default;
+    }
   },
   mounted() {
     if (!this.getInputLabel()) this.show = true;
