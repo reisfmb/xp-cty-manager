@@ -20,11 +20,9 @@ export default Vue.extend({
   components: { LoadButton, NewButton, SaveButton },
   methods: {
     async suggestSaveIfThereAreChanges(): Promise<void> {
-      const isContentTypeSameAsContentTypeAfterLastSave = ModuleContentType.isContentTypeSameAsContentTypeAfterLastSave(
+      if (ModuleContentType.isContentTypeSameAsContentTypeAfterLastSave(
         this.$store,
-      );
-
-      if (isContentTypeSameAsContentTypeAfterLastSave) return;
+      )) return;
 
       await Swal.fire({
         icon: 'warning',

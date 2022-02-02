@@ -3,13 +3,19 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["plugin:vue/essential", "airbnb-base"],
+  "extends": [
+    "plugin:vue/essential",
+    "airbnb-base"
+  ],
   "parserOptions": {
     "ecmaVersion": 2017,
     "parser": "@typescript-eslint/parser",
     "sourceType": "module"
   },
-  "plugins": ["vue", "@typescript-eslint"],
+  "plugins": [
+    "vue",
+    "@typescript-eslint"
+  ],
   "rules": {
     "no-underscore-dangle": "off",
     "no-restricted-syntax": "off",
@@ -22,7 +28,6 @@
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "no-undef": "off",
-    "max-len": "off",
     "global-require": "off"
   }
 }
