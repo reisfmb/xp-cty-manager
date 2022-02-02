@@ -10,9 +10,9 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, './src/main/resources/assets/js'),
+    path: path.resolve(__dirname, './build/resources/main/assets/js'),
     filename: '[name].js',
-    publicPath: path.resolve(__dirname, './src/main/resources/assets'),
+    publicPath: path.resolve(__dirname, './build/resources/main/assets'),
   },
 
   module: {
