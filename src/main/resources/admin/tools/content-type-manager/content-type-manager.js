@@ -6,6 +6,10 @@ exports.get = () => {
   const view = resolve('content-type-manager.html');
 
   const model = {
+    favicon: {
+      svg: portalLib.assetUrl({ path: 'img/favicon.svg' }),
+      png: portalLib.assetUrl({ path: 'img/favicon.png' }),
+    },
     loadingIcon: portalLib.assetUrl({ path: 'img/spinning-loader.gif' }),
     launcherUrl: adminLib.getLauncherUrl(),
     launcherPath: adminLib.getLauncherPath(),
