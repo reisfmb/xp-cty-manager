@@ -52,7 +52,7 @@
     "pug": "^3.0.2",
     "ramda": "0.28.0",
     "sweetalert2": "^11.3.0",
-    "typescript": "^4.5.4",
+    "typescript": "^4.6.3",
     "vue": "^2.6.14",
     "vuetify": "^2.6.4",
     "vuex": "^3.4.0"
