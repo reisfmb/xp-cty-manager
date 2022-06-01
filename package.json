@@ -51,7 +51,7 @@
     "@vue/vue2-jest": "^27.0.0-alpha.4",
     "pug": "^3.0.2",
     "ramda": "0.28.0",
-    "sweetalert2": "^11.4.10",
+    "sweetalert2": "^11.4.17",
     "typescript": "^4.6.3",
     "vue": "^2.6.14",
     "vuetify": "^2.6.6",
