@@ -14,7 +14,7 @@
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-typescript": "^7.16.7",
     "@reginaldlee/xml-js": "^1.7.12",
-    "@testing-library/vue": "^5.8.2",
+    "@testing-library/vue": "^5.8.3",
     "@types/eslint": "^8.2.1",
     "@types/jest": "^27.4.0",
     "@types/ramda": "^0.28.11",
