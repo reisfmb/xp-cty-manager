@@ -35,7 +35,7 @@
     "pretty": "^2.0.0",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.63.6",
-    "sass-loader": "^13.2.2",
+    "sass-loader": "^13.3.2",
     "stream-browserify": "^3.0.0",
     "terser-webpack-plugin": "^5.3.9",
     "ts-jest": "^27.1.5",
