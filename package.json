@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
-    "@babel/preset-env": "^7.22.14",
+    "@babel/preset-env": "^7.22.20",
     "@babel/preset-typescript": "^7.23.0",
     "@reginaldlee/xml-js": "^1.7.12",
     "@testing-library/vue": "^5.9.0",
