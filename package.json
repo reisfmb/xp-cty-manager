@@ -17,7 +17,7 @@
     "@testing-library/vue": "^5.9.0",
     "@types/eslint": "^8.44.2",
     "@types/jest": "^27.4.0",
-    "@types/ramda": "^0.29.3",
+    "@types/ramda": "^0.29.5",
     "@types/wicg-file-system-access": "^2020.9.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
