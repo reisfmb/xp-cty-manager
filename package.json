@@ -10,7 +10,7 @@
     "fix": "eslint --ext ts,js,vue src/main/resources/admin/tools/vue/ --fix"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.0",
+    "@babel/core": "^7.23.5",
     "@babel/preset-env": "^7.23.2",
     "@babel/preset-typescript": "^7.23.0",
     "@reginaldlee/xml-js": "^1.7.12",
