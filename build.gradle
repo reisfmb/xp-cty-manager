@@ -14,8 +14,8 @@ app {
 }
 
 dependencies {
-    implementation "com.enonic.xp:core-api:${xpVersion}"
-    implementation "com.enonic.xp:portal-api:${xpVersion}"
+    compile "com.enonic.xp:core-api:${xpVersion}"
+    compile "com.enonic.xp:portal-api:${xpVersion}"
     include "com.enonic.xp:lib-admin:${xpVersion}"
     include "com.enonic.xp:lib-content:${xpVersion}"
     include "com.enonic.xp:lib-portal:${xpVersion}"
@@ -68,8 +68,6 @@ task webpack( type: NpmTask, dependsOn: [npmInstall, lint, tests] ) {
     outputs.dir "src/main/resources/assets/js"
     outputs.upToDateWhen { false }
 }
-
-processResources.dependsOn webpack
 
 jar {
     dependsOn += webpack
