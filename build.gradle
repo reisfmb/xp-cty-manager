@@ -69,6 +69,8 @@ task webpack( type: NpmTask, dependsOn: [npmInstall, lint, tests] ) {
     outputs.upToDateWhen { false }
 }
 
+processResources.dependsOn webpack
+
 jar {
     dependsOn += webpack
 }
