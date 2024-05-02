@@ -59,7 +59,7 @@ function resetVCardErrorClass() {
   Array.from(document.getElementsByClassName('v-card')).forEach((el) => el.classList.remove('v-card-error'));
 }
 
-function sanitizeXml(xmlString: string) {
+function sanitizeXml(xmlString: string): string {
   function _getAllEmptyTagsInXmlString(xmlString: string) {
     // eslint-disable-next-line prefer-regex-literals
     const emptyTags = new RegExp(/<[^/>][^>]*><\/[^>]+>/g);
@@ -106,7 +106,8 @@ function sanitizeXml(xmlString: string) {
     removed: _getSpecificTagsToBeRemoved(),
   };
 
-  let tagsToBeRemoved = _getAllEmptyTagsInXmlString(xmlString);
+  let tagsToBeRemoved: string[] = _getAllEmptyTagsInXmlString(xmlString)
+    .map((tag) => tag.toString());
 
   // Ignore specific tag.
   tagsToBeRemoved = tagsToBeRemoved.filter(
