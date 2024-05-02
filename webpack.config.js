@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack'); // Require webpack to access built-in plugins
 
 const TerserPlugin = require('terser-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
@@ -69,6 +70,7 @@ module.exports = {
       assert: false,
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer'),
+      process: require.resolve('process/browser'), // Add this line
     },
   },
 
@@ -79,5 +81,8 @@ module.exports = {
 
   plugins: [
     new VueLoaderPlugin(),
+    new webpack.ProvidePlugin({
+      process: 'process/browser', // Automatically provide process where needed
+    }),
   ],
 };

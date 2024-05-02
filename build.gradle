@@ -31,7 +31,6 @@ repositories {
 node {
     download = true
     version = '20.9.0'
-    npmVersion = '8.1.4'
 }
 
 def nodeEnvironment() {
@@ -40,7 +39,8 @@ def nodeEnvironment() {
     return nodeEnv != null ? nodeEnv : 'production'
 }
 
-task lint( type: NpmTask, dependsOn: npmInstall ) {
+tasks.register('lint', NpmTask) {
+    dependsOn( npmInstall )
     description = 'Linting Application.'
     args = [ 'run', 'lint' ]
     inputs.dir 'src/main/resources/admin/tools/vue'
@@ -48,15 +48,8 @@ task lint( type: NpmTask, dependsOn: npmInstall ) {
     outputs.upToDateWhen { false }
 }
 
-task tests( type: NpmTask, dependsOn: [npmInstall, lint] ) {
-    description = 'Testing Application.'
-    args = [ 'run', 'test' ]
-    inputs.dir 'src/main/resources/admin/tools/vue/'
-    outputs.dir file('gradle')
-    outputs.upToDateWhen { false }
-}
-
-task webpack( type: NpmTask, dependsOn: [npmInstall, lint, tests] ) {
+tasks.register('webpack', NpmTask ) {
+    dependsOn( npmInstall, lint )
     description = 'Building Application.'
     environment = [ 'NODE_ENV': nodeEnvironment() ]
     args = [ 'run', 'build' ]
@@ -69,6 +62,21 @@ task webpack( type: NpmTask, dependsOn: [npmInstall, lint, tests] ) {
     outputs.upToDateWhen { false }
 }
 
+tasks.register('tests', NpmTask) {
+  dependsOn(webpack)
+  description = 'Testing Application.'
+  args = [ 'run', 'test' ]
+  inputs.dir 'src/main/resources/admin/tools/vue/'
+  outputs.dir file('gradle')
+  outputs.upToDateWhen { false }
+}
+
 processResources {
-    dependsOn webpack
+  dependsOn webpack
+}
+
+jar {
+    exclude 'admin/tools/vue/**'
+
+    dependsOn webpack, tests
 }
