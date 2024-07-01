@@ -12,7 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.24.6",
     "@babel/preset-env": "^7.24.6",
-    "@babel/preset-typescript": "^7.23.3",
+    "@babel/preset-typescript": "^7.24.7",
     "@reginaldlee/xml-js": "^1.7.12",
     "@testing-library/vue": "^5.9.0",
     "@types/eslint": "^8.56.2",
